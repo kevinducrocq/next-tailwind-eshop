@@ -1,11 +1,14 @@
 import Layout from "@/components/Layout";
+import { Store } from "@/utils/Store";
 import data from "@/utils/data";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useContext } from "react";
 
 export default function ProductPage() {
+  const { state, dispatch } = useContext(Store);
+
   const { query } = useRouter();
   const { slug } = query;
   const product = data.products.find((x) => x.slug === slug);
@@ -13,6 +16,19 @@ export default function ProductPage() {
   if (!product) {
     return <div>Produit non trouvé</div>;
   }
+
+  const addToCartHandler = () => {
+    const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+    if (product.countInStock < quantity) {
+      alert("Désolé,Il n'y a plus de quantité pour ce produit");
+      return;
+    }
+    dispatch({
+      type: "CART_ADD_ITEM",
+      payload: { ...product, quantity: quantity },
+    });
+  };
 
   return (
     <Layout title={product.name}>
@@ -26,6 +42,7 @@ export default function ProductPage() {
             alt={product.name}
             width={640}
             height={640}
+            priority
           />
         </div>
         <div>
@@ -51,7 +68,12 @@ export default function ProductPage() {
               <div>Statut</div>
               <div>{product.countInStock > 0 ? "En stock" : "Epuisé"}</div>
             </div>
-            <button class='primary-button w-full'>Ajouter au panier</button>
+            <button
+              className='primary-button w-full'
+              onClick={addToCartHandler}
+            >
+              Ajouter au panier
+            </button>
           </div>
         </div>
       </div>
