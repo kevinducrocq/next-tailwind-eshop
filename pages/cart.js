@@ -7,15 +7,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
+import dynamic from "next/dynamic";
 
-export default function CartPage() {
+function CartPage() {
   const { state, dispatch } = useContext(Store);
   const {
     cart: { cartItems },
   } = state;
   const router = useRouter();
+
   const removeItemHandler = (item) => {
     dispatch({ type: "CART_REMOVE_ITEM", payload: item });
+  };
+
+  const updateCartHandler = (item, qty) => {
+    const quantity = Number(qty);
+    dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
   };
 
   return (
@@ -54,7 +61,20 @@ export default function CartPage() {
                         </span>
                       </Link>
                     </td>
-                    <td className='p-5 text-right'>{item.quantity}</td>
+                    <td className='p-5 text-right'>
+                      <select
+                        value={item.quantity}
+                        onChange={(e) =>
+                          updateCartHandler(item, e.target.value)
+                        }
+                      >
+                        {[...Array(item.countInStock).keys()].map((x) => (
+                          <option key={x + 1} value={x + 1}>
+                            {x + 1}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
                     <td className='p-5 text-right'>{item.price} &euro;</td>
                     <td className='p-5 text-center'>
                       <button onClick={() => removeItemHandler(item)}>
@@ -89,3 +109,5 @@ export default function CartPage() {
     </Layout>
   );
 }
+
+export default dynamic(() => Promise.resolve(CartPage), { ssr: false });
