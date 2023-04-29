@@ -9,7 +9,6 @@ export default function Layout({ title, children }) {
         <title>{title ? title + " - Eshop" : "Eshop"}</title>
         <meta name='description' content='Eshop website' />
       </Head>
-
       <div className='flex min-h-screen flex-col justify-between'>
         <header>
           <nav className='flex h-12 justify-between shadow-md items-center'>
