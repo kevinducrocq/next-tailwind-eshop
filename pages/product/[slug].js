@@ -1,6 +1,8 @@
 import Layout from "@/components/Layout";
 import { Store } from "@/utils/Store";
 import data from "@/utils/data";
+import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -8,7 +10,7 @@ import React, { useContext } from "react";
 
 export default function ProductPage() {
   const { state, dispatch } = useContext(Store);
-
+  const router = useRouter();
   const { query } = useRouter();
   const { slug } = query;
   const product = data.products.find((x) => x.slug === slug);
@@ -28,6 +30,7 @@ export default function ProductPage() {
       type: "CART_ADD_ITEM",
       payload: { ...product, quantity: quantity },
     });
+    router.push("/cart");
   };
 
   return (
@@ -72,7 +75,8 @@ export default function ProductPage() {
               className='primary-button w-full'
               onClick={addToCartHandler}
             >
-              Ajouter au panier
+              <FontAwesomeIcon icon={faCartPlus} />
+              &nbsp; Ajouter au panier
             </button>
           </div>
         </div>

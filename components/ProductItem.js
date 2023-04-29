@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import React from "react";
 
@@ -19,7 +21,8 @@ export default function ProductItem({ product }) {
         <p className='mb-2'>{product.brand}</p>
         <p className=''>€ {product.price}</p>
         <button className='primary-button' type='button'>
-          Ajouter au panier
+          <FontAwesomeIcon icon={faCartPlus} />
+          &nbsp; Ajouter
         </button>
       </div>
     </div>
