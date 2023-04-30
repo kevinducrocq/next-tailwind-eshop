@@ -90,8 +90,9 @@ function CartPage() {
             <ul>
               <li>
                 <div className='pb-3 text-xl'>
-                  Sous-total ({cartItems.reduce((a, c) => a + c.quantity, 0)}) :{" "}
-                  {cartItems.reduce((a, c) => a + c.price, 0)} &euro;
+                  Sous-total ({cartItems.reduce((a, c) => a + c.quantity, 0)}) :
+                  {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}
+                  &euro;
                 </div>
               </li>
               <li>

@@ -10,7 +10,9 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm();
 
-  const submitHandler = ({ email, password }) => {};
+  const submitHandler = ({ email, password }) => {
+
+  };
 
   return (
     <Layout title='Connexion'>
