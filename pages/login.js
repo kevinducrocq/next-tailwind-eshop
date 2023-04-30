@@ -32,7 +32,7 @@ export default function LoginPage() {
         password,
       });
       if (result.error) {
-        toast.error(result.error);
+        toast.error(result.error, { autoClose: 1500 });
       }
     } catch (err) {
       toast.error(getError(err));
