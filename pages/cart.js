@@ -2,12 +2,12 @@ import Layout from "@/components/Layout";
 import { Store } from "@/utils/Store";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
 import dynamic from "next/dynamic";
+import { toast } from "react-toastify";
 
 function CartPage() {
   const { state, dispatch } = useContext(Store);
@@ -18,11 +18,29 @@ function CartPage() {
 
   const removeItemHandler = (item) => {
     dispatch({ type: "CART_REMOVE_ITEM", payload: item });
+    toast.warning("Produit retiré du panier", {
+      autoClose: 1500,
+      hideProgressBar: true,
+      position: "bottom-right",
+    });
   };
 
   const updateCartHandler = (item, qty) => {
     const quantity = Number(qty);
+    if (item.countInStock < quantity) {
+      toast.error("Désolé, il n'y a plus de stock pour ce produit", {
+        autoClose: 1500,
+        hideProgressBar: true,
+        position: "bottom-right",
+      });
+      return;
+    }
     dispatch({ type: "CART_ADD_ITEM", payload: { ...item, quantity } });
+    toast.success("Quantité mise à jour dans le panier", {
+      autoClose: 1500,
+      hideProgressBar: true,
+      position: "bottom-right",
+    });
   };
 
   return (

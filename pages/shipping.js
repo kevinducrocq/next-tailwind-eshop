@@ -1,6 +1,8 @@
 import CheckoutWizard from "@/components/CheckoutWizard";
 import Layout from "@/components/Layout";
 import { Store } from "@/utils/Store";
+import { faForward } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect } from "react";
@@ -142,8 +144,11 @@ export default function ShippingPage() {
             <div className='text-red-500'>{errors.country.message}</div>
           )}
         </div>
-        <div className='mb-4 flex justify-between'>
-          <button className='primary-button'>Suivant</button>
+        <div className='mb-4'>
+          <button className='primary-button float-right'>
+            Suivant &nbsp;
+            <FontAwesomeIcon icon={faForward} />
+          </button>
         </div>
       </form>
     </Layout>

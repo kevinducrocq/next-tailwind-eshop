@@ -1,19 +1,27 @@
 import Layout from "@/components/Layout";
+import fetchProducts from "@/domain/product/fetchProducts";
 import { Store } from "@/utils/Store";
-import data from "@/utils/data";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function ProductPage() {
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
   const { query } = useRouter();
   const { slug } = query;
-  const product = data.products.find((x) => x.slug === slug);
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetchProducts(setProducts);
+  }, []);
+
+  const product = products.find((x) => x.slug === slug);
 
   if (!product) {
     return <div>Produit non trouvé</div>;
@@ -22,8 +30,13 @@ export default function ProductPage() {
   const addToCartHandler = () => {
     const existItem = state.cart.cartItems.find((x) => x.slug === product.slug);
     const quantity = existItem ? existItem.quantity + 1 : 1;
+
     if (product.countInStock < quantity) {
-      alert("Désolé,Il n'y a plus de quantité pour ce produit");
+      toast.error("Désolé, il n'y a plus de stock pour ce produit", {
+        autoClose: 1500,
+        hideProgressBar: true,
+        position: "bottom-right",
+      });
       return;
     }
     dispatch({
@@ -53,14 +66,7 @@ export default function ProductPage() {
             <li>
               <h1 className='text-lg'>{product.name}</h1>
             </li>
-            <li>
-              Catégorie{product.categories.length > 1 ? "s" : ""} :{" "}
-              {product.categories.map((category) =>
-                product.categories.length > 1
-                  ? category.name + ", "
-                  : category.name
-              )}
-            </li>
+            <li>Catégorie</li>
             <li>Marque : {product.brand}</li>
             <li>
               {product.rating} sur {product.numReviews} avis
