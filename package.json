@@ -19,12 +19,14 @@
     "eslint-config-next": "13.3.1",
     "js-cookie": "^3.0.5",
     "mongoose": "^7.1.0",
+    "net": "^1.0.2",
     "next": "13.3.1",
     "next-auth": "^4.22.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
     "react-toastify": "^9.1.2",
+    "serverless-mysql": "^1.5.5",
     "tailwindcss": "3.3.2"
   },
   "devDependencies": {
@@ -33,5 +35,10 @@
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
     "tailwind": "^4.0.0"
+  },
+  "browser": {
+    "tls": false,
+    "net": false,
+    "fs": false
   }
 }

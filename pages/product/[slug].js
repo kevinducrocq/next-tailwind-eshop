@@ -53,7 +53,14 @@ export default function ProductPage() {
             <li>
               <h1 className='text-lg'>{product.name}</h1>
             </li>
-            <li>Catégorie : {product.category}</li>
+            <li>
+              Catégorie{product.categories.length > 1 ? "s" : ""} :{" "}
+              {product.categories.map((category) =>
+                product.categories.length > 1
+                  ? category.name + ", "
+                  : category.name
+              )}
+            </li>
             <li>Marque : {product.brand}</li>
             <li>
               {product.rating} sur {product.numReviews} avis
