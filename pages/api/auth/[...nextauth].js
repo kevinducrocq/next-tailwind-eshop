@@ -1,8 +1,7 @@
 import bcryptjs from "bcryptjs";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import User from "../../../models/User";
-import db from "../../../utils/db";
+import query from "@/utils/dbMysql";
 
 export default NextAuth({
   session: {
@@ -23,20 +22,24 @@ export default NextAuth({
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
-        await db.connect();
-        const user = await User.findOne({
-          email: credentials.email,
+        console.log(credentials);
+        const user = await query({
+          query: "SELECT * FROM users WHERE email = ?",
+          values: [credentials.email],
         });
-        await db.disconnect();
-        if (user && bcryptjs.compareSync(credentials.password, user.password)) {
+  
+        if (
+          user.length === 1 &&
+          bcryptjs.compareSync(credentials.password, user[0].password)
+        ) {
           return {
-            _id: user._id,
-            name: user.firstName + " " + user.lastName,
-            email: user.email,
-            isAdmin: user.isAdmin,
+            id: user[0].id,
+            name: user[0].firstName + " " + user[0].lastName,
+            email: user[0].email,
+            isAdmin: user[0].isAdmin,
           };
         }
-        throw new Error("Invalid email or password");
+        throw new Error("Email ou Mot de passe erronés");
       },
     }),
   ],

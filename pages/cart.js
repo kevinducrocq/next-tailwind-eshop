@@ -64,9 +64,9 @@ function CartPage() {
               </thead>
               <tbody>
                 {cartItems.map((item) => (
-                  <tr key={item.slug} className='border-b'>
+                  <tr key={item?.slug} className='border-b'>
                     <td>
-                      <Link href={`/product/${item.slug}`}>
+                      <Link href={`/product/${item?.slug}`}>
                         <span className='flex items-center'>
                           <Image
                             src={item.image}
@@ -75,7 +75,7 @@ function CartPage() {
                             height={50}
                           />
                           &nbsp;
-                          {item.name}
+                          {item?.name}
                         </span>
                       </Link>
                     </td>
@@ -86,7 +86,7 @@ function CartPage() {
                           updateCartHandler(item, e.target.value)
                         }
                       >
-                        {[...Array(item.countInStock).keys()].map((x) => (
+                        {[...Array(item?.countInStock).keys()].map((x) => (
                           <option key={x + 1} value={x + 1}>
                             {x + 1}
                           </option>

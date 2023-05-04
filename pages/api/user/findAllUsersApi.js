@@ -1,6 +1,6 @@
 import query from "@/utils/dbMysql";
 
-const findAllUsers = (req, res) => {
+const findAllUsersApi = (req, res) => {
   const fetchUsers = async () => {
     //RECUPERER TOUS LES PRODUITS
     try {
@@ -13,4 +13,4 @@ const findAllUsers = (req, res) => {
   fetchUsers();
 };
 
-export default findAllUsers;
+export default findAllUsersApi;

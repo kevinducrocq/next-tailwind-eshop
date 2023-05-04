@@ -50,6 +50,7 @@ export default function LoginPage() {
           <label htmlFor='email'>Email</label>
           <input
             type='email'
+            name='email'
             {...register("email", {
               required: "Entrez votre email",
               pattern: {
@@ -69,6 +70,7 @@ export default function LoginPage() {
           <label htmlFor='password'>Mot de passe</label>
           <input
             type='password'
+            name='password'
             {...register("password", {
               required: "Entrez votre mot de passe",
               minLength: {

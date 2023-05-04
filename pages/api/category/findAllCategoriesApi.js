@@ -1,7 +1,7 @@
 import query from "@/utils/dbMysql";
 
 //RECUPERER TOUTES LES CATEGORIES
-const findAllCategories = (req, res) => {
+const findAllCategoriesApi = (req, res) => {
   const fetchCategories = async () => {
     try {
       const result = await query({ query: "SELECT * FROM categories" });
@@ -13,4 +13,4 @@ const findAllCategories = (req, res) => {
   fetchCategories();
 };
 
-export default findAllCategories;
+export default findAllCategoriesApi;

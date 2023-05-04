@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import fetchProducts from "@/domain/product/fetchProducts";
+import fetchProductBySlug from "@/domain/product/fetchProductBySlug";
 import { Store } from "@/utils/Store";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,13 +15,11 @@ export default function ProductPage() {
   const { query } = useRouter();
   const { slug } = query;
 
-  const [products, setProducts] = useState([]);
+  const [product, setProduct] = useState([]);
 
   useEffect(() => {
-    fetchProducts(setProducts);
-  }, []);
-
-  const product = products.find((x) => x.slug === slug);
+    fetchProductBySlug(slug, setProduct);
+  }, [slug]);
 
   if (!product) {
     return <div>Produit non trouvé</div>;

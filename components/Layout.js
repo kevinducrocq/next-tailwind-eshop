@@ -82,7 +82,7 @@ export default function Layout({ title, children }) {
                       </DropdownLink>
                     </Menu.Item>
                     <Menu.Item>
-                      <DropdownLink className='dropdown-link' href='#'>
+                      <DropdownLink className='dropdown-link' href=''>
                         <span onClick={logoutHandler}> Déconnexion</span>
                       </DropdownLink>
                     </Menu.Item>
