@@ -2,9 +2,9 @@ import query from "@/utils/dbMysql";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 
-//ENREGISTRER UNE ADRESSE DE LIVRAISON
+//ENREGISTRER UNE ADRESSE DE FACTURATION
 
-const saveShippingAddressApi = async (req, res) => {
+const saveBillingAddressApi = async (req, res) => {
   // VERIFICATION SESSION
   const session = await getServerSession(req, res, authOptions);
   if (!session) {
@@ -14,7 +14,7 @@ const saveShippingAddressApi = async (req, res) => {
 
   const { user } = session;
 
-  const saveShippingAddress = async (
+  const saveBillingAddress = async (
     firstName,
     lastName,
     address,
@@ -25,7 +25,7 @@ const saveShippingAddressApi = async (req, res) => {
     try {
       const result = await query({
         query:
-          "INSERT INTO shipping_address (userId, firstName, lastName, address, zip, city, country) VALUES(?,?,?,?,?,?,?)",
+          "INSERT INTO billing_address (userId, firstName, lastName, address, zip, city, country) VALUES(?,?,?,?,?,?,?)",
         values: [user.id, firstName, lastName, address, zip, city, country],
       });
       res.status(200).json(result);
@@ -34,7 +34,7 @@ const saveShippingAddressApi = async (req, res) => {
     }
   };
 
-  saveShippingAddress(
+  saveBillingAddress(
     req.body.firstName,
     req.body.lastName,
     req.body.address,
@@ -44,4 +44,4 @@ const saveShippingAddressApi = async (req, res) => {
   );
 };
 
-export default saveShippingAddressApi;
+export default saveBillingAddressApi;

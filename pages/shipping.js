@@ -1,5 +1,6 @@
 import CheckoutWizard from "@/components/CheckoutWizard";
 import Layout from "@/components/Layout";
+import saveBillingAddress from "@/domain/order/saveBillingAddress";
 import saveShippingAddress from "@/domain/order/saveShippingAddress";
 import { Store } from "@/utils/Store";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
@@ -52,6 +53,7 @@ export default function ShippingPage() {
       })
     );
     saveShippingAddress(firstName, lastName, address, zip, city, country);
+    saveBillingAddress(firstName, lastName, address, zip, city, country);
     toast.success("Adresse sauvegardée en bdd");
     router.push("/payment");
   };

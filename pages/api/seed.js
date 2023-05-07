@@ -1,23 +1,42 @@
 import data from "@/utils/data";
 import query from "@/utils/dbMysql";
 
-const handler = async () => {
+const handler = async (req, res) => {
   try {
     // VIDER LES TABLES
     await query({
+      query: "TRUNCATE shipping_address",
+      force: true,
+    });
+
+    await query({
+      query: "TRUNCATE billing_address",
+      force: true,
+    });
+
+    await query({
       query: "TRUNCATE product_categories",
+      force: true,
     });
 
     await query({
       query: "TRUNCATE users",
+      force: true,
     });
 
     await query({
       query: "TRUNCATE categories",
+      force: true,
     });
 
     await query({
       query: "TRUNCATE products",
+      force: true,
+    });
+
+    await query({
+      query: "TRUNCATE orders",
+      force: true,
     });
 
     // USERS
@@ -73,8 +92,10 @@ const handler = async () => {
         });
         console.log("ttt", result);
       });
+      res.status(200).send({ message: "SUCCEEDED" });
     });
   } catch (error) {
+    res.status(401).send({ message: "Raté" });
     console.log("error :", error);
   }
 };

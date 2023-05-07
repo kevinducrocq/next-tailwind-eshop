@@ -5,7 +5,7 @@ import { Store } from "@/utils/Store";
 import { getError } from "@/utils/error";
 import { faBackward, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -27,30 +27,6 @@ export default function PlaceorderPage() {
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
   const router = useRouter();
 
-  const [order, setOrder] = useState({});
-
-  useEffect(() => {
-    setOrder({
-      cartItems,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      shippingPrice,
-      taxPrice,
-      totalPrice,
-    });
-  }, [
-    cartItems,
-    itemsPrice,
-    paymentMethod,
-    shippingAddress,
-    shippingPrice,
-    taxPrice,
-    totalPrice,
-  ]);
-
-  console.log(order);
-
   useEffect(() => {
     if (!paymentMethod) {
       router.push("/payment");
@@ -59,14 +35,24 @@ export default function PlaceorderPage() {
 
   const [loading, setLoading] = useState(false);
 
+  const shipping_address_id = 1;
+  const billing_address_id = 1;
+
   const placeOrderHandler = async () => {
     try {
       setLoading(true);
-      console.log(cartItems);
-      placeOrder(order);
+      placeOrder(
+        shipping_address_id,
+        billing_address_id,
+        paymentMethod,
+        itemsPrice,
+        shippingPrice,
+        taxPrice,
+        totalPrice
+      );
       setLoading(false);
-      // dispatch({ type: "CART_CLEAR_ITEMS" });
-      // Cookies.set("cart", JSON.stringify({ ...cart, cartItems: [] }));
+      dispatch({ type: "CART_CLEAR_ITEMS" });
+      Cookies.set("cart", JSON.stringify({ ...cart, cartItems: [] }));
     } catch (err) {
       setLoading(false);
       toast.error(getError(err));

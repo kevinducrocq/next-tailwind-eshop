@@ -10,9 +10,15 @@ const db = mysql({
   },
 });
 
-async function query({ query, values }) {
+async function query({ query, values, force = false }) {
   try {
+    if (force) {
+      await db.query("SET FOREIGN_KEY_CHECKS=0");
+    }
     const results = await db.query(query, values);
+    if (force) {
+      await db.query("SET FOREIGN_KEY_CHECKS=1");
+    }
     await db.end();
     return results;
   } catch (error) {

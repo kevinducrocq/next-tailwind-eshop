@@ -1,6 +1,6 @@
 const placeOrder = async (
-  orderItems,
-  shippingAddress,
+  shipping_address_id,
+  billing_address_id,
   paymentMethod,
   itemsPrice,
   shippingPrice,
@@ -15,8 +15,8 @@ const placeOrder = async (
       },
       method: "POST",
       body: JSON.stringify({
-        orderItems,
-        shippingAddress,
+        shipping_address_id,
+        billing_address_id,
         paymentMethod,
         itemsPrice,
         shippingPrice,

@@ -3,5 +3,8 @@
     "paths": {
       "@/*": ["./*"]
     }
-  }
+  },
+  "experimentalDecorators": true,
+  "emitDecoratorMetadata": true,
+  "esModuleInterop": true
 }
