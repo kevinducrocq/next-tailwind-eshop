@@ -1,4 +1,4 @@
-const fetchProducts = async (callback) => {
+const fetchCategories = async (callback) => {
   try {
     const response = await fetch("/api/product/findAllCategoriessApi");
     const jsonCategories = await response.json();
@@ -9,4 +9,4 @@ const fetchProducts = async (callback) => {
   }
 };
 
-export default fetchProducts;
+export default fetchCategories;

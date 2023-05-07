@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 export default function Home() {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
-  
+
   const [products, setProducts] = useState([]);
 
   useEffect(() => {

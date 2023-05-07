@@ -1,9 +1,11 @@
 import CheckoutWizard from "@/components/CheckoutWizard";
 import Layout from "@/components/Layout";
+import placeOrder from "@/domain/order/placeOrder";
 import { Store } from "@/utils/Store";
 import { getError } from "@/utils/error";
 import { faBackward, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -20,10 +22,34 @@ export default function PlaceorderPage() {
   const itemsPrice = round2(
     cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
   );
-  const ShippingPrice = itemsPrice > 200 ? 0 : 15;
+  const shippingPrice = itemsPrice > 200 ? 0 : 15;
   const taxPrice = round2(itemsPrice * 0.15);
-  const totalPrice = round2(itemsPrice + ShippingPrice + taxPrice);
+  const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
   const router = useRouter();
+
+  const [order, setOrder] = useState({});
+
+  useEffect(() => {
+    setOrder({
+      cartItems,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice,
+      shippingPrice,
+      taxPrice,
+      totalPrice,
+    });
+  }, [
+    cartItems,
+    itemsPrice,
+    paymentMethod,
+    shippingAddress,
+    shippingPrice,
+    taxPrice,
+    totalPrice,
+  ]);
+
+  console.log(order);
 
   useEffect(() => {
     if (!paymentMethod) {
@@ -36,6 +62,11 @@ export default function PlaceorderPage() {
   const placeOrderHandler = async () => {
     try {
       setLoading(true);
+      console.log(cartItems);
+      placeOrder(order);
+      setLoading(false);
+      // dispatch({ type: "CART_CLEAR_ITEMS" });
+      // Cookies.set("cart", JSON.stringify({ ...cart, cartItems: [] }));
     } catch (err) {
       setLoading(false);
       toast.error(getError(err));
@@ -96,7 +127,7 @@ export default function PlaceorderPage() {
                 </thead>
                 <tbody>
                   {cartItems.map((item) => (
-                    <tr key={item._id} className='border-b'>
+                    <tr key={item.id} className='border-b'>
                       <td>
                         <Link legacyBehavior href={`/product/${item.slug}`}>
                           <a className='flex items-center'>
@@ -139,7 +170,7 @@ export default function PlaceorderPage() {
                 <li>
                   <div className='mb-2 flex justify-between'>
                     <div>Frais de livraison</div>
-                    <div>{ShippingPrice} &euro;</div>
+                    <div>{shippingPrice} &euro;</div>
                   </div>
                 </li>
                 <li>
@@ -151,7 +182,7 @@ export default function PlaceorderPage() {
                 <li>
                   <button
                     disabled={loading}
-                    onclick={placeOrderHandler}
+                    onClick={placeOrderHandler}
                     className='primary-button w-full'
                   >
                     {loading ? "Chargement..." : "Commander"}

@@ -1,5 +1,6 @@
 import CheckoutWizard from "@/components/CheckoutWizard";
 import Layout from "@/components/Layout";
+import saveShippingAddress from "@/domain/order/saveShippingAddress";
 import { Store } from "@/utils/Store";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +8,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 export default function ShippingPage() {
   const {
@@ -49,6 +51,8 @@ export default function ShippingPage() {
         shippingAddress: { firstName, lastName, address, zip, city, country },
       })
     );
+    saveShippingAddress(firstName, lastName, address, zip, city, country);
+    toast.success("Adresse sauvegardée en bdd");
     router.push("/payment");
   };
 
