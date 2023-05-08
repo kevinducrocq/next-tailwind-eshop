@@ -36,7 +36,14 @@ export default function PlaceorderPage() {
   const [loading, setLoading] = useState(false);
 
   const shipping_address_id = 1;
+
   const billing_address_id = 1;
+
+  const orderItems = cartItems.map((cartItem) => {
+    return { productId: cartItem.id, quantity: cartItem.quantity };
+  });
+
+  // const orderId = 1;
 
   const placeOrderHandler = async () => {
     try {
@@ -48,11 +55,13 @@ export default function PlaceorderPage() {
         itemsPrice,
         shippingPrice,
         taxPrice,
-        totalPrice
+        totalPrice,
+        orderItems
       );
       setLoading(false);
-      dispatch({ type: "CART_CLEAR_ITEMS" });
-      Cookies.set("cart", JSON.stringify({ ...cart, cartItems: [] }));
+      // dispatch({ type: "CART_CLEAR_ITEMS" });
+      // Cookies.set("cart", JSON.stringify({ ...cart, cartItems: [] }));
+      // router.push(`/order/${req.orderId}`);
     } catch (err) {
       setLoading(false);
       toast.error(getError(err));

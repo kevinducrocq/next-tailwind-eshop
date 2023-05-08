@@ -5,7 +5,8 @@ const placeOrder = async (
   itemsPrice,
   shippingPrice,
   taxPrice,
-  totalPrice
+  totalPrice,
+  orderItems
 ) => {
   try {
     await fetch("/api/order/placeOrderApi", {
@@ -22,6 +23,7 @@ const placeOrder = async (
         shippingPrice,
         taxPrice,
         totalPrice,
+        orderItems,
       }),
     });
   } catch (err) {

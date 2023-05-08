@@ -39,6 +39,11 @@ const handler = async (req, res) => {
       force: true,
     });
 
+    await query({
+      query: "TRUNCATE order_items",
+      force: true,
+    });
+
     // USERS
     data.users.forEach(async (user) => {
       const result = await query({

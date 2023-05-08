@@ -36,11 +36,30 @@ const placeOrderApi = async (req, res) => {
           totalPrice,
         ],
       });
-      res.status(200).json(result);
+
+      if (result) {
+        const getOrderId = await query({
+          query: "SELECT id FROM orders WHERE id=LAST_INSERT_ID()",
+        });
+
+        const orderId = getOrderId[0].id;
+
+        const orderItems = await req.body.orderItems.forEach(
+          async (orderItem) => {
+            query({
+              query:
+                "INSERT INTO order_items (orderId, productId, quantity) VALUES(?,?,?)",
+              values: [orderId, orderItem.productId, orderItem.quantity],
+            });
+          }
+        );
+        res.status(200).json(result, orderId, orderItems);
+      }
     } catch (error) {
       console.log("error :", error);
     }
   };
+
   placeOrder(
     req.body.shipping_address_id,
     req.body.billing_address_id,
@@ -48,7 +67,9 @@ const placeOrderApi = async (req, res) => {
     req.body.itemsPrice,
     req.body.shippingPrice,
     req.body.taxPrice,
-    req.body.totalPrice
+    req.body.totalPrice,
+    req.body.productId,
+    req.body.orderItems
   );
 };
 
