@@ -22,7 +22,7 @@ const placeOrderApi = async (req, res) => {
     totalPrice
   ) => {
     try {
-      const result = await query({
+      const orderQueryResult = await query({
         query:
           "INSERT INTO orders (userId, shipping_address_id, billing_address_id, paymentMethod, itemsPrice, shippingPrice, taxPrice, totalPrice) VALUES(?,?,?,?,?,?,?,?)",
         values: [
@@ -37,12 +37,8 @@ const placeOrderApi = async (req, res) => {
         ],
       });
 
-      if (result) {
-        const getOrderId = await query({
-          query: "SELECT id FROM orders WHERE id=LAST_INSERT_ID()",
-        });
-
-        const orderId = getOrderId[0].id;
+      if (orderQueryResult) {
+        const orderId = orderQueryResult.insertId;
 
         const orderItems = await req.body.orderItems.forEach(
           async (orderItem) => {
@@ -53,7 +49,7 @@ const placeOrderApi = async (req, res) => {
             });
           }
         );
-        res.status(200).json(result, orderId, orderItems);
+        res.status(200).json({ orderItems, orderId });
       }
     } catch (error) {
       console.log("error :", error);

@@ -43,8 +43,6 @@ export default function PlaceorderPage() {
     return { productId: cartItem.id, quantity: cartItem.quantity };
   });
 
-  // const orderId = 1;
-
   const placeOrderHandler = async () => {
     try {
       setLoading(true);
@@ -57,11 +55,12 @@ export default function PlaceorderPage() {
         taxPrice,
         totalPrice,
         orderItems
-      );
+      ).then((orderId) => {
+        dispatch({ type: "CART_CLEAR_ITEMS" });
+        Cookies.set("cart", JSON.stringify({ ...cart, cartItems: [] }));
+        router.push(`/order/${orderId}`);
+      });
       setLoading(false);
-      // dispatch({ type: "CART_CLEAR_ITEMS" });
-      // Cookies.set("cart", JSON.stringify({ ...cart, cartItems: [] }));
-      // router.push(`/order/${req.orderId}`);
     } catch (err) {
       setLoading(false);
       toast.error(getError(err));

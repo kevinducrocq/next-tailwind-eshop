@@ -9,7 +9,7 @@ const placeOrder = async (
   orderItems
 ) => {
   try {
-    await fetch("/api/order/placeOrderApi", {
+    const orderRepsonse = await fetch("/api/order/placeOrderApi", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -26,6 +26,8 @@ const placeOrder = async (
         orderItems,
       }),
     });
+    const { orderId } = await orderRepsonse.json();
+    return orderId;
   } catch (err) {
     console.error(err);
   }
