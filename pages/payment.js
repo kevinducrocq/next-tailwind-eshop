@@ -18,7 +18,7 @@ export default function PaymentScreen() {
   const router = useRouter();
 
   const submitHandler = (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     if (!selectedPaymentMethod) {
       return toast.error("Payment method is required");
     }
@@ -32,6 +32,7 @@ export default function PaymentScreen() {
     );
     router.push("/placeorder");
   };
+
   useEffect(() => {
     if (!shippingAddress.address) {
       return router.push("/shipping");

@@ -27,13 +27,13 @@ export default function PlaceorderPage() {
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (!paymentMethod) {
       router.push("/payment");
     }
   }, [paymentMethod, router]);
-
-  const [loading, setLoading] = useState(false);
 
   const shipping_address_id = 1;
 
