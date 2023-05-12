@@ -1,10 +1,11 @@
 import query from "@/utils/dbMysql";
 import bcryptjs from "bcryptjs";
 
-async function register(req, res) {
+async function registerUserApi(req, res) {
   if (req.method !== "POST") {
     return;
   }
+
   const { firstName, lastName, email, password } = req.body;
   if (
     !firstName ||
@@ -41,4 +42,4 @@ async function register(req, res) {
   }
 }
 
-export default register;
+export default registerUserApi;

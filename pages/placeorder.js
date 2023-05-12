@@ -94,7 +94,6 @@ export default function PlaceorderPage() {
                 {shippingAddress.country} <br />
               </div>
             </div>
-
             <div className='card p-5'>
               <div className='flex justify-between'>
                 <h2 className='mb-2 text-lg'>Méthode de paiement</h2>
@@ -104,20 +103,19 @@ export default function PlaceorderPage() {
               </div>
               <div>{paymentMethod}</div>
             </div>
-
             <div className='card overflow-x-auto p-5'>
               <div className='flex justify-between'>
-                <h2 className='mb-2 text-lg'>Produits de votre commande</h2>
+                <h2 className='mb-2 text-lg'>Produits</h2>
                 <Link href={"/cart"}>
                   <FontAwesomeIcon icon={faEdit} /> Editer
                 </Link>
               </div>
               <table className='min-w-full'>
-                <thead>
+                <thead className='border-b'>
                   <tr>
                     <th className='px-5 text-left'>Produit</th>
-                    <th className='p-5 text-right'>Quantité</th>
-                    <th className='p-5 text-right'>Prix</th>
+                    <th className='    p-5 text-right'>Quantité</th>
+                    <th className='  p-5 text-right'>Prix</th>
                     <th className='p-5 text-right'>Sous-total</th>
                   </tr>
                 </thead>
@@ -133,12 +131,12 @@ export default function PlaceorderPage() {
                               width={50}
                               height={50}
                             ></Image>
-                            {item.name}
                             &nbsp;
+                            {item.name}
                           </a>
                         </Link>
                       </td>
-                      <td className='p-5 text-right'>{item.quantity}</td>
+                      <td className=' p-5 text-right'>{item.quantity}</td>
                       <td className='p-5 text-right'>{item.price} &euro;</td>
                       <td className='p-5 text-right'>
                         {item.quantity * item.price} &euro;
@@ -148,44 +146,45 @@ export default function PlaceorderPage() {
                 </tbody>
               </table>
             </div>
-            <div className='card p-5'>
-              <h2 className='mb-2 text-lg'>Commande</h2>
-              <ul>
-                <li>
-                  <div className='mb-2 flex justify-between'>
-                    <div>Produits</div>
-                    <div>{itemsPrice} &euro;</div>
-                  </div>
-                </li>
-                <li>
-                  <div className='mb-2 flex justify-between'>
-                    <div>Taxes</div>
-                    <div>{taxPrice} &euro;</div>
-                  </div>
-                </li>
-                <li>
-                  <div className='mb-2 flex justify-between'>
-                    <div>Frais de livraison</div>
-                    <div>{shippingPrice} &euro;</div>
-                  </div>
-                </li>
-                <li>
-                  <div className='mb-2 flex justify-between'>
-                    <div>Total</div>
-                    <div>{totalPrice} &euro;</div>
-                  </div>
-                </li>
-                <li>
-                  <button
-                    disabled={loading}
-                    onClick={placeOrderHandler}
-                    className='primary-button w-full'
-                  >
-                    {loading ? "Chargement..." : "Commander"}
-                  </button>
-                </li>
-              </ul>
-            </div>
+          </div>
+
+          <div className='card p-5'>
+            <h2 className='mb-2 text-lg'>Commande</h2>
+            <ul>
+              <li>
+                <div className='mb-2 flex justify-between'>
+                  <div>Produits</div>
+                  <div>{itemsPrice} &euro;</div>
+                </div>
+              </li>
+              <li>
+                <div className='mb-2 flex justify-between'>
+                  <div>Taxes</div>
+                  <div>{taxPrice} &euro;</div>
+                </div>
+              </li>
+              <li>
+                <div className='mb-2 flex justify-between'>
+                  <div>Frais de livraison</div>
+                  <div>{shippingPrice} &euro;</div>
+                </div>
+              </li>
+              <li>
+                <div className='mb-2 flex justify-between'>
+                  <div>Total</div>
+                  <div>{totalPrice} &euro;</div>
+                </div>
+              </li>
+              <li>
+                <button
+                  disabled={loading}
+                  onClick={placeOrderHandler}
+                  className='primary-button w-full'
+                >
+                  {loading ? "Chargement..." : "Commander"}
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       )}

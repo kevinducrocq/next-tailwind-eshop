@@ -11,6 +11,7 @@ export default function ProductPage() {
   const { id } = query;
 
   const [user, setUser] = useState([]);
+
   const [shippingAddresses, setShippingAddresses] = useState([]);
 
   useEffect(() => {
@@ -60,10 +61,7 @@ export default function ProductPage() {
                       </ul>
                       <div className=''>
                         <button className=''>
-                          <FontAwesomeIcon icon={faEdit} />
-                        </button>
-                        <button className=''>
-                          <FontAwesomeIcon icon={faTrash} />
+                          <FontAwesomeIcon icon={faTrash} color='' />
                         </button>
                       </div>
                     </div>

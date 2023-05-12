@@ -28,16 +28,17 @@ export default function RegisterPage() {
 
   const submitHandler = async ({ firstName, lastName, email, password }) => {
     try {
-      registerUser(firstName, lastName, email, password);
+      const newUser = await registerUser(firstName, lastName, email, password);
+      if (newUser) {
+        const result = await signIn("credentials", {
+          redirect: false,
+          email,
+          password,
+        });
 
-      const signInResult = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-      });
-
-      if (signInResult.error) {
-        toast.error(signInResult.error, { autoClose: 1500 });
+        if (result.error) {
+          toast.error(result.error);
+        }
       }
     } catch (err) {
       toast.error(getError(err));

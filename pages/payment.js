@@ -20,7 +20,7 @@ export default function PaymentScreen() {
   const submitHandler = (e) => {
     e?.preventDefault();
     if (!selectedPaymentMethod) {
-      return toast.error("Payment method is required");
+      return toast.error("Choisissez une méthode de paiement");
     }
     dispatch({ type: "SAVE_PAYMENT_METHOD", payload: selectedPaymentMethod });
     Cookies.set(

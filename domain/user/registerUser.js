@@ -1,6 +1,9 @@
+import { getError } from "@/utils/error";
+import { toast } from "react-toastify";
+
 const registerUser = async (firstName, lastName, email, password) => {
   try {
-    const userResponse = await fetch("/api/auth/register", {
+    const userResponse = await fetch("/api/auth/registerUserApi", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -13,7 +16,13 @@ const registerUser = async (firstName, lastName, email, password) => {
         password,
       }),
     });
-    return userResponse.json();
+
+    if (userResponse.status > 400) {
+      getError(userResponse);
+      return;
+    }
+
+    return await userResponse.json();
   } catch (err) {
     console.error(err);
   }

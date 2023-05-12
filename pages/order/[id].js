@@ -16,7 +16,6 @@ function ProductPage() {
 
   useEffect(() => {
     fetchOrderById(id, setOrder, (err) => {
-      console.log("coucou");
       if (err.error === "forbidden") {
         router.push(
           "/unauthorized?message=Cette commande ne vous appartient pas"
@@ -25,13 +24,9 @@ function ProductPage() {
     });
   }, [id, router]);
 
-  console.log(order);
-
-  if (order.length === 0) {
+   if (order.length === 0) {
     return <div>Commande non trouvée</div>;
   }
-
-  console.log(order);
 
   return (
     <Layout title={`Order ${id}`}>

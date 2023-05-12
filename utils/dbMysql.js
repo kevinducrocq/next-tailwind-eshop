@@ -19,7 +19,7 @@ async function query({ query, values, force = false, singleResult = false }) {
     if (force) {
       await db.query("SET FOREIGN_KEY_CHECKS=1");
     }
-    console.log(results);
+
     if (singleResult) {
       return results[0];
     }
