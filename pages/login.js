@@ -91,7 +91,9 @@ export default function LoginPage() {
         </div>
         <div className='mb-4'>
           Vous n&apos;avez pas de compte ? &nbsp;
-          <Link href='/register'>Inscrivez-vous</Link>
+          <Link href={`/register?redirect=${redirect || "/"}`}>
+            Inscrivez-vous
+          </Link>
         </div>
       </form>
     </Layout>
