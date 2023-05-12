@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 
 const findOrderByIdApi = async (req, res) => {
-  
   // VERIFIE LA SESSION ET L'UTILISATEUR CONNECTE
   const session = await getServerSession(req, res, authOptions);
   if (!session) {
@@ -18,16 +17,23 @@ const findOrderByIdApi = async (req, res) => {
         const order = await query({
           query: "SELECT * FROM orders WHERE id = ? AND userId = ?",
           values: [id, user.id],
+          singleResult: true,
         });
 
+        if (!order) {
+          return res.status(403).send({ error: "forbidden" });
+        }
+
         const shippingAddress = await query({
-          query: "SELECT * FROM shipping_address WHERE userId = ?",
-          values: [user.id],
+          query: "SELECT * FROM shipping_address WHERE id = ?",
+          values: [order.shipping_address_id],
+          singleResult: true,
         });
 
         const billingAddress = await query({
           query: "SELECT * FROM billing_address WHERE userId = ?",
-          values: [user.id],
+          values: [order.billing_address_id],
+          singleResult: true,
         });
 
         const orderItems = await query({
@@ -48,7 +54,6 @@ const findOrderByIdApi = async (req, res) => {
         console.log("error :", error);
       }
     };
-
     fetchOrder(req.query.id);
   });
 };

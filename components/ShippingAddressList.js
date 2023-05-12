@@ -42,8 +42,9 @@ export default function ShippingAddressList({ onChange, shippingAddresses }) {
                   {shipAd.firstName} {shipAd.lastName}
                 </li>
                 <li>{shipAd.address}</li>
-                <li>{shipAd.zip}</li>
-                <li>{shipAd.city}</li>
+                <li>
+                  {shipAd.zip} {shipAd.city}
+                </li>
                 <li>{shipAd.country}</li>
               </ul>
             </div>

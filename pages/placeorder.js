@@ -35,9 +35,9 @@ export default function PlaceorderPage() {
     }
   }, [paymentMethod, router]);
 
-  const shipping_address_id = 1;
+  const shipping_address_id = cart.shippingAddress.id;
 
-  const billing_address_id = 1;
+  const billing_address_id = 1; // TODO
 
   const orderItems = cartItems.map((cartItem) => {
     return { productId: cartItem.id, quantity: cartItem.quantity };
@@ -86,9 +86,11 @@ export default function PlaceorderPage() {
                 </Link>
               </div>
               <div>
-                {shippingAddress.firstName} {shippingAddress.lastName},<br />
-                {shippingAddress.address},<br />
-                {shippingAddress.zip}, {shippingAddress.city} <br />
+                {shippingAddress.firstName} {shippingAddress.lastName}
+                <br />
+                {shippingAddress.address}
+                <br />
+                {shippingAddress.zip} {shippingAddress.city} <br />
                 {shippingAddress.country} <br />
               </div>
             </div>

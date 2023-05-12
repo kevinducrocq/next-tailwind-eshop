@@ -24,7 +24,7 @@ const placeOrderApi = async (req, res) => {
     try {
       const orderQueryResult = await query({
         query:
-          "INSERT INTO orders (userId, shipping_address_id, billing_address_id, paymentMethod, itemsPrice, shippingPrice, taxPrice, totalPrice) VALUES(?,?,?,?,?,?,?,?)",
+          "INSERT INTO orders (userId, shipping_address_id, billing_address_id, paymentMethod, itemsPrice, shippingPrice, taxPrice, totalPrice, createdAt) VALUES(?,?,?,?,?,?,?,?, NOW())",
         values: [
           user.id,
           shipping_address_id,

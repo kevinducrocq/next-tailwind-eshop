@@ -69,7 +69,10 @@ export default function Layout({ title, children }) {
                   </Menu.Button>
                   <Menu.Items className='absolute right-0 w-56 origin-top-right shadow-lg bg-white'>
                     <Menu.Item>
-                      <DropdownLink className='dropdown-link' href='/profile'>
+                      <DropdownLink
+                        className='dropdown-link'
+                        href={`/user/${session.user.id}`}
+                      >
                         Profil
                       </DropdownLink>
                     </Menu.Item>

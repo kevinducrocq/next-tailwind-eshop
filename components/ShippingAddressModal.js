@@ -40,8 +40,8 @@ export default function ShippingAddressModal(props) {
           firstName,
           lastName,
           address,
-          city,
           zip,
+          city,
           country,
         },
       })
