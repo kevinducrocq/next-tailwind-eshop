@@ -1,18 +1,15 @@
 import { getError } from "@/utils/error";
 
-const registerUser = async (firstName, lastName, email, password) => {
+const deleteShippingAddress = async (id) => {
   try {
-    const userResponse = await fetch("/api/auth/registerUserApi", {
+    const userResponse = await fetch("/api/user/deleteShippingAddressApi", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        password,
+        id,
       }),
     });
 
@@ -27,4 +24,4 @@ const registerUser = async (firstName, lastName, email, password) => {
   }
 };
 
-export default registerUser;
+export default deleteShippingAddress;

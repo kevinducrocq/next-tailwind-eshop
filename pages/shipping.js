@@ -28,7 +28,7 @@ export default function ShippingPage() {
   const submitHandler = (e) => {
     e?.preventDefault();
     if (!selectedShippingAddress) {
-      return toast.error("Choisissez une adresse");
+      return toast.error("Choisissez une adresse de livraison");
     }
     dispatch({
       type: "SAVE_SHIPPING_ADDRESS",
@@ -47,30 +47,21 @@ export default function ShippingPage() {
   return (
     <Layout title='Adresse de livraison'>
       <CheckoutWizard activeStep={1} />
-
-      <ShippingAddressList
-        onChange={setSelectedShippingAddress}
-        shippingAddresses={shippingAddresses}
-      />
-
-      <div className='flex justify-between'>
-        {shippingAddresses.length != 0 ? (
-          <ShippingAddressModal buttonText='Saisir une nouvelle adresse de livraison' />
-        ) : (
-          <div>
-            <h2>
-              Vous n&pos;avez pas encore d&apos;adresse de livraison enregistrée
-            </h2>
-            <ShippingAddressModal buttonText='Enregistrer une première adresse' />
-          </div>
-        )}
-
+      <h1 className='text-3xl font-semibold'>Adresse de livraison</h1> <hr />
+      <div className='mx-auto grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 mt-5'>
+        <ShippingAddressList
+          onChange={setSelectedShippingAddress}
+          shippingAddresses={shippingAddresses}
+          isOrder={true}
+        />
+        <ShippingAddressModal isOrder={true} />
+      </div>
+      <div className='flex justify-end'>
         <button
           className='primary-button'
           onClick={() => {
             submitHandler();
           }}
-          // disabled={!selectedShippingAddress}
         >
           Suivant <FontAwesomeIcon icon={faForward} />
         </button>

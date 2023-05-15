@@ -14,7 +14,8 @@ const getAddressesApi = async (req, res) => {
     //RECUPERER TOUTES LES ADRESSES DE LIVRAISON DE L'UTILISATEUR CONNECTE
     try {
       const result = await query({
-        query: "SELECT * FROM shipping_address WHERE userId = ?",
+        query:
+          "SELECT * FROM shipping_address WHERE userId = ? AND isVisible=1",
         values: [user.id],
       });
       res.status(200).json(result);
@@ -23,20 +24,6 @@ const getAddressesApi = async (req, res) => {
     }
   };
   fetchShippingAddress();
-
-  //   const fetchBillingAddress = async () => {
-  //     //RECUPERER TOUTES LES ADRESSES DE FACTURATION DE L'UTILISATEUR CONNECTE
-  //     try {
-  //       const result = await query({
-  //         query: "SELECT * FROM billing_address WHERE userId = ?",
-  //         values: [user.id],
-  //       });
-  //       res.status(200).json(result);
-  //     } catch (error) {
-  //       console.log("error :", error);
-  //     }
-  //   };
-  //   fetchBillingAddress();
 };
 
 export default getAddressesApi;
