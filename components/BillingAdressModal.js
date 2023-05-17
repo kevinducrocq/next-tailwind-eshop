@@ -1,14 +1,10 @@
-import saveShippingAddress from "@/domain/order/saveShippingAddress";
 import { Store } from "@/utils/Store";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Cookies from "js-cookie";
 import React, { useContext, useState, Fragment } from "react";
 import { useForm } from "react-hook-form";
 import { Dialog, Transition } from "@headlessui/react";
-import { toast } from "react-toastify";
 
-export default function ShippingAddressModal({ onCreate }) {
+export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
   const {
     handleSubmit,
     register,
@@ -19,8 +15,6 @@ export default function ShippingAddressModal({ onCreate }) {
   const { cart } = state;
 
   let [isOpen, setIsOpen] = useState(false);
-
-
 
   function closeModal() {
     setIsOpen(false);
@@ -39,45 +33,46 @@ export default function ShippingAddressModal({ onCreate }) {
     country,
   }) => {
     dispatch({
-      type: "SAVE_SHIPPING_ADDRESS",
+      type: "SAVE_BILLING_ADDRESS",
       payload: { firstName, lastName, address, zip, city, country },
     });
+    const billingAddress = {
+      firstName,
+      lastName,
+      address,
+      zip,
+      city,
+      country,
+    };
+
     Cookies.set(
       "cart",
       JSON.stringify({
         ...cart,
-        shippingAddress: {
-          firstName,
-          lastName,
-          address,
-          zip,
-          city,
-          country,
-        },
+        billingAddress,
       })
     );
-    await saveShippingAddress(firstName, lastName, address, zip, city, country);
 
     if (onCreate) {
       closeModal();
-      onCreate();
-      toast.success("Adresse ajoutée à votre profil");
+      onCreate(billingAddress);
     }
   };
 
   return (
     <>
-      <div
-        className='col-span-1 flex flex-col border-2 p-4 rounded-lg shadow-lg'
-        role='button'
-        onClick={openModal}
-      >
-        <h2 className='mb-2 text-sm'>Ajouter une adresse</h2>
-        <hr />
-        <div className='flex flex-wrap mt-auto p-3 opacity-60 justify-center'>
-          <FontAwesomeIcon icon={faPlus} size='4x' />
-        </div>
-      </div>
+      <label htmlFor='billingIsDifferent'>
+        <input
+          type='radio'
+          id='billingIsDifferent'
+          name='billingAddress'
+          onClick={() => {
+            openModal();
+            billingIsNotSame();
+          }}
+        />
+        &nbsp;Autre adresse
+      </label>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as='div' className='relative z-10' onClose={closeModal}>
@@ -109,7 +104,7 @@ export default function ShippingAddressModal({ onCreate }) {
                     as='h2'
                     className='text-xl font-medium leading-6 text-gray-900 flex justify-between'
                   >
-                    Nouvelle adresse de livraison
+                    Adresse
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       fill='none'
@@ -141,7 +136,7 @@ export default function ShippingAddressModal({ onCreate }) {
                             className='w-full'
                             autoFocus
                             {...register("firstName", {
-                              required: "Entrez votre prénom",
+                              required: "Entrez un prénom",
                             })}
                           />
                           {errors.firstName && (
@@ -157,7 +152,7 @@ export default function ShippingAddressModal({ onCreate }) {
                             id='lastName'
                             className='w-full'
                             {...register("lastName", {
-                              required: "Entrez votre nom",
+                              required: "Entrez un nom",
                             })}
                           />
                           {errors.lastName && (
@@ -173,7 +168,7 @@ export default function ShippingAddressModal({ onCreate }) {
                             id='address'
                             className='w-full'
                             {...register("address", {
-                              required: "Entrez votre adresse",
+                              required: "Entrez une adresse",
                               minLength: {
                                 value: 3,
                                 message:
@@ -194,7 +189,7 @@ export default function ShippingAddressModal({ onCreate }) {
                             id='zip'
                             className='w-full'
                             {...register("zip", {
-                              required: "Entrez votre code postal",
+                              required: "Entrez un code postal",
                             })}
                           />
                           {errors.zip && (
@@ -210,7 +205,7 @@ export default function ShippingAddressModal({ onCreate }) {
                             id='city'
                             className='w-full'
                             {...register("city", {
-                              required: "Entrez votre ville",
+                              required: "Entrez une ville",
                             })}
                           />
                           {errors.city && (
@@ -226,7 +221,7 @@ export default function ShippingAddressModal({ onCreate }) {
                             id='country'
                             className='w-full'
                             {...register("country", {
-                              required: "Entrez votre pays",
+                              required: "Entrez une pays",
                             })}
                           />
                           {errors.country && (
@@ -237,7 +232,7 @@ export default function ShippingAddressModal({ onCreate }) {
                         </div>
                       </div>
                       <button className='primary-button mb-2 w-full'>
-                        Continuer
+                        Enreigstrer
                       </button>
                     </form>
                   </div>

@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 export default function PlaceorderPage() {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
-  const { cartItems, shippingAddress, paymentMethod } = cart;
+  const { cartItems, shippingAddress, paymentMethod, billingAddress } = cart;
 
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
   const itemsPrice = round2(
@@ -37,7 +37,7 @@ export default function PlaceorderPage() {
 
   const shipping_address_id = cart.shippingAddress.id;
 
-  const billing_address_id = 1; // TODO
+  const billing_address_id = cart.billingAddress.id;
 
   const orderItems = cartItems.map((cartItem) => {
     return { productId: cartItem.id, quantity: cartItem.quantity };
@@ -46,6 +46,7 @@ export default function PlaceorderPage() {
   const placeOrderHandler = async () => {
     try {
       setLoading(true);
+
       placeOrder(
         shipping_address_id,
         billing_address_id,
@@ -79,19 +80,37 @@ export default function PlaceorderPage() {
         <div className='grid md:grid-cols-4 md:gap-5'>
           <div className='overflow-x-auto md:col-span-3'>
             <div className='card p-5'>
-              <div className='flex justify-between'>
-                <h2 className='mb-2 text-lg'>Adresse de livraison</h2>
-                <Link href={"/shipping"}>
-                  <FontAwesomeIcon icon={faEdit} /> Editer
-                </Link>
-              </div>
-              <div>
-                {shippingAddress.firstName} {shippingAddress.lastName}
-                <br />
-                {shippingAddress.address}
-                <br />
-                {shippingAddress.zip} {shippingAddress.city} <br />
-                {shippingAddress.country} <br />
+              <div className='grid md:grid-cols-4 md:gap-5'>
+                <div className='overflow-x-auto md:col-span-2'>
+                  <div className='flex justify-between'>
+                    <h2 className='mb-2 text-lg'>Adresse de livraison</h2>{" "}
+                  </div>
+                  <hr />{" "}
+                  <div className='mb-2 mt-2'>
+                    {shippingAddress?.firstName}&nbsp;
+                    {shippingAddress?.lastName} <br />
+                    {shippingAddress?.address} <br /> {shippingAddress?.city}{" "}
+                    <br /> {shippingAddress?.postalCode}{" "}
+                    {shippingAddress?.country}
+                  </div>
+                </div>
+
+                <div className='overflow-x-auto md:col-span-2'>
+                  <h2 className='mb-2 text-lg'>Adresse de facturation</h2>
+                  <hr />
+                  <div className='mb-2 mt-2'>
+                    {billingAddress?.firstName}&nbsp;
+                    {billingAddress?.lastName} <br />
+                    {billingAddress?.address} <br /> {billingAddress?.city}{" "}
+                    <br /> {billingAddress?.postalCode}{" "}
+                    {billingAddress?.country}
+                  </div>
+                  <div className='my-auto float-right'>
+                    <Link href={"/shipping"}>
+                      <FontAwesomeIcon icon={faEdit} /> Editer
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
             <div className='card p-5'>

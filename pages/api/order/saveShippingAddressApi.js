@@ -30,6 +30,7 @@ const saveShippingAddressApi = async (req, res) => {
       });
       res.status(200).json(result);
     } catch (error) {
+      res.status(400).json({ message: "Erreur lors de l'insertion en BDD" });
       console.log("error :", error);
     }
   };

@@ -27,9 +27,11 @@ const saveBillingAddressApi = async (req, res) => {
         query:
           "INSERT INTO billing_address (userId, firstName, lastName, address, zip, city, country) VALUES(?,?,?,?,?,?,?)",
         values: [user.id, firstName, lastName, address, zip, city, country],
+        singleResult: true,
       });
       res.status(200).json(result);
     } catch (error) {
+      res.status(400).json({ message: "Erreur lors de l'insertion en BDD" });
       console.log("error :", error);
     }
   };

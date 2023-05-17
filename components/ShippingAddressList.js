@@ -7,6 +7,7 @@ export default function ShippingAddressList({
   onDelete,
   shippingAddresses,
   isOrder,
+  selectedShippingAddress,
 }) {
   const [shippingAddress, setShippingAddress] = useState(null);
 
@@ -56,6 +57,7 @@ export default function ShippingAddressList({
                     country: shipAd.country,
                   });
                 }}
+                checked={selectedShippingAddress.id === shipAd.id}
                 className='float-right'
               />
             </h2>

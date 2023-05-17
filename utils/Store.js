@@ -55,6 +55,18 @@ function reducer(state, action) {
         },
       };
     }
+    case "SAVE_BILLING_ADDRESS": {
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          billingAddress: {
+            ...state.cart.billingAddress,
+            ...action.payload,
+          },
+        },
+      };
+    }
     case "SAVE_PAYMENT_METHOD": {
       return {
         ...state,
