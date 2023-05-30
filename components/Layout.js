@@ -79,7 +79,7 @@ export default function Layout({ title, children }) {
                     <Menu.Item>
                       <DropdownLink
                         className='dropdown-link'
-                        href='/oder-history'
+                        href='/order-history'
                       >
                         Historique de commandes
                       </DropdownLink>

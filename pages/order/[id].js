@@ -24,9 +24,27 @@ function ProductPage() {
     });
   }, [id, router]);
 
-   if (order.length === 0) {
+  if (order.length === 0) {
     return <div>Commande non trouvée</div>;
   }
+
+  const isSameAddress = () => {
+    if (
+      order.shippingAddress?.shippingFirstName ===
+        order.billingAddress?.billingFirstName &&
+      order.shippingAddress?.shippingLastName ===
+        order.billingAddress?.billingLastName &&
+      order.shippingAddress?.shippingStreet ===
+        order.billingAddress?.billingStreet &&
+      order.shippingAddress?.shippingZip === order.billingAddress?.billingZip &&
+      order.shippingAddress?.shippingCity ===
+        order.billingAddress?.billingCity &&
+      order.shippingAddress?.shippingCountry ===
+        order.billingAddress?.billingCountry
+    ) {
+      return true;
+    }
+  };
 
   return (
     <Layout title={`Order ${id}`}>
@@ -40,24 +58,32 @@ function ProductPage() {
                 <h2 className='mb-2 text-lg'>Adresse de livraison</h2>
                 <hr />
                 <div className='mb-2 mt-2'>
-                  {order.shippingAddress?.firstName}&nbsp;
-                  {order.shippingAddress?.lastName} <br />
-                  {order.shippingAddress?.address} <br />{" "}
-                  {order.shippingAddress?.city} <br />{" "}
-                  {order.shippingAddress?.postalCode}{" "}
-                  {order.shippingAddress?.country}
+                  {order.shippingAddress?.shippingFirstName}&nbsp;
+                  {order.shippingAddress?.shippingLastName} <br />
+                  {order.shippingAddress?.shippingStreet} <br />
+                  {order.shippingAddress?.shippingCity} <br />
+                  {order.shippingAddress?.shippingZip}
+                  {order.shippingAddress?.shippingCountry}
                 </div>
               </div>
+
               <div className='overflow-x-auto md:col-span-2'>
                 <h2 className='mb-2 text-lg'>Adresse de facturation</h2>
                 <hr />
                 <div className='mb-2 mt-2'>
-                  {order.billingAddress?.firstName}{" "}
-                  {order.billingAddress?.lastName} <br />
-                  {order.billingAddress?.address} <br />{" "}
-                  {order.billingAddress?.city} <br />{" "}
-                  {order.billingAddress?.postalCode}{" "}
-                  {order.billingAddress?.country}
+                  {isSameAddress() === true ? (
+                    "Identique à l'adresse de livraison"
+                  ) : (
+                    <div>
+                      {order.billingAddress?.billingFirstName}
+                      &nbsp;
+                      {order.billingAddress?.billingLastName} <br />
+                      {order.billingAddress?.billingStreet} <br />{" "}
+                      {order.billingAddress?.billingCity} <br />{" "}
+                      {order.billingAddress?.billingZip}{" "}
+                      {order.billingAddress?.billingCountry}
+                    </div>
+                  )}
                 </div>{" "}
               </div>
             </div>
@@ -118,8 +144,9 @@ function ProductPage() {
             </table>
           </div>
         </div>
+
         <div>
-          <div className='card  p-5'>
+          <div className='card p-5'>
             <h2 className='mb-2 text-lg'>Résumé de la commande</h2>
             <ul>
               <li>

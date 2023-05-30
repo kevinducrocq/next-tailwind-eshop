@@ -1,10 +1,10 @@
 const saveBillingAddress = async (
-  firstName,
-  lastName,
-  address,
-  zip,
-  city,
-  country
+  billingFirstName,
+  billingLastName,
+  billingStreet,
+  billingCity,
+  billingZip,
+  billingCountry
 ) => {
   try {
     await fetch("/api/order/saveBillingAddressApi", {
@@ -14,12 +14,12 @@ const saveBillingAddress = async (
       },
       method: "POST",
       body: JSON.stringify({
-        firstName,
-        lastName,
-        address,
-        zip,
-        city,
-        country,
+        billingFirstName,
+        billingLastName,
+        billingStreet,
+        billingCity,
+        billingZip,
+        billingCountry,
       }),
     });
   } catch (err) {

@@ -25,24 +25,31 @@ export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
   }
 
   const submitHandler = async ({
-    firstName,
-    lastName,
-    address,
-    city,
-    zip,
-    country,
+    billingFirstName,
+    billingLastName,
+    billingStreet,
+    billingCity,
+    billingZip,
+    billingCountry,
   }) => {
     dispatch({
       type: "SAVE_BILLING_ADDRESS",
-      payload: { firstName, lastName, address, zip, city, country },
+      payload: {
+        billingFirstName,
+        billingLastName,
+        billingStreet,
+        billingCity,
+        billingZip,
+        billingCountry,
+      },
     });
     const billingAddress = {
-      firstName,
-      lastName,
-      address,
-      zip,
-      city,
-      country,
+      billingFirstName,
+      billingLastName,
+      billingStreet,
+      billingCity,
+      billingZip,
+      billingCountry,
     };
 
     Cookies.set(
@@ -129,45 +136,45 @@ export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
                     >
                       <div className='relative p-6 flex-auto'>
                         <div className='mb-4'>
-                          <label htmlFor='firstName'>Prénom</label>
+                          <label htmlFor='billingFirstName'>Prénom</label>
                           <input
                             type='text'
-                            id='firstName'
+                            id='billingFirstName'
                             className='w-full'
                             autoFocus
-                            {...register("firstName", {
+                            {...register("billingFirstName", {
                               required: "Entrez un prénom",
                             })}
                           />
-                          {errors.firstName && (
+                          {errors.billingFirstName && (
                             <div className='text-red-500'>
-                              {errors.firstName.message}
+                              {errors.billingFirstName.message}
                             </div>
                           )}
                         </div>
                         <div className='mb-4'>
-                          <label htmlFor='lastName'>Nom</label>
+                          <label htmlFor='billingLastName'>Nom</label>
                           <input
                             type='text'
-                            id='lastName'
+                            id='billingLastName'
                             className='w-full'
-                            {...register("lastName", {
+                            {...register("billingLastName", {
                               required: "Entrez un nom",
                             })}
                           />
-                          {errors.lastName && (
+                          {errors.billingLastName && (
                             <div className='text-red-500'>
-                              {errors.lastName.message}
+                              {errors.billingLastName.message}
                             </div>
                           )}
                         </div>
                         <div className='mb-4'>
-                          <label htmlFor='address'>Adresse</label>
+                          <label htmlFor='billingStreet'>Adresse</label>
                           <input
                             type='text'
-                            id='address'
+                            id='billingStreet'
                             className='w-full'
-                            {...register("address", {
+                            {...register("billingStreet", {
                               required: "Entrez une adresse",
                               minLength: {
                                 value: 3,
@@ -176,63 +183,63 @@ export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
                               },
                             })}
                           />
-                          {errors.address && (
+                          {errors.billingStreet && (
                             <div className='text-red-500'>
-                              {errors.address.message}
+                              {errors.billingStreet.message}
                             </div>
                           )}
                         </div>
                         <div className='mb-4'>
-                          <label htmlFor='zip'>Code postal</label>
+                          <label htmlFor='billingZip'>Code postal</label>
                           <input
                             type='text'
-                            id='zip'
+                            id='billingZip'
                             className='w-full'
-                            {...register("zip", {
+                            {...register("billingZip", {
                               required: "Entrez un code postal",
                             })}
                           />
-                          {errors.zip && (
+                          {errors.billingZip && (
                             <div className='text-red-500'>
-                              {errors.zip.message}
+                              {errors.billingZip.message}
                             </div>
                           )}
                         </div>
                         <div className='mb-4'>
-                          <label htmlFor='city'>Ville</label>
+                          <label htmlFor='billingCity'>Ville</label>
                           <input
                             type='text'
-                            id='city'
+                            id='billingCity'
                             className='w-full'
-                            {...register("city", {
+                            {...register("billingCity", {
                               required: "Entrez une ville",
                             })}
                           />
-                          {errors.city && (
+                          {errors.billingCity && (
                             <div className='text-red-500'>
-                              {errors.city.message}
+                              {errors.billingCity.message}
                             </div>
                           )}
                         </div>
                         <div className='mb-4'>
-                          <label htmlFor='country'>Pays</label>
+                          <label htmlFor='billingCountry'>Pays</label>
                           <input
                             type='text'
-                            id='country'
+                            id='billingCountry'
                             className='w-full'
-                            {...register("country", {
-                              required: "Entrez une pays",
+                            {...register("billingCountry", {
+                              required: "Entrez un pays",
                             })}
                           />
-                          {errors.country && (
+                          {errors.billingCountry && (
                             <div className='text-red-500'>
-                              {errors.country.message}
+                              {errors.billingCountry.message}
                             </div>
                           )}
                         </div>
                       </div>
                       <button className='primary-button mb-2 w-full'>
-                        Enreigstrer
+                        Enregistrer
                       </button>
                     </form>
                   </div>

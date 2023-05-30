@@ -20,8 +20,6 @@ export default function ShippingAddressModal({ onCreate }) {
 
   let [isOpen, setIsOpen] = useState(false);
 
-
-
   function closeModal() {
     setIsOpen(false);
   }
@@ -31,32 +29,46 @@ export default function ShippingAddressModal({ onCreate }) {
   }
 
   const submitHandler = async ({
-    firstName,
-    lastName,
-    address,
-    city,
-    zip,
-    country,
+    shippingFirstName,
+    shippingLastName,
+    shippingStreet,
+    shippingCity,
+    shippingZip,
+    shippingCountry,
   }) => {
     dispatch({
       type: "SAVE_SHIPPING_ADDRESS",
-      payload: { firstName, lastName, address, zip, city, country },
+      payload: {
+        shippingFirstName,
+        shippingLastName,
+        shippingStreet,
+        shippingZip,
+        shippingCity,
+        shippingCountry,
+      },
     });
     Cookies.set(
       "cart",
       JSON.stringify({
         ...cart,
         shippingAddress: {
-          firstName,
-          lastName,
-          address,
-          zip,
-          city,
-          country,
+          shippingFirstName,
+          shippingLastName,
+          shippingStreet,
+          shippingZip,
+          shippingCity,
+          shippingCountry,
         },
       })
     );
-    await saveShippingAddress(firstName, lastName, address, zip, city, country);
+    await saveShippingAddress(
+      shippingFirstName,
+      shippingLastName,
+      shippingStreet,
+      shippingZip,
+      shippingCity,
+      shippingCountry
+    );
 
     if (onCreate) {
       closeModal();
@@ -134,45 +146,45 @@ export default function ShippingAddressModal({ onCreate }) {
                     >
                       <div className='relative p-6 flex-auto'>
                         <div className='mb-4'>
-                          <label htmlFor='firstName'>Prénom</label>
+                          <label htmlFor='shippingFirstName'>Prénom</label>
                           <input
                             type='text'
-                            id='firstName'
+                            id='shippingFirstName'
                             className='w-full'
                             autoFocus
-                            {...register("firstName", {
+                            {...register("shippingFirstName", {
                               required: "Entrez votre prénom",
                             })}
                           />
-                          {errors.firstName && (
+                          {errors.shippingFirstName && (
                             <div className='text-red-500'>
-                              {errors.firstName.message}
+                              {errors.shippingFirstName.message}
                             </div>
                           )}
                         </div>
                         <div className='mb-4'>
-                          <label htmlFor='lastName'>Nom</label>
+                          <label htmlFor='shippingLastName'>Nom</label>
                           <input
                             type='text'
-                            id='lastName'
+                            id='shippingLastName'
                             className='w-full'
-                            {...register("lastName", {
+                            {...register("shippingLastName", {
                               required: "Entrez votre nom",
                             })}
                           />
-                          {errors.lastName && (
+                          {errors.shippingLastName && (
                             <div className='text-red-500'>
-                              {errors.lastName.message}
+                              {errors.shippingLastName.message}
                             </div>
                           )}
                         </div>
                         <div className='mb-4'>
-                          <label htmlFor='address'>Adresse</label>
+                          <label htmlFor='shippingStreet'>Adresse</label>
                           <input
                             type='text'
-                            id='address'
+                            id='shippingStreet'
                             className='w-full'
-                            {...register("address", {
+                            {...register("shippingStreet", {
                               required: "Entrez votre adresse",
                               minLength: {
                                 value: 3,
@@ -181,57 +193,57 @@ export default function ShippingAddressModal({ onCreate }) {
                               },
                             })}
                           />
-                          {errors.address && (
+                          {errors.shippingStreet && (
                             <div className='text-red-500'>
-                              {errors.address.message}
+                              {errors.shippingStreet.message}
                             </div>
                           )}
                         </div>
                         <div className='mb-4'>
-                          <label htmlFor='zip'>Code postal</label>
+                          <label htmlFor='shippingZip'>Code postal</label>
                           <input
                             type='text'
-                            id='zip'
+                            id='shippingZip'
                             className='w-full'
-                            {...register("zip", {
+                            {...register("shippingZip", {
                               required: "Entrez votre code postal",
                             })}
                           />
-                          {errors.zip && (
+                          {errors.shippingZip && (
                             <div className='text-red-500'>
-                              {errors.zip.message}
+                              {errors.shippingZip.message}
                             </div>
                           )}
                         </div>
                         <div className='mb-4'>
-                          <label htmlFor='city'>Ville</label>
+                          <label htmlFor='shippingCity'>Ville</label>
                           <input
                             type='text'
-                            id='city'
+                            id='shippingCity'
                             className='w-full'
-                            {...register("city", {
+                            {...register("shippingCity", {
                               required: "Entrez votre ville",
                             })}
                           />
-                          {errors.city && (
+                          {errors.shippingCity && (
                             <div className='text-red-500'>
-                              {errors.city.message}
+                              {errors.shippingCity.message}
                             </div>
                           )}
                         </div>
                         <div className='mb-4'>
-                          <label htmlFor='country'>Pays</label>
+                          <label htmlFor='shippingCountry'>Pays</label>
                           <input
                             type='text'
-                            id='country'
+                            id='shippingCountry'
                             className='w-full'
-                            {...register("country", {
+                            {...register("shippingCountry", {
                               required: "Entrez votre pays",
                             })}
                           />
-                          {errors.country && (
+                          {errors.shippingCountry && (
                             <div className='text-red-500'>
-                              {errors.country.message}
+                              {errors.shippingCountry.message}
                             </div>
                           )}
                         </div>

@@ -15,19 +15,26 @@ const saveBillingAddressApi = async (req, res) => {
   const { user } = session;
 
   const saveBillingAddress = async (
-    firstName,
-    lastName,
-    address,
-    zip,
-    city,
-    country
+    billingFirstName,
+    billingLastName,
+    billingStreet,
+    billingZip,
+    billingCity,
+    billingCountry
   ) => {
     try {
       const result = await query({
         query:
-          "INSERT INTO billing_address (userId, firstName, lastName, address, zip, city, country) VALUES(?,?,?,?,?,?,?)",
-        values: [user.id, firstName, lastName, address, zip, city, country],
-        singleResult: true,
+          "INSERT INTO billing_address (userId, billingFirstName, billingLastName, billingStreet, billingZip, billingCity, billingCountry) VALUES(?,?,?,?,?,?,?)",
+        values: [
+          user.id,
+          billingFirstName,
+          billingLastName,
+          billingStreet,
+          billingZip,
+          billingCity,
+          billingCountry,
+        ],
       });
       res.status(200).json(result);
     } catch (error) {
@@ -37,12 +44,12 @@ const saveBillingAddressApi = async (req, res) => {
   };
 
   saveBillingAddress(
-    req.body.firstName,
-    req.body.lastName,
-    req.body.address,
-    req.body.zip,
-    req.body.city,
-    req.body.country
+    req.body.billingFirstName,
+    req.body.billingLastName,
+    req.body.billingStreet,
+    req.body.billingZip,
+    req.body.billingCity,
+    req.body.billingCountry
   );
 };
 

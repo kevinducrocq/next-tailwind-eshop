@@ -15,18 +15,26 @@ const saveShippingAddressApi = async (req, res) => {
   const { user } = session;
 
   const saveShippingAddress = async (
-    firstName,
-    lastName,
-    address,
-    zip,
-    city,
-    country
+    shippingFirstName,
+    shippingLastName,
+    shippingStreet,
+    shippingZip,
+    shippingCity,
+    shippingCountry
   ) => {
     try {
       const result = await query({
         query:
-          "INSERT INTO shipping_address (userId, firstName, lastName, address, zip, city, country) VALUES(?,?,?,?,?,?,?)",
-        values: [user.id, firstName, lastName, address, zip, city, country],
+          "INSERT INTO shipping_address (userId, shippingFirstName, shippingLastName, shippingStreet, shippingZip, shippingCity, shippingCountry) VALUES(?,?,?,?,?,?,?)",
+        values: [
+          user.id,
+          shippingFirstName,
+          shippingLastName,
+          shippingStreet,
+          shippingZip,
+          shippingCity,
+          shippingCountry,
+        ],
       });
       res.status(200).json(result);
     } catch (error) {
@@ -36,12 +44,12 @@ const saveShippingAddressApi = async (req, res) => {
   };
 
   saveShippingAddress(
-    req.body.firstName,
-    req.body.lastName,
-    req.body.address,
-    req.body.zip,
-    req.body.city,
-    req.body.country
+    req.body.shippingFirstName,
+    req.body.shippingLastName,
+    req.body.shippingStreet,
+    req.body.shippingZip,
+    req.body.shippingCity,
+    req.body.shippingCountry
   );
 };
 

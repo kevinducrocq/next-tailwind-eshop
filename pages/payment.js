@@ -33,12 +33,14 @@ export default function PaymentScreen() {
     router.push("/placeorder");
   };
 
+  console.log("PaymentPage Cart", cart);
+
   useEffect(() => {
-    if (!shippingAddress.address) {
+    if (!shippingAddress.shippingStreet) {
       return router.push("/shipping");
     }
     setSelectedPaymentMethod(paymentMethod || "");
-  }, [paymentMethod, router, shippingAddress.address]);
+  }, [paymentMethod, router, shippingAddress.shippingStreet]);
 
   return (
     <Layout title='Payment Method'>

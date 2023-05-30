@@ -19,11 +19,8 @@ export default function ShippingPage() {
   const router = useRouter();
 
   const [shippingAddresses, setShippingAddresses] = useState([]);
-
   const [selectedShippingAddress, setSelectedShippingAddress] = useState(null);
-
   const [billingAddressIsSame, setBillingAddressIsSame] = useState(true);
-
   const [selectedBillingAddress, setSelectedBillingAddress] = useState(null);
 
   useEffect(() => {
@@ -35,7 +32,14 @@ export default function ShippingPage() {
 
   useEffect(() => {
     if (billingAddressIsSame) {
-      setSelectedBillingAddress(selectedShippingAddress);
+      setSelectedBillingAddress({
+        billingFirstName: selectedShippingAddress?.shippingFirstName,
+        billingLastName: selectedShippingAddress?.shippingLastName,
+        billingStreet: selectedShippingAddress?.shippingStreet,
+        billingZip: selectedShippingAddress?.shippingZip,
+        billingCity: selectedShippingAddress?.shippingCity,
+        billingCountry: selectedShippingAddress?.shippingCountry,
+      });
     }
   }, [selectedShippingAddress, billingAddressIsSame]);
 
@@ -48,6 +52,7 @@ export default function ShippingPage() {
       type: "SAVE_SHIPPING_ADDRESS",
       payload: selectedShippingAddress,
     });
+
     Cookies.set(
       "cart",
       JSON.stringify({
@@ -55,36 +60,42 @@ export default function ShippingPage() {
         shippingAddress: selectedShippingAddress,
       })
     );
+
     if (!selectedBillingAddress) {
       return toast.error("Choisissez une adresse de facturation");
     }
 
-    let newBillingAddress = selectedBillingAddress;
+    let billingAddress = selectedBillingAddress;
 
-    if (!selectedBillingAddress.id) {
-      newBillingAddress = await saveBillingAddress(
-        selectedBillingAddress.firstName,
-        selectedBillingAddress.lastName,
-        selectedBillingAddress.address,
-        selectedBillingAddress.zip,
-        selectedBillingAddress.city,
-        selectedBillingAddress.country
-      );
-    }
     dispatch({
       type: "SAVE_BILLING_ADDRESS",
-      payload: newBillingAddress,
+      payload: billingAddress,
     });
     Cookies.set(
       "cart",
       JSON.stringify({
         ...cart,
-        billingAddress: newBillingAddress,
+        billingAddress: billingAddress,
       })
     );
+
+    if (selectedBillingAddress) {
+      billingAddress = await saveBillingAddress(
+        selectedBillingAddress.billingFirstName,
+        selectedBillingAddress.billingLastName,
+        selectedBillingAddress.billingStreet,
+        selectedBillingAddress.billingZip,
+        selectedBillingAddress.billingCity,
+        selectedBillingAddress.billingCountry
+      );
+    }
+
     router.push("/payment");
   };
 
+  console.log("Shipping", selectedShippingAddress);
+  console.log("Billing", selectedBillingAddress);
+  // console.log("ShippingPage Cart", cart);
 
   return (
     <Layout title='Adresse de livraison'>
@@ -130,20 +141,20 @@ export default function ShippingPage() {
               />
             </div>
           </div>{" "}
-          {/* {!!selectedShippingAddress?.firstName && (
+          {!!selectedBillingAddress?.billingFirstName && (
             <div className='card p-5'>
               <ul>
                 <li>
-                  {billingAddress.firstName}&nbsp;
-                  {billingAddress.lastName}
+                  {selectedBillingAddress.billingFirstName}&nbsp;
+                  {selectedBillingAddress.billingLastName}
                 </li>
-                <li>{billingAddress.address}</li>
-                <li>{billingAddress.zip}</li>
-                <li>{billingAddress.city}</li>
-                <li>{billingAddress.country}</li>
+                <li>{selectedBillingAddress.billingStreet}</li>
+                <li>{selectedBillingAddress.billingZip}</li>
+                <li>{selectedBillingAddress.billingCity}</li>
+                <li>{selectedBillingAddress.billingCountry}</li>
               </ul>
             </div>
-          )} */}
+          )}
         </div>
       </div>
 

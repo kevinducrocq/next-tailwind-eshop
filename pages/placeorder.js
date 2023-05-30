@@ -39,6 +39,25 @@ export default function PlaceorderPage() {
 
   const billing_address_id = cart.billingAddress.id;
 
+  console.log(cart.billingAddress);
+
+  const isSameAddress = () => {
+    if (
+      cart.shippingAddress.shippingFirstName ===
+        cart.billingAddress.billingFirstName &&
+      cart.shippingAddress.shippingLastName ===
+        cart.billingAddress.billingLastName &&
+      cart.shippingAddress.shippingStreet ===
+        cart.billingAddress.billingStreet &&
+      cart.shippingAddress.shippingZip === cart.billingAddress.billingZip &&
+      cart.shippingAddress.shippingCity === cart.billingAddress.billingCity &&
+      cart.shippingAddress.shippingCountry ===
+        cart.billingAddress.billingCountry
+    ) {
+      return true;
+    }
+  };
+
   const orderItems = cartItems.map((cartItem) => {
     return { productId: cartItem.id, quantity: cartItem.quantity };
   });
@@ -46,7 +65,6 @@ export default function PlaceorderPage() {
   const placeOrderHandler = async () => {
     try {
       setLoading(true);
-
       placeOrder(
         shipping_address_id,
         billing_address_id,
@@ -82,16 +100,14 @@ export default function PlaceorderPage() {
             <div className='card p-5'>
               <div className='grid md:grid-cols-4 md:gap-5'>
                 <div className='overflow-x-auto md:col-span-2'>
-                  <div className='flex justify-between'>
-                    <h2 className='mb-2 text-lg'>Adresse de livraison</h2>{" "}
-                  </div>
-                  <hr />{" "}
+                  <h2 className='mb-2 text-lg'>Adresse de livraison</h2> <hr />{" "}
                   <div className='mb-2 mt-2'>
-                    {shippingAddress?.firstName}&nbsp;
-                    {shippingAddress?.lastName} <br />
-                    {shippingAddress?.address} <br /> {shippingAddress?.city}{" "}
-                    <br /> {shippingAddress?.postalCode}{" "}
-                    {shippingAddress?.country}
+                    {shippingAddress?.shippingFirstName}&nbsp;
+                    {shippingAddress?.shippingLastName} <br />
+                    {shippingAddress?.shippingStreet} <br />{" "}
+                    {shippingAddress?.shippingZip}{" "}
+                    {shippingAddress?.shippingCity} <br />{" "}
+                    {shippingAddress?.shippingCountry}
                   </div>
                 </div>
 
@@ -99,11 +115,19 @@ export default function PlaceorderPage() {
                   <h2 className='mb-2 text-lg'>Adresse de facturation</h2>
                   <hr />
                   <div className='mb-2 mt-2'>
-                    {billingAddress?.firstName}&nbsp;
-                    {billingAddress?.lastName} <br />
-                    {billingAddress?.address} <br /> {billingAddress?.city}{" "}
-                    <br /> {billingAddress?.postalCode}{" "}
-                    {billingAddress?.country}
+                    {isSameAddress() === true ? (
+                      "Identique à l'adresse de livraison"
+                    ) : (
+                      <div>
+                        {billingAddress?.billingFirstName}
+                        &nbsp;
+                        {billingAddress?.billingLastName} <br />
+                        {billingAddress?.billingStreet} <br />{" "}
+                        {billingAddress?.billingZip}{" "}
+                        {billingAddress?.billingCity} <br />{" "}
+                        {billingAddress?.billingCountry}
+                      </div>
+                    )}
                   </div>
                   <div className='my-auto float-right'>
                     <Link href={"/shipping"}>
@@ -133,8 +157,8 @@ export default function PlaceorderPage() {
                 <thead className='border-b'>
                   <tr>
                     <th className='px-5 text-left'>Produit</th>
-                    <th className='    p-5 text-right'>Quantité</th>
-                    <th className='  p-5 text-right'>Prix</th>
+                    <th className='p-5 text-right'>Quantité</th>
+                    <th className='p-5 text-right'>Prix</th>
                     <th className='p-5 text-right'>Sous-total</th>
                   </tr>
                 </thead>
@@ -155,7 +179,7 @@ export default function PlaceorderPage() {
                           </a>
                         </Link>
                       </td>
-                      <td className=' p-5 text-right'>{item.quantity}</td>
+                      <td className='p-5 text-right'>{item.quantity}</td>
                       <td className='p-5 text-right'>{item.price} &euro;</td>
                       <td className='p-5 text-right'>
                         {item.quantity * item.price} &euro;
@@ -166,44 +190,43 @@ export default function PlaceorderPage() {
               </table>
             </div>
           </div>
-
-          <div className='card p-5'>
-            <h2 className='mb-2 text-lg'>Commande</h2>
-            <ul>
-              <li>
-                <div className='mb-2 flex justify-between'>
-                  <div>Produits</div>
-                  <div>{itemsPrice} &euro;</div>
-                </div>
-              </li>
-              <li>
-                <div className='mb-2 flex justify-between'>
-                  <div>Taxes</div>
-                  <div>{taxPrice} &euro;</div>
-                </div>
-              </li>
-              <li>
-                <div className='mb-2 flex justify-between'>
-                  <div>Frais de livraison</div>
-                  <div>{shippingPrice} &euro;</div>
-                </div>
-              </li>
-              <li>
-                <div className='mb-2 flex justify-between'>
-                  <div>Total</div>
-                  <div>{totalPrice} &euro;</div>
-                </div>
-              </li>
-              <li>
-                <button
-                  disabled={loading}
-                  onClick={placeOrderHandler}
-                  className='primary-button w-full'
-                >
-                  {loading ? "Chargement..." : "Commander"}
-                </button>
-              </li>
-            </ul>
+          <div>
+            <div className='card p-5'>
+              <h2 className='mb-2 text-lg'>Commande</h2>
+              <ul>
+                <li>
+                  <div className='mb-2 flex justify-between'>
+                    <div>Produits</div>
+                    <div>{itemsPrice} &euro;</div>
+                  </div>
+                </li>
+                <li>
+                  <div className='mb-2 flex justify-between'>
+                    <div>Taxes</div>
+                    <div>{taxPrice} &euro;</div>
+                  </div>
+                </li>
+                <li>
+                  <div className='mb-2 flex justify-between'>
+                    <div>Frais de livraison</div>
+                    <div>{shippingPrice} &euro;</div>
+                  </div>
+                </li>
+                <li>
+                  <div className='mb-2 flex justify-between'>
+                    <div>Total</div>
+                    <div>{totalPrice} &euro;</div>
+                  </div>
+                </li>
+              </ul>
+              <button
+                disabled={loading}
+                onClick={placeOrderHandler}
+                className='primary-button w-full'
+              >
+                {loading ? "Chargement..." : "Commander"}
+              </button>
+            </div>
           </div>
         </div>
       )}
