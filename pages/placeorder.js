@@ -79,7 +79,13 @@ export default function PlaceorderPage() {
         orderItems
       ).then((orderId) => {
         dispatch({ type: "CART_CLEAR_ITEMS" });
-        Cookies.set("cart", JSON.stringify({ ...cart, cartItems: [] }));
+        Cookies.set(
+          "cart",
+          JSON.stringify({
+            ...cart,
+            cartItems: [],
+          })
+        );
         router.push(`/order/${orderId}`);
       });
       setLoading(false);

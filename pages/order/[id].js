@@ -6,7 +6,6 @@ import Layout from "../../components/Layout";
 import fetchOrderById from "@/domain/order/fetchOrderById";
 
 function ProductPage() {
-  // order/:id
   const { query } = useRouter();
   const { id } = query;
 
@@ -111,8 +110,8 @@ function ProductPage() {
               <thead className='border-b'>
                 <tr>
                   <th className='px-5 text-left'>Produit</th>
-                  <th className='    p-5 text-right'>Quantité</th>
-                  <th className='  p-5 text-right'>Prix</th>
+                  <th className='p-5 text-right'>Quantité</th>
+                  <th className='p-5 text-right'>Prix</th>
                   <th className='p-5 text-right'>Sous-total</th>
                 </tr>
               </thead>
@@ -133,7 +132,7 @@ function ProductPage() {
                         </a>
                       </Link>
                     </td>
-                    <td className=' p-5 text-right'>{item.quantity}</td>
+                    <td className='p-5 text-right'>{item.quantity}</td>
                     <td className='p-5 text-right'>€{item.price}</td>
                     <td className='p-5 text-right'>
                       €{item.quantity * item.price}

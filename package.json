@@ -20,6 +20,7 @@
     "@paypal/react-paypal-js": "^7.8.3",
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
+    "embla-carousel-react": "^8.0.0-rc05",
     "eslint": "8.39.0",
     "eslint-config-next": "13.3.1",
     "js-cookie": "^3.0.5",
@@ -30,6 +31,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
+    "react-responsive-carousel": "^3.2.23",
     "react-toastify": "^9.1.2",
     "serverless-mysql": "^1.5.5",
     "tailwindcss": "3.3.2"
