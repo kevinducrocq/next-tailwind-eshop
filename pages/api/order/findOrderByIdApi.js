@@ -30,10 +30,12 @@ const findOrderByIdApi = async (req, res) => {
       });
 
       const billingAddress = await query({
-        query: "SELECT * FROM billing_address WHERE userId = ?",
+        query: "SELECT * FROM billing_address WHERE id = ?",
         values: [order.billing_address_id],
         singleResult: true,
       });
+
+      console.log(billingAddress);
 
       const orderItems = await query({
         query:

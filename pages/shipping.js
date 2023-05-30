@@ -67,6 +67,16 @@ export default function ShippingPage() {
 
     let billingAddress = selectedBillingAddress;
 
+    if (selectedBillingAddress) {
+      billingAddress = await saveBillingAddress(
+        selectedBillingAddress.billingFirstName,
+        selectedBillingAddress.billingLastName,
+        selectedBillingAddress.billingStreet,
+        selectedBillingAddress.billingZip,
+        selectedBillingAddress.billingCity,
+        selectedBillingAddress.billingCountry
+      );
+    }
     dispatch({
       type: "SAVE_BILLING_ADDRESS",
       payload: billingAddress,
@@ -78,18 +88,6 @@ export default function ShippingPage() {
         billingAddress: billingAddress,
       })
     );
-
-    if (selectedBillingAddress) {
-      billingAddress = await saveBillingAddress(
-        selectedBillingAddress.billingFirstName,
-        selectedBillingAddress.billingLastName,
-        selectedBillingAddress.billingStreet,
-        selectedBillingAddress.billingZip,
-        selectedBillingAddress.billingCity,
-        selectedBillingAddress.billingCountry
-      );
-    }
-
     router.push("/payment");
   };
 

@@ -1,5 +1,6 @@
 import CheckoutWizard from "@/components/CheckoutWizard";
 import Layout from "@/components/Layout";
+import getLastBillingAddress from "@/domain/order/getLastBillingAddress";
 import placeOrder from "@/domain/order/placeOrder";
 import { Store } from "@/utils/Store";
 import { getError } from "@/utils/error";
@@ -16,7 +17,7 @@ import { toast } from "react-toastify";
 export default function PlaceorderPage() {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
-  const { cartItems, shippingAddress, paymentMethod, billingAddress } = cart;
+  const { cartItems, shippingAddress, paymentMethod } = cart;
 
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
   const itemsPrice = round2(
@@ -28,6 +29,13 @@ export default function PlaceorderPage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
+  const [lastBillingAddress, setLastBillingAddress] = useState("");
+
+  useEffect(() => {
+    getLastBillingAddress(setLastBillingAddress);
+  }, []);
+
+  console.log("lastbilling", lastBillingAddress);
 
   useEffect(() => {
     if (!paymentMethod) {
@@ -37,22 +45,19 @@ export default function PlaceorderPage() {
 
   const shipping_address_id = cart.shippingAddress.id;
 
-  const billing_address_id = cart.billingAddress.id;
-
-  console.log(cart.billingAddress);
+  const billing_address_id = lastBillingAddress.id;
 
   const isSameAddress = () => {
     if (
       cart.shippingAddress.shippingFirstName ===
-        cart.billingAddress.billingFirstName &&
+        lastBillingAddress.billingFirstName &&
       cart.shippingAddress.shippingLastName ===
-        cart.billingAddress.billingLastName &&
+        lastBillingAddress.billingLastName &&
       cart.shippingAddress.shippingStreet ===
-        cart.billingAddress.billingStreet &&
-      cart.shippingAddress.shippingZip === cart.billingAddress.billingZip &&
-      cart.shippingAddress.shippingCity === cart.billingAddress.billingCity &&
-      cart.shippingAddress.shippingCountry ===
-        cart.billingAddress.billingCountry
+        lastBillingAddress.billingStreet &&
+      cart.shippingAddress.shippingZip === lastBillingAddress.billingZip &&
+      cart.shippingAddress.shippingCity === lastBillingAddress.billingCity &&
+      cart.shippingAddress.shippingCountry === lastBillingAddress.billingCountry
     ) {
       return true;
     }
@@ -119,13 +124,13 @@ export default function PlaceorderPage() {
                       "Identique à l'adresse de livraison"
                     ) : (
                       <div>
-                        {billingAddress?.billingFirstName}
+                        {lastBillingAddress?.billingFirstName}
                         &nbsp;
-                        {billingAddress?.billingLastName} <br />
-                        {billingAddress?.billingStreet} <br />{" "}
-                        {billingAddress?.billingZip}{" "}
-                        {billingAddress?.billingCity} <br />{" "}
-                        {billingAddress?.billingCountry}
+                        {lastBillingAddress?.billingLastName} <br />
+                        {lastBillingAddress?.billingStreet} <br />{" "}
+                        {lastBillingAddress?.billingZip}{" "}
+                        {lastBillingAddress?.billingCity} <br />{" "}
+                        {lastBillingAddress?.billingCountry}
                       </div>
                     )}
                   </div>

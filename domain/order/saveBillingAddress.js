@@ -2,8 +2,8 @@ const saveBillingAddress = async (
   billingFirstName,
   billingLastName,
   billingStreet,
-  billingCity,
   billingZip,
+  billingCity,
   billingCountry
 ) => {
   try {
@@ -17,8 +17,8 @@ const saveBillingAddress = async (
         billingFirstName,
         billingLastName,
         billingStreet,
-        billingCity,
         billingZip,
+        billingCity,
         billingCountry,
       }),
     });
