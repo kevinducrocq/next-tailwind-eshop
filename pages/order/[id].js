@@ -28,8 +28,6 @@ function ProductPage() {
     return <div>Commande non trouvée</div>;
   }
 
-  console.log(order.billingAddress);
-
   const isSameAddress = () => {
     if (
       order.shippingAddress?.shippingFirstName ===

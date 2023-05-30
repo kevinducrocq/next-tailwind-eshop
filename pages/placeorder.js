@@ -35,8 +35,6 @@ export default function PlaceorderPage() {
     getLastBillingAddress(setLastBillingAddress);
   }, []);
 
-  console.log("lastbilling", lastBillingAddress);
-
   useEffect(() => {
     if (!paymentMethod) {
       router.push("/payment");

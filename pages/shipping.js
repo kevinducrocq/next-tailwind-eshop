@@ -91,10 +91,6 @@ export default function ShippingPage() {
     router.push("/payment");
   };
 
-  console.log("Shipping", selectedShippingAddress);
-  console.log("Billing", selectedBillingAddress);
-  // console.log("ShippingPage Cart", cart);
-
   return (
     <Layout title='Adresse de livraison'>
       <CheckoutWizard activeStep={1} />
@@ -108,7 +104,12 @@ export default function ShippingPage() {
             isOrder={true}
           />
           <ShippingAddressModal
-            onCreate={() => fetchAddresses(setShippingAddresses)}
+            onCreate={() =>
+              fetchAddresses((addresses) => {
+                setShippingAddresses(addresses);
+                setSelectedShippingAddress(addresses[addresses.length - 1]);
+              })
+            }
           />
         </div>
       </div>

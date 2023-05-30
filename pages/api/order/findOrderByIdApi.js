@@ -35,8 +35,6 @@ const findOrderByIdApi = async (req, res) => {
         singleResult: true,
       });
 
-      console.log(billingAddress);
-
       const orderItems = await query({
         query:
           "SELECT * FROM order_items LEFT JOIN products ON order_items.productId = products.id WHERE order_items.orderId = ?",

@@ -33,9 +33,7 @@ export default function PaymentScreen() {
     router.push("/placeorder");
   };
 
-  console.log("PaymentPage Cart", cart);
-
-  useEffect(() => {
+   useEffect(() => {
     if (!shippingAddress.shippingStreet) {
       return router.push("/shipping");
     }

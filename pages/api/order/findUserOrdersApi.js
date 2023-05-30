@@ -15,18 +15,27 @@ const findUserOrdersApi = async (req, res) => {
     try {
       const orders = await query({
         query:
-          "SELECT orders.*, order_items.*, shipping_address.*, billing_address.* FROM orders JOIN order_items ON orders.id = order_items.orderId JOIN shipping_address ON orders.shipping_address_id = shipping_address.id JOIN billing_address ON orders.billing_address_id = billing_address.id WHERE orders.userId = ?",
+          "SELECT orders.*, billing_address.*, shipping_address.* FROM orders JOIN billing_address ON orders.billing_address_id = billing_address.id JOIN shipping_address ON orders.shipping_address_id = shipping_address.id WHERE orders.userId = ?",
         values: [user.id],
       });
+
+      for (const order of orders) {
+        const result = await query({
+          query:
+            "SELECT * FROM order_items LEFT JOIN products ON order_items.productId = products.id WHERE order_items.orderId = ?",
+          values: [order.id],
+        });
+        order.orderItems = result;
+      }
 
       if (!orders) {
         return res.status(403).send({ error: "forbidden" });
       }
-      res.status(200).json({ orders });
+
+      res.status(200).json(orders);
     } catch (error) {
       res.json(error);
       res.status(405).end();
-
       console.log("error :", error);
     }
   };
