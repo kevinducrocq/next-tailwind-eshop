@@ -48,7 +48,10 @@ function CartPage() {
       <h1 className='mb-4 text-xl'>Panier</h1>
       {cartItems.length === 0 ? (
         <div>
-          Votre panier est vide. <Link href='/'>Go Shopping</Link>
+          Votre panier est vide.{" "}
+          <Link legacyBehavior href='/'>
+            Go Shopping
+          </Link>
         </div>
       ) : (
         <div className='grid md:grid-cols-4 md:gap-5'>

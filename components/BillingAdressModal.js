@@ -1,8 +1,11 @@
-import { Store } from "@/utils/Store";
-import Cookies from "js-cookie";
 import React, { useContext, useState, Fragment } from "react";
 import { useForm } from "react-hook-form";
 import { Dialog, Transition } from "@headlessui/react";
+import Cookies from "js-cookie";
+
+import { Store } from "@/utils/Store";
+
+const ERROR_REQUIRED = "Ce champ est requis";
 
 export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
   const {
@@ -14,7 +17,7 @@ export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
 
-  let [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
     setIsOpen(false);
@@ -22,43 +25,21 @@ export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
 
   function openModal() {
     setIsOpen(true);
+    billingIsNotSame();
   }
 
-  const submitHandler = async ({
-    billingFirstName,
-    billingLastName,
-    billingStreet,
-    billingCity,
-    billingZip,
-    billingCountry,
-  }) => {
+  const submitHandler = async (formData) => {
     dispatch({
       type: "SAVE_BILLING_ADDRESS",
-      payload: {
-        billingFirstName,
-        billingLastName,
-        billingStreet,
-        billingCity,
-        billingZip,
-        billingCountry,
-      },
+      payload: formData,
     });
-    const billingAddress = {
-      billingFirstName,
-      billingLastName,
-      billingStreet,
-      billingCity,
-      billingZip,
-      billingCountry,
-    };
 
-    Cookies.set(
-      "cart",
-      JSON.stringify({
-        ...cart,
-        billingAddress,
-      })
-    );
+    const billingAddress = formData;
+
+    Cookies.set("cart", {
+      ...cart,
+      billingAddress,
+    });
 
     if (onCreate) {
       closeModal();
@@ -73,10 +54,7 @@ export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
           type='radio'
           id='billingIsDifferent'
           name='billingAddress'
-          onClick={() => {
-            openModal();
-            billingIsNotSame();
-          }}
+          onClick={openModal}
         />
         &nbsp;Autre adresse
       </label>
@@ -143,7 +121,7 @@ export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
                             className='w-full'
                             autoFocus
                             {...register("billingFirstName", {
-                              required: "Entrez un prénom",
+                              required: ERROR_REQUIRED,
                             })}
                           />
                           {errors.billingFirstName && (
@@ -159,7 +137,7 @@ export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
                             id='billingLastName'
                             className='w-full'
                             {...register("billingLastName", {
-                              required: "Entrez un nom",
+                              required: ERROR_REQUIRED,
                             })}
                           />
                           {errors.billingLastName && (
@@ -175,7 +153,7 @@ export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
                             id='billingStreet'
                             className='w-full'
                             {...register("billingStreet", {
-                              required: "Entrez une adresse",
+                              required: ERROR_REQUIRED,
                               minLength: {
                                 value: 3,
                                 message:
@@ -196,7 +174,7 @@ export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
                             id='billingZip'
                             className='w-full'
                             {...register("billingZip", {
-                              required: "Entrez un code postal",
+                              required: ERROR_REQUIRED,
                             })}
                           />
                           {errors.billingZip && (
@@ -212,7 +190,7 @@ export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
                             id='billingCity'
                             className='w-full'
                             {...register("billingCity", {
-                              required: "Entrez une ville",
+                              required: ERROR_REQUIRED,
                             })}
                           />
                           {errors.billingCity && (
@@ -228,7 +206,7 @@ export default function BillingAddressModal({ onCreate, billingIsNotSame }) {
                             id='billingCountry'
                             className='w-full'
                             {...register("billingCountry", {
-                              required: "Entrez un pays",
+                              required: ERROR_REQUIRED,
                             })}
                           />
                           {errors.billingCountry && (

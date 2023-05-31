@@ -16,8 +16,6 @@ export default function Home() {
     fetchProducts(setProducts);
   }, []);
 
-  console.log(cart);
-
   const addToCartHandler = async (product) => {
     const existItem = cart.cartItems.find((x) => x.slug === product.slug);
     const quantity = existItem ? existItem.quantity + 1 : 1;

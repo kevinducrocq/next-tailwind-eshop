@@ -46,19 +46,19 @@ export default function Layout({ title, children }) {
       <div className='flex min-h-screen flex-col justify-between'>
         <header>
           <nav className='flex h-12 items-center px-4 justify-between shadow-md'>
-            <Link href='/'>
-              <span className='text-lg font-bold'>Eshop</span>
+            <Link legacyBehavior href='/'>
+              <a className='text-lg font-bold'>Eshop</a>
             </Link>
             <div>
-              <Link href='/cart'>
-                <span className='p-2'>
+              <Link legacyBehavior href='/cart'>
+                <a className='p-2'>
                   Panier
                   {cartItemsCount > 0 && (
                     <span className='ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white'>
                       {cartItemsCount}
                     </span>
                   )}
-                </span>
+                </a>
               </Link>
               {status === "loading" ? (
                 "Chargement..."
@@ -72,6 +72,7 @@ export default function Layout({ title, children }) {
                       <DropdownLink
                         className='dropdown-link'
                         href={`/user/${session.user.id}`}
+                        legacyBehavior
                       >
                         Profil
                       </DropdownLink>
@@ -80,6 +81,7 @@ export default function Layout({ title, children }) {
                       <DropdownLink
                         className='dropdown-link'
                         href='/order-history'
+                        legacyBehavior
                       >
                         Historique de commandes
                       </DropdownLink>
@@ -89,6 +91,7 @@ export default function Layout({ title, children }) {
                         className='dropdown-link'
                         onClick={logoutHandler}
                         href=''
+                        legacyBehavior
                       >
                         Déconnexion
                       </DropdownLink>
