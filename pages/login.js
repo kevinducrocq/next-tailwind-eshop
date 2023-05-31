@@ -54,7 +54,7 @@ export default function LoginPage() {
             {...register("email", {
               required: "Entrez votre email",
               pattern: {
-                value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/i,
+                value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i,
                 message: "Entrez une adresse email valide",
               },
             })}

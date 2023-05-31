@@ -71,14 +71,14 @@ function CartPage() {
                     <td>
                       <Link href={`/product/${item?.slug}`}>
                         <span className='flex items-center'>
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            width={50}
-                            height={50}
-                          />
-                          &nbsp;
-                          {item?.name}
+                          <div className='w-10 h-10 relative'>
+                            <Image
+                              src={item.image}
+                              alt={item.name}
+                              layout='fill'
+                            />
+                          </div>
+                          <span className='ml-2'>{item?.name}</span>
                         </span>
                       </Link>
                     </td>

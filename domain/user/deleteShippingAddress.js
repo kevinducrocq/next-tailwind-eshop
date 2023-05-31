@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { getError } from "@/utils/error";
 
 const deleteShippingAddress = async (id) => {
@@ -14,14 +15,18 @@ const deleteShippingAddress = async (id) => {
     });
 
     if (userResponse.status > 400) {
-      getError(userResponse);
+      const error = await getError(userResponse);
+      toast.error(error);
       return;
     }
 
     return await userResponse.json();
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
+    toast.error(
+      "Une erreur s'est produite lors de la suppression de l'adresse"
+    );
   }
 };
 
-export default deleteShippingAddress;
+export { deleteShippingAddress };

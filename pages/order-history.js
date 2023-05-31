@@ -28,7 +28,7 @@ export default function OrderHistoryPage() {
 
       let y = height - margin;
 
-      // Ajouter le titre de la facture
+      // Add invoice title
       page.drawText("Facture", {
         x: margin,
         y,
@@ -37,7 +37,7 @@ export default function OrderHistoryPage() {
         color: rgb(0, 0, 0),
       });
 
-      // Ajouter les détails de la facture
+      // Add invoice details
       y -= lineHeight;
       page.drawText(`Commande n°: ${order.id}`, {
         x: margin,
@@ -47,7 +47,7 @@ export default function OrderHistoryPage() {
         color: rgb(0, 0, 0),
       });
 
-      // Ajouter les informations sur la commande
+      // Add order information
       y -= lineHeight;
       page.drawText(`Créée le : ${order.createdAt.substring(0, 10)}`, {
         x: margin,
@@ -57,12 +57,12 @@ export default function OrderHistoryPage() {
         color: rgb(0, 0, 0),
       });
 
-      // Ajouter d'autres détails de la facture...
+      // Add other invoice details...
 
-      // Génération du fichier PDF
+      // Generate PDF file
       const pdfBytes = await pdfDoc.save();
 
-      // Enregistrement et téléchargement du fichier PDF
+      // Save and download the PDF file
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       saveAs(blob, "facture.pdf");
     } catch (error) {
@@ -137,14 +137,15 @@ export default function OrderHistoryPage() {
                 </button>
               </div>
             </div>
-            <div className='mt-8 max-h-40 overflow-y-auto'>
+            <div className='mt-8 max-h-40 overflow-x-auto'>
               <Carousel
                 items={order.orderItems.map((item) => (
                   <div key={item.id} className='flex items-center'>
-                    <div className='mr-4'>
+                    <div className='w-24 h-24 mr-4'>
                       <Image
                         src={item.image}
                         alt={item.name}
+                        layout='responsive'
                         width={150}
                         height={150}
                       />

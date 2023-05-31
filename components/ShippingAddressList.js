@@ -1,7 +1,7 @@
-import deleteShippingAddress from "@/domain/user/deleteShippingAddress";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ConfirmModal from "./ConfirmModal";
+import { deleteShippingAddress } from "@/domain/user/deleteShippingAddress";
 
 export default function ShippingAddressList({
   onChange,
@@ -17,24 +17,40 @@ export default function ShippingAddressList({
     if (shippingAddress && isOrder) {
       onChange(shippingAddress);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shippingAddress]);
+  }, [shippingAddress, isOrder, onChange]);
 
-  const deleteShippingAddressHandler = async (shippingAddressId) => {
+  const handleShippingAddressSelection = (shipAd) => {
+    setShippingAddress({
+      id: shipAd.id,
+      shippingFirstName: shipAd.shippingFirstName,
+      shippingLastName: shipAd.shippingLastName,
+      shippingStreet: shipAd.shippingStreet,
+      shippingZip: shipAd.shippingZip,
+      shippingCity: shipAd.shippingCity,
+      shippingCountry: shipAd.shippingCountry,
+    });
+  };
+
+  const handleDeleteShippingAddress = async (shippingAddressId) => {
     try {
       await deleteShippingAddress(shippingAddressId);
       if (onDelete) {
         onDelete();
       }
       toast.success("Adresse supprimée de votre profil");
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        "Une erreur s'est produite lors de la suppression de l'adresse"
+      );
     }
   };
 
   return (
     <>
       {shippingAddresses.map((shipAd) => {
+        const isSelected = selectedShippingAddress?.id === shipAd.id;
+
         return isOrder ? (
           <label
             key={shipAd.id}
@@ -48,18 +64,8 @@ export default function ShippingAddressList({
                 id={shipAd.id}
                 name='shippingAd'
                 value={shipAd}
-                onChange={() => {
-                  setShippingAddress({
-                    id: shipAd.id,
-                    shippingFirstName: shipAd.shippingFirstName,
-                    shippingLastName: shipAd.shippingLastName,
-                    shippingStreet: shipAd.shippingStreet,
-                    shippingZip: shipAd.shippingZip,
-                    shippingCity: shipAd.shippingCity,
-                    shippingCountry: shipAd.shippingCountry,
-                  });
-                }}
-                checked={selectedShippingAddress?.id === shipAd.id}
+                onChange={() => handleShippingAddressSelection(shipAd)}
+                checked={isSelected}
                 className='float-right'
               />
             </h2>
@@ -81,7 +87,7 @@ export default function ShippingAddressList({
           <div
             key={shipAd.id}
             htmlFor={shipAd.id}
-            className='col-span-1 flex flex-col border p-4 rounded-lg border-gray-200 '
+            className='col-span-1 flex flex-col border p-4 rounded-lg border-gray-200'
           >
             <div className='flex mt-auto pt-2 text-md'>
               <ul>
@@ -120,11 +126,11 @@ export default function ShippingAddressList({
             </div>
             <ConfirmModal
               isOpen={confirmModalOpen}
-              handleConfirm={() => deleteShippingAddressHandler(shipAd.id)}
+              handleConfirm={() => handleDeleteShippingAddress(shipAd.id)}
               handleClose={() => setConfirmModalOpen(false)}
-              modalTitle={"Supprimer cette adresse ?"}
-              buttonCancelText={"Annuler"}
-              buttonConfirmText={"Oui"}
+              modalTitle='Supprimer cette adresse ?'
+              buttonCancelText='Annuler'
+              buttonConfirmText='Oui'
             />
           </div>
         );
