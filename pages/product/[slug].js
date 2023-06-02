@@ -18,7 +18,9 @@ export default function ProductPage() {
   const [product, setProduct] = useState([]);
 
   useEffect(() => {
-    fetchProductBySlug(slug, setProduct);
+    if (slug) {
+      fetchProductBySlug(slug, setProduct);
+    }
   }, [slug]);
 
   if (!product) {

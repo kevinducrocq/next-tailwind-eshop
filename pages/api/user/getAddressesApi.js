@@ -1,6 +1,6 @@
-import query from "@/utils/dbMysql";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
+import { findShippingAddressesByUserId } from "@/repositories/shippingAddressRepository";
 
 const getAddressesApi = async (req, res) => {
   try {
@@ -13,7 +13,7 @@ const getAddressesApi = async (req, res) => {
     const { user } = session;
 
     // RÉCUPÉRER TOUTES LES ADRESSES DE LIVRAISON DE L'UTILISATEUR CONNECTÉ
-    const addresses = await fetchShippingAddresses(user.id);
+    const addresses = await findShippingAddressesByUserId(user.id);
 
     res.status(200).json(addresses);
   } catch (error) {
@@ -21,28 +21,9 @@ const getAddressesApi = async (req, res) => {
       "Une erreur s'est produite lors de la récupération des adresses de livraison :",
       error
     );
-    res
-      .status(500)
-      .json({
-        error: "Erreur lors de la récupération des adresses de livraison",
-      });
-  }
-};
-
-const fetchShippingAddresses = async (userId) => {
-  try {
-    const queryResult = await query({
-      query:
-        "SELECT * FROM shipping_address WHERE userId = ? AND isVisible = 1",
-      values: [userId],
+    res.status(500).json({
+      error: "Erreur lors de la récupération des adresses de livraison",
     });
-    return queryResult;
-  } catch (error) {
-    console.error(
-      "Une erreur s'est produite lors de l'exécution de la requête :",
-      error
-    );
-    throw error;
   }
 };
 

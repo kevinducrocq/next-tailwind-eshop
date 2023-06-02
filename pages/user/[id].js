@@ -13,7 +13,9 @@ export default function ProductPage() {
   const [shippingAddresses, setShippingAddresses] = useState([]);
 
   useEffect(() => {
-    fetchUserById(id, setUser);
+    if (id) {
+      fetchUserById(id, setUser);
+    }
   }, [id]);
 
   useEffect(() => {

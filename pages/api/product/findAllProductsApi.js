@@ -1,9 +1,9 @@
-import query from "@/utils/dbMysql";
+import * as productService from "@/services/productService";
 
 const findAllProductsApi = async (req, res) => {
   try {
     // Récupérer tous les produits
-    const result = await query({ query: "SELECT * FROM products" });
+    const result = await productService.findAll();
     res.status(200).json(result);
   } catch (error) {
     console.error(

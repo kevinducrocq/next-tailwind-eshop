@@ -10,7 +10,7 @@ const initialState = {
         cartItems: [],
         shippingAddress: {},
         billingAddress: {},
-        paymentMethod: "",
+        paymentMethod: "", 
       },
 };
 

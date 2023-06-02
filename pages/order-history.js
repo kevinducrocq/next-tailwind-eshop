@@ -109,11 +109,15 @@ export default function OrderHistoryPage() {
               <div className='mt-4 sm:mt-0 sm:ml-4'>
                 <h3 className='text-lg font-semibold'>Adresse de livraison</h3>
                 <p className='text-sm'>
-                  {order.shippingFirstName} {order.shippingLastName}
+                  {order.shippingAddress.shippingFirstName}{" "}
+                  {order.shippingAddress.shippingLastName}
                 </p>
-                <p className='text-sm'>{order.shippingStreet}</p>
                 <p className='text-sm'>
-                  {order.shippingZip} {order.shippingCity}
+                  {order.shippingAddress.shippingStreet}
+                </p>
+                <p className='text-sm'>
+                  {order.shippingAddress.shippingZip}{" "}
+                  {order.shippingAddress.shippingCity}
                 </p>
               </div>
               <div className='mt-4 sm:mt-0 sm:ml-4'>
@@ -121,11 +125,13 @@ export default function OrderHistoryPage() {
                   Adresse de facturation
                 </h3>
                 <p className='text-sm'>
-                  {order.billingFirstName} {order.billingLastName}
+                  {order.billingAddress.billingFirstName}{" "}
+                  {order.billingAddress.billingLastName}
                 </p>
-                <p className='text-sm'>{order.billingStreet}</p>
+                <p className='text-sm'>{order.billingAddress.billingStreet}</p>
                 <p className='text-sm'>
-                  {order.billingZip} {order.billingCity}
+                  {order.billingAddress.billingZip}{" "}
+                  {order.billingAddress.billingCity}
                 </p>
               </div>
               <div className='flex items-center mt-8 sm:mt-0'>
