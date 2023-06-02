@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import fetchOrderById from "@/domain/order/fetchOrderById";
 
-function ProductPage() {
+function OrderPage() {
   const { query } = useRouter();
   const { id } = query;
 
@@ -46,44 +46,51 @@ function ProductPage() {
   };
 
   return (
-    <Layout title={`Order ${id}`}>
-      <h1 className='mb-4 text-xl'>{`Order ${id}`}</h1>
+    <Layout title={`Commande N° ${id}`}>
+      <h1 className='mb-4 text-xl'>{`Commande N° ${id}`}</h1>
 
       <div className='grid md:grid-cols-4 md:gap-5'>
         <div className='overflow-x-auto md:col-span-3'>
           <div className='card p-5'>
-            <div className='grid md:grid-cols-4 md:gap-5'>
-              <div className='overflow-x-auto md:col-span-2'>
+            <div className='grid md:grid-cols-2 md:gap-5'>
+              <div>
                 <h2 className='mb-2 text-lg'>Adresse de livraison</h2>
                 <hr />
                 <div className='mb-2 mt-2'>
-                  {order.shippingAddress?.shippingFirstName}&nbsp;
-                  {order.shippingAddress?.shippingLastName} <br />
-                  {order.shippingAddress?.shippingStreet} <br />
-                  {order.shippingAddress?.shippingCity} <br />
-                  {order.shippingAddress?.shippingZip}
-                  {order.shippingAddress?.shippingCountry}
+                  <p>
+                    {order.shippingAddress?.shippingFirstName}{" "}
+                    {order.shippingAddress?.shippingLastName}
+                  </p>
+                  <p>{order.shippingAddress?.shippingStreet}</p>
+                  <p>
+                    {order.shippingAddress?.shippingZip}{" "}
+                    {order.shippingAddress?.shippingCity}
+                  </p>
+                  <p>{order.shippingAddress?.shippingCountry}</p>
                 </div>
               </div>
 
-              <div className='overflow-x-auto md:col-span-2'>
+              <div>
                 <h2 className='mb-2 text-lg'>Adresse de facturation</h2>
                 <hr />
                 <div className='mb-2 mt-2'>
                   {isSameAddress() === true ? (
-                    "Identique à l'adresse de livraison"
+                    <p>Identique à l&apos;adresse de livraison</p>
                   ) : (
                     <div>
-                      {order.billingAddress?.billingFirstName}
-                      &nbsp;
-                      {order.billingAddress?.billingLastName} <br />
-                      {order.billingAddress?.billingStreet} <br />{" "}
-                      {order.billingAddress?.billingCity} <br />{" "}
-                      {order.billingAddress?.billingZip}{" "}
-                      {order.billingAddress?.billingCountry}
+                      <p>
+                        {order.billingAddress?.billingFirstName}{" "}
+                        {order.billingAddress?.billingLastName}
+                      </p>
+                      <p>{order.billingAddress?.billingStreet}</p>
+                      <p>
+                        {order.billingAddress?.billingZip}{" "}
+                        {order.billingAddress?.billingCity}
+                      </p>
+                      <p>{order.billingAddress?.billingCountry}</p>
                     </div>
                   )}
-                </div>{" "}
+                </div>
               </div>
             </div>
             {order.isDelivered ? (
@@ -96,7 +103,8 @@ function ProductPage() {
           </div>
 
           <div className='card p-5'>
-            <h2 className='mb-2 text-lg'>Méthode de paiement</h2> <hr />
+            <h2 className='mb-2 text-lg'>Méthode de paiement</h2>
+            <hr />
             <div>{order.paymentMethod}</div>
             {order.isPaid ? (
               <div className='alert-success'>Paid at {order.paidAt}</div>
@@ -104,6 +112,7 @@ function ProductPage() {
               <div className='alert-error'>Pas encore payé</div>
             )}
           </div>
+
           <div className='card overflow-x-auto p-5'>
             <h2 className='mb-2 text-lg'>Produits</h2>
             <table className='min-w-full'>
@@ -121,14 +130,15 @@ function ProductPage() {
                     <td>
                       <Link legacyBehavior href={`/product/${item.slug}`}>
                         <a className='flex items-center'>
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            width={50}
-                            height={50}
-                          ></Image>
-                          &nbsp;
-                          {item.name}
+                          <div className='w-10 h-10 relative'>
+                            <Image
+                              src={item.image}
+                              alt={item.name}
+                              layout='fill'
+                              objectFit='cover'
+                            />
+                          </div>
+                          <span className='ml-2'>{item.name}</span>
                         </a>
                       </Link>
                     </td>
@@ -148,29 +158,21 @@ function ProductPage() {
           <div className='card p-5'>
             <h2 className='mb-2 text-lg'>Résumé de la commande</h2>
             <ul>
-              <li>
-                <div className='mb-2 flex justify-between'>
-                  <div>Produits</div>
-                  <div>{order.itemsPrice} &euro;</div>
-                </div>
-              </li>{" "}
-              <li>
-                <div className='mb-2 flex justify-between'>
-                  <div>Taxes</div>
-                  <div>{order.taxPrice} &euro;</div>
-                </div>
+              <li className='mb-2 flex justify-between'>
+                <span>Produits</span>
+                <span>{order.itemsPrice} &euro;</span>
               </li>
-              <li>
-                <div className='mb-2 flex justify-between'>
-                  <div>Livraison</div>
-                  <div>{order.shippingPrice} &euro;</div>
-                </div>
+              <li className='mb-2 flex justify-between'>
+                <span>Taxes</span>
+                <span>{order.taxPrice} &euro;</span>
               </li>
-              <li>
-                <div className='mb-2 flex justify-between'>
-                  <div>Total</div>
-                  <div>{order.totalPrice} &euro;</div>
-                </div>
+              <li className='mb-2 flex justify-between'>
+                <span>Livraison</span>
+                <span>{order.shippingPrice} &euro;</span>
+              </li>
+              <li className='mb-2 flex justify-between'>
+                <span>Total</span>
+                <span>{order.totalPrice} &euro;</span>
               </li>
             </ul>
           </div>
@@ -180,6 +182,6 @@ function ProductPage() {
   );
 }
 
-ProductPage.auth = true;
+OrderPage.auth = true;
 
-export default ProductPage;
+export default OrderPage;

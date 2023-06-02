@@ -31,6 +31,8 @@ export default function PlaceorderPage() {
   const [loading, setLoading] = useState(false);
   const [lastBillingAddress, setLastBillingAddress] = useState("");
 
+  console.log(lastBillingAddress);
+
   useEffect(() => {
     getLastBillingAddress(setLastBillingAddress);
   }, []);

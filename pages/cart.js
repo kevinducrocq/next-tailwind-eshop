@@ -107,24 +107,26 @@ function CartPage() {
               </tbody>
             </table>
           </div>
-          <div className='card p-5'>
-            <ul>
-              <li>
-                <div className='pb-3 text-xl'>
-                  Sous-total ({cartItems.reduce((a, c) => a + c.quantity, 0)}) :
-                  {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}
-                  &euro;
-                </div>
-              </li>
-              <li>
-                <button
-                  onClick={() => router.push("login?redirect=/shipping")}
-                  className='primary-button w-full'
-                >
-                  Commander
-                </button>
-              </li>
-            </ul>
+          <div>
+            <div className='card p-5'>
+              <ul>
+                <li>
+                  <div className='pb-3 text-xl'>
+                    Sous-total ({cartItems.reduce((a, c) => a + c.quantity, 0)})
+                    : {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}
+                    &euro;
+                  </div>
+                </li>
+                <li>
+                  <button
+                    onClick={() => router.push("login?redirect=/shipping")}
+                    className='primary-button w-full'
+                  >
+                    Commander
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       )}
