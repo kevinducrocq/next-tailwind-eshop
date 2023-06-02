@@ -44,7 +44,7 @@ export const findShippingAddressesByUserId = async (userId) => {
   }
 };
 
-export const create = async (shippingAddress) => {
+export const create = async (user, shippingAddress) => {
   try {
     const result = await query({
       query: `
@@ -52,7 +52,7 @@ export const create = async (shippingAddress) => {
         VALUES (?, ?, ?, ?, ?, ?, ?, 1)
       `,
       values: [
-        shippingAddress.userId,
+        user.id,
         shippingAddress.shippingFirstName,
         shippingAddress.shippingLastName,
         shippingAddress.shippingStreet,

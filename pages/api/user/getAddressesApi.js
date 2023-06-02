@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
-import { findShippingAddressesByUserId } from "@/repositories/shippingAddressRepository";
+import * as shippingAddressService from "@/services/shippingAddressService";
 
 const getAddressesApi = async (req, res) => {
   try {
@@ -13,7 +13,7 @@ const getAddressesApi = async (req, res) => {
     const { user } = session;
 
     // RÉCUPÉRER TOUTES LES ADRESSES DE LIVRAISON DE L'UTILISATEUR CONNECTÉ
-    const addresses = await findShippingAddressesByUserId(user.id);
+    const addresses = await shippingAddressService.findAllByUser(user.id);
 
     res.status(200).json(addresses);
   } catch (error) {

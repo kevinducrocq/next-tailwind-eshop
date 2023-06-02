@@ -1,6 +1,6 @@
-import query from "@/utils/dbMysql";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
+import * as shippingAddressService from "@/services/shippingAddressService";
 
 const saveShippingAddressApi = async (req, res) => {
   try {
@@ -13,29 +13,11 @@ const saveShippingAddressApi = async (req, res) => {
 
     const { user } = session;
 
-    const {
-      shippingFirstName,
-      shippingLastName,
-      shippingStreet,
-      shippingZip,
-      shippingCity,
-      shippingCountry,
-    } = req.body;
-
     // Enregistrer l'adresse de livraison
-    const result = await query({
-      query:
-        "INSERT INTO shipping_address (userId, shippingFirstName, shippingLastName, shippingStreet, shippingZip, shippingCity, shippingCountry) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      values: [
-        user.id,
-        shippingFirstName,
-        shippingLastName,
-        shippingStreet,
-        shippingZip,
-        shippingCity,
-        shippingCountry,
-      ],
-    });
+    const result = await shippingAddressService.createShippingAddress(
+      user,
+      req.body
+    );
 
     res.status(200).json(result);
   } catch (error) {
