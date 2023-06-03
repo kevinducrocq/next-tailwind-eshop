@@ -1,6 +1,6 @@
-import query from "@/utils/dbMysql";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
+import * as orderService from "@/services/orderService";
 
 const placeOrderApi = async (req, res) => {
   try {
@@ -12,46 +12,10 @@ const placeOrderApi = async (req, res) => {
 
     const { user } = session;
 
-    const {
-      shipping_address_id,
-      billing_address_id,
-      paymentMethod,
-      itemsPrice,
-      shippingPrice,
-      taxPrice,
-      totalPrice,
-      orderItems,
-    } = req.body;
+    const order = await orderService.createOrder(req.body, user);
 
-    const orderQueryResult = await query({
-      query:
-        "INSERT INTO orders (userId, shipping_address_id, billing_address_id, paymentMethod, itemsPrice, shippingPrice, taxPrice, totalPrice, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())",
-      values: [
-        user.id,
-        shipping_address_id,
-        billing_address_id,
-        paymentMethod,
-        itemsPrice,
-        shippingPrice,
-        taxPrice,
-        totalPrice,
-      ],
-    });
-
-    if (orderQueryResult) {
-      const orderId = orderQueryResult.insertId;
-
-      await Promise.all(
-        orderItems.map((orderItem) => {
-          return query({
-            query:
-              "INSERT INTO order_items (orderId, productId, quantity) VALUES (?, ?, ?)",
-            values: [orderId, orderItem.productId, orderItem.quantity],
-          });
-        })
-      );
-
-      res.status(200).json({ orderItems, orderId });
+    if (order) {
+      res.status(200).json(order);
     } else {
       res
         .status(400)

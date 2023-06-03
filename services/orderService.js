@@ -55,3 +55,21 @@ export const findAllByUser = async (user, groups = []) => {
   }
   return orders;
 };
+
+export const createOrder = async (order, user) => {
+  let createdOrderId = await orderRepository.create(order, user);
+
+  if (!createdOrderId) {
+    throw new Error("Erreur lors de la création de la commande");
+  }
+
+  await Promise.all(
+    order.orderItems.map((orderItem) => {
+      const item = { ...orderItem, orderId: createdOrderId };
+      orderItemRepository.create(item);
+    })
+  );
+  const newOrder = await findOneById(createdOrderId, user);
+
+  return newOrder;
+};

@@ -1,6 +1,6 @@
-import query from "@/utils/dbMysql";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
+import * as billingAddressService from "@/services/billingAddressService";
 
 const getLastBillingAddressApi = async (req, res) => {
   try {
@@ -12,12 +12,9 @@ const getLastBillingAddressApi = async (req, res) => {
     const { user } = session;
 
     // RÉCUPÉRER LA DERNIÈRE ADRESSE DE FACTURATION
-    const result = await query({
-      query:
-        "SELECT * FROM billing_address WHERE userId = ? ORDER BY id DESC LIMIT 1",
-      values: [user.id],
-      singleResult: true,
-    });
+    const result = await billingAddressService.findLastBillingAddressByUser(
+      user.id
+    );
 
     if (result) {
       res.status(200).json(result);
@@ -29,11 +26,9 @@ const getLastBillingAddressApi = async (req, res) => {
       "Une erreur s'est produite lors de la récupération de l'adresse de facturation :",
       error
     );
-    res
-      .status(500)
-      .json({
-        error: "Erreur lors de la récupération de l'adresse de facturation",
-      });
+    res.status(500).json({
+      error: "Erreur lors de la récupération de l'adresse de facturation",
+    });
   }
 };
 

@@ -31,8 +31,6 @@ export default function PlaceorderPage() {
   const [loading, setLoading] = useState(false);
   const [lastBillingAddress, setLastBillingAddress] = useState("");
 
-  console.log(lastBillingAddress);
-
   useEffect(() => {
     getLastBillingAddress(setLastBillingAddress);
   }, []);
@@ -79,7 +77,7 @@ export default function PlaceorderPage() {
         taxPrice,
         totalPrice,
         orderItems
-      ).then((orderId) => {
+      ).then((createdOrder) => {
         dispatch({ type: "CART_CLEAR_ITEMS" });
         Cookies.set(
           "cart",
@@ -88,7 +86,8 @@ export default function PlaceorderPage() {
             cartItems: [],
           })
         );
-        router.push(`/order/${orderId}`);
+        console.log(createdOrder);
+        router.push(`/order/${createdOrder.id}`);
       });
       setLoading(false);
     } catch (err) {

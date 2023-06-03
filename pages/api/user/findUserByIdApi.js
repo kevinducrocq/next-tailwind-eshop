@@ -1,10 +1,8 @@
-import { findUserById } from "@/repositories/userRepository";
+import * as userService from "@/services/userService";
 
 const findUserByIdApi = async (req, res) => {
   try {
-    const userId = req.query.id;
-    console.log(userId);
-    const user = await findUserById(userId);
+    const user = await userService.findOneById(req.query.id);
     if (user) {
       res.status(200).json(user);
     } else {

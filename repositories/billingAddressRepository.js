@@ -28,6 +28,23 @@ export const findBillingAddressById = async (id) => {
   }
 };
 
+export const findLastBillingAddressesByUserId = async (userId) => {
+  try {
+    const result = await query({
+      query:
+        "SELECT * FROM billing_address WHERE userId = ? ORDER BY id DESC LIMIT 1",
+      values: [userId],
+      singleResult: true,
+    });
+    return result;
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors de la récupération de l'adresse de facturation :",
+      error
+    );
+  }
+};
+
 export const findBillingAddressesByUserId = async (userId) => {
   try {
     const result = await query({
@@ -43,15 +60,14 @@ export const findBillingAddressesByUserId = async (userId) => {
   }
 };
 
-export const create = async (billingAddress) => {
+export const create = async (user, billingAddress) => {
   try {
     const result = await query({
       query: `
-        INSERT INTO billing_address (userId, billingFirstName, billingLastName, billingStreet, billingZip, billingCity, billingCountry)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO billing_address (userId, billingFirstName, billingLastName, billingStreet, billingZip, billingCity, billingCountry) VALUES (?, ?, ?, ?, ?, ?, ?)
       `,
       values: [
-        billingAddress.userId,
+        user.id,
         billingAddress.billingFirstName,
         billingAddress.billingLastName,
         billingAddress.billingStreet,

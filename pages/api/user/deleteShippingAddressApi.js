@@ -37,11 +37,9 @@ const deleteAddressApi = async (req, res) => {
       "Une erreur s'est produite lors de la suppression de l'adresse de livraison :",
       error
     );
-    res
-      .status(500)
-      .json({
-        error: "Erreur lors de la suppression de l'adresse de livraison",
-      });
+    res.status(500).json({
+      error: "Erreur lors de la suppression de l'adresse de livraison",
+    });
   }
 };
 

@@ -26,8 +26,8 @@ const placeOrder = async (
         orderItems,
       }),
     });
-    const { orderId } = await orderRepsonse.json();
-    return orderId;
+    const createdOrder = await orderRepsonse.json();
+    return createdOrder;
   } catch (err) {
     console.error(err);
   }

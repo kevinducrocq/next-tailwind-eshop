@@ -1,6 +1,6 @@
-import query from "@/utils/dbMysql";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
+import * as billingAddressService from "@/services/billingAddressService";
 
 const saveBillingAddressApi = async (req, res) => {
   try {
@@ -13,29 +13,11 @@ const saveBillingAddressApi = async (req, res) => {
 
     const { user } = session;
 
-    const {
-      billingFirstName,
-      billingLastName,
-      billingStreet,
-      billingZip,
-      billingCity,
-      billingCountry,
-    } = req.body;
-
     // Enregistrer l'adresse de facturation
-    const result = await query({
-      query:
-        "INSERT INTO billing_address (userId, billingFirstName, billingLastName, billingStreet, billingZip, billingCity, billingCountry) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      values: [
-        user.id,
-        billingFirstName,
-        billingLastName,
-        billingStreet,
-        billingZip,
-        billingCity,
-        billingCountry,
-      ],
-    });
+    const result = await billingAddressService.createBillingAddress(
+      user,
+      req.body
+    );
 
     res.status(200).json(result);
   } catch (error) {
