@@ -7,3 +7,13 @@ export const findOneById = async (id) => {
   }
   return user;
 };
+
+export const createUser = async (user) => {
+  let createdUser = await userRepository.create(user);
+
+  if (!createdUser) {
+    throw new Error("Erreur lors de la création de l'utilisateur");
+  }
+
+  return createdUser;
+};

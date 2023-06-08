@@ -1,5 +1,4 @@
-import query from "@/utils/dbMysql";
-import bcryptjs from "bcryptjs";
+import * as userService from "@/services/userService";
 
 async function registerUserApi(req, res) {
   if (req.method !== "POST") {
@@ -20,12 +19,8 @@ async function registerUserApi(req, res) {
   }
 
   try {
-    const hashedPassword = bcryptjs.hashSync(password);
-    const newUser = await query({
-      query:
-        "INSERT INTO users (firstName, lastName, email, password, isAdmin, createdAt) VALUES(?,?,?,?,?, NOW())",
-      values: [firstName, lastName, email, hashedPassword, 0],
-    });
+    const newUser = await userService.createUser(req.body);
+
     res.status(201).send({
       message: "Utilisateur créé ! ",
       id: newUser.id,

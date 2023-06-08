@@ -1,4 +1,5 @@
 import query from "@/utils/dbMysql";
+import bcryptjs from "bcryptjs";
 
 export const findAll = async () => {
   try {
@@ -46,18 +47,13 @@ export const findUserByEmail = async (email) => {
 
 export const create = async (user) => {
   try {
+    const hashedPassword = bcryptjs.hashSync(user.password);
     const result = await query({
       query: `
         INSERT INTO users (firstName, lastName, email, password, isAdmin, createdAt)
         VALUES (?, ?, ?, ?, ?, NOW())
       `,
-      values: [
-        user.firstName,
-        user.lastName,
-        user.email,
-        user.password,
-        user.isAdmin,
-      ],
+      values: [user.firstName, user.lastName, user.email, hashedPassword, 0],
     });
 
     return result.insertId;
