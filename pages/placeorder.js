@@ -86,7 +86,6 @@ export default function PlaceorderPage() {
             cartItems: [],
           })
         );
-        console.log(createdOrder);
         router.push(`/order/${createdOrder.id}`);
       });
       setLoading(false);

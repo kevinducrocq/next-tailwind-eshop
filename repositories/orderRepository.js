@@ -39,7 +39,7 @@ export const findOneBy = async (searchCriterias) => {
     return result[0];
   } catch (error) {
     console.error(
-      "Une erreur s'est produite lors de la récupération des commandes :",
+      "Une erreur s'est produite lors de la récupération de la commande :",
       error
     );
   }
@@ -59,7 +59,7 @@ export const findOneById = async (id) => {
     return result;
   } catch (error) {
     console.error(
-      "Une erreur s'est produite lors de la récupération des commandes :",
+      "Une erreur s'est produite lors de la récupération des de la commande :",
       error
     );
   }
@@ -99,12 +99,12 @@ export const update = async (id, orderFields) => {
       updates.push(`${fieldKey} = ?`);
       values.push(orderFields[fieldKey]);
     }
-    const orderQueryResult = await query({
+    await query({
       query: `UPDATE orders SET ${updates.join(", ")} WHERE id = ?`,
       values: [...values, id],
     });
 
-    return orderQueryResult.insertId;
+    return await findOneById(id);
   } catch (error) {
     console.error(
       "Une erreur s'est produite lors de la mise à jour de la commande :",

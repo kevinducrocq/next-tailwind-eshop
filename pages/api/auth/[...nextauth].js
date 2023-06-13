@@ -25,7 +25,6 @@ export const authOptions = {
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
-        console.log(credentials);
         const user = await query({
           query: "SELECT * FROM users WHERE email = ?",
           values: [credentials.email],

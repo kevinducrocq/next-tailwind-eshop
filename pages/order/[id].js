@@ -4,6 +4,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import fetchOrderById from "@/domain/order/fetchOrderById";
+import Paypal from "@/components/paypal";
+import { PayPalButtons } from "@paypal/react-paypal-js";
+import payOrder from "@/domain/order/payOrder";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 
 function OrderPage() {
   const { query } = useRouter();
@@ -23,7 +28,16 @@ function OrderPage() {
     });
   }, [id, router]);
 
-  if (order.length === 0) {
+  const handlePaymentSuccess = async () => {
+    try {
+      const updatedOrder = await payOrder(order.id);
+      setOrder(updatedOrder);
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour de la commande :", error);
+    }
+  };
+
+  if (Object.keys(order).length === 0) {
     return <div>Commande non trouvée</div>;
   }
 
@@ -43,6 +57,7 @@ function OrderPage() {
     ) {
       return true;
     }
+    return false;
   };
 
   return (
@@ -74,7 +89,7 @@ function OrderPage() {
                 <h2 className='mb-2 text-lg'>Adresse de facturation</h2>
                 <hr />
                 <div className='mb-2 mt-2'>
-                  {isSameAddress() === true ? (
+                  {isSameAddress() ? (
                     <p>Identique à l&apos;adresse de livraison</p>
                   ) : (
                     <div>
@@ -95,7 +110,10 @@ function OrderPage() {
             </div>
             {order.isDelivered ? (
               <div className='alert-success'>
-                Livré le : {order.deliveredAt}
+                Livré le :{" "}
+                {format(new Date(order.deliveredAt), "dd MMMM yyyy", {
+                  locale: fr,
+                })}
               </div>
             ) : (
               <div className='alert-error'>Pas encore livré</div>
@@ -107,7 +125,10 @@ function OrderPage() {
             <hr />
             <div>{order.paymentMethod}</div>
             {order.isPaid ? (
-              <div className='alert-success'>Paid at {order.paidAt}</div>
+              <div className='alert-success'>
+                Payé le :{" "}
+                {format(new Date(order.paidAt), "dd MMMM yyyy", { locale: fr })}
+              </div>
             ) : (
               <div className='alert-error'>Pas encore payé</div>
             )}
@@ -128,7 +149,7 @@ function OrderPage() {
                 {order.orderItems?.map((item) => (
                   <tr key={item.id} className='border-b'>
                     <td>
-                      <Link legacyBehavior href={`/product/${item.slug}`}>
+                      <Link href={`/product/${item.slug}`} legacyBehavior>
                         <a className='flex items-center'>
                           <div className='w-10 h-10 relative'>
                             <Image
@@ -174,6 +195,38 @@ function OrderPage() {
                 <span>Total</span>
                 <span>{order.totalPrice} &euro;</span>
               </li>
+              {!order.isPaid && (
+                <Paypal>
+                  <PayPalButtons
+                    createOrder={(data, actions) => {
+                      const totalAmount = parseFloat(order.totalPrice).toFixed(
+                        2
+                      );
+                      return actions.order.create({
+                        purchase_units: [
+                          {
+                            amount: {
+                              currency_code: "EUR",
+                              value: totalAmount,
+                            },
+                          },
+                        ],
+                      });
+                    }}
+                    onApprove={async (data, actions) => {
+                      try {
+                        await actions.order.capture();
+                        await handlePaymentSuccess();
+                      } catch (error) {
+                        console.error(
+                          "Erreur lors de la capture du paiement :",
+                          error
+                        );
+                      }
+                    }}
+                  />
+                </Paypal>
+              )}
             </ul>
           </div>
         </div>
