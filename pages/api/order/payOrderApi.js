@@ -15,8 +15,6 @@ const payOrderApi = async (req, res) => {
 
     const { orderId, paymentData } = req.body;
 
-    console.log("API", "orderId:", orderId, "paymentData:", paymentData);
-
     if (!orderId) {
       return res.status(400).json({ error: "ID de commande manquant" });
     }

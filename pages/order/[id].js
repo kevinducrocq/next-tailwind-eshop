@@ -29,7 +29,6 @@ function OrderPage() {
   }, [id, router]);
 
   const handlePaymentSuccess = async (paymentData) => {
-    console.log("FRONT", "orderId:", order.id, "paymentData:", paymentData);
     try {
       const updatedOrder = await payOrder(order.id, paymentData);
       setOrder(updatedOrder);
