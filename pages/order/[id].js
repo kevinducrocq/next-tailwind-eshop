@@ -28,9 +28,10 @@ function OrderPage() {
     });
   }, [id, router]);
 
-  const handlePaymentSuccess = async () => {
+  const handlePaymentSuccess = async (paymentData) => {
+    console.log("FRONT", "orderId:", order.id, "paymentData:", paymentData);
     try {
-      const updatedOrder = await payOrder(order.id);
+      const updatedOrder = await payOrder(order.id, paymentData);
       setOrder(updatedOrder);
     } catch (error) {
       console.error("Erreur lors de la mise à jour de la commande :", error);
@@ -192,40 +193,39 @@ function OrderPage() {
                 <span>{order.shippingPrice} &euro;</span>
               </li>
               <li className='mb-2 flex justify-between'>
-                <span>Total</span>
-                <span>{order.totalPrice} &euro;</span>
+                <strong>Total</strong>
+                <strong>{order.totalPrice} &euro;</strong>
               </li>
               {!order.isPaid && (
-                <Paypal>
-                  <PayPalButtons
-                    createOrder={(data, actions) => {
-                      const totalAmount = parseFloat(order.totalPrice).toFixed(
-                        2
-                      );
-                      return actions.order.create({
-                        purchase_units: [
-                          {
-                            amount: {
-                              currency_code: "EUR",
-                              value: totalAmount,
+                <li className='mt-2'>
+                  <Paypal>
+                    <PayPalButtons
+                      createOrder={(data, actions) => {
+                        console.log(data, actions);
+                        return actions.order.create({
+                          purchase_units: [
+                            {
+                              amount: {
+                                value: order.totalPrice,
+                              },
                             },
-                          },
-                        ],
-                      });
-                    }}
-                    onApprove={async (data, actions) => {
-                      try {
-                        await actions.order.capture();
-                        await handlePaymentSuccess();
-                      } catch (error) {
-                        console.error(
-                          "Erreur lors de la capture du paiement :",
-                          error
-                        );
-                      }
-                    }}
-                  />
-                </Paypal>
+                          ],
+                        });
+                      }}
+                      onApprove={async (data, actions) => {
+                        try {
+                          await actions.order.capture();
+                          await handlePaymentSuccess(data);
+                        } catch (error) {
+                          console.error(
+                            "Erreur lors de la capture du paiement :",
+                            error
+                          );
+                        }
+                      }}
+                    />
+                  </Paypal>
+                </li>
               )}
             </ul>
           </div>
@@ -234,7 +234,5 @@ function OrderPage() {
     </Layout>
   );
 }
-
-OrderPage.auth = true;
 
 export default OrderPage;
