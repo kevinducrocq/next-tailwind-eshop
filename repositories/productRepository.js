@@ -92,12 +92,18 @@ export const update = async (id, productFields) => {
       values: [...values, id],
     });
 
-    return result.insertId;
+    // Vérifier si au moins une ligne a été modifiée dans la base de données
+    if (result.affectedRows > 0) {
+      return true; // La mise à jour a réussi
+    } else {
+      return false; // Aucune ligne n'a été modifiée (produit introuvable ou aucune modification nécessaire)
+    }
   } catch (error) {
     console.error(
       "Une erreur s'est produite lors de la mise à jour du produit :",
       error
     );
+    return false; // Une erreur s'est produite lors de la mise à jour
   }
 };
 

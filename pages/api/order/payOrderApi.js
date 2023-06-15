@@ -20,8 +20,8 @@ const payOrderApi = async (req, res) => {
     }
 
     // Initialiser le SDK PayPal avec les informations d'authentification du mode sandbox
-    const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
-    const clientSecret = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_SECRET;
+    const clientId = process.env.PAYPAL_CLIENT_ID;
+    const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
     const environment = new paypal.core.SandboxEnvironment(
       clientId,
       clientSecret

@@ -1,5 +1,6 @@
 import * as orderRepository from "@/repositories/orderRepository";
 import * as orderItemRepository from "@/repositories/orderItemRepository";
+import * as productRepository from "@/repositories/productRepository";
 import * as shippingAddressRepository from "@/repositories/shippingAddressRepository";
 import * as billingAddressRepository from "@/repositories/billingAddressRepository";
 
@@ -92,6 +93,35 @@ export const payOrder = async (orderId, user) => {
 
   if (!updatedOrder) {
     throw new Error("Erreur lors du paiement de la commande");
+  }
+
+  const orderItems = await orderItemRepository.findWithProductsByOrderId(
+    orderId
+  );
+
+  for (const orderItem of orderItems) {
+    const { productId, quantity } = orderItem;
+
+    // Récupérer le produit correspondant
+    const product = await productRepository.findProductById(productId);
+
+    if (!product) {
+      throw new Error("Produit introuvable");
+    }
+
+    // Vérifier si la quantité en stock est suffisante
+    if (product.stock < quantity) {
+      throw new Error("Stock insuffisant pour le produit");
+    }
+
+    // Mettre à jour la quantité en stock
+    const updatedProduct = await productRepository.update(productId, {
+      countInStock: product.countInStock - quantity,
+    });
+
+    if (!updatedProduct) {
+      throw new Error("Erreur lors de la mise à jour du stock du produit");
+    }
   }
 
   return updatedOrder;
