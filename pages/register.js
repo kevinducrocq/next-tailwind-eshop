@@ -53,6 +53,21 @@ export default function RegisterPage() {
       >
         <h1 className='mb-4 text-xl'>Inscription</h1>
         <div className='mb-4'>
+          <label htmlFor='firstName'>Prénom</label>
+          <input
+            type='firstName'
+            name='firstName'
+            {...register("firstName", {
+              required: "Entrez votre prénom",
+            })}
+            id='firstName'
+            className='w-full'
+          />
+          {errors.firstName && (
+            <div className='text-red-500'>{errors.firstName.message}</div>
+          )}
+        </div>
+        <div className='mb-4'>
           <label htmlFor='lastName'>Nom</label>
           <input
             type='lastName'
@@ -78,7 +93,6 @@ export default function RegisterPage() {
             })}
             id='firstName'
             className='w-full'
-            autoFocus
           />
           {errors.firstName && (
             <div className='text-red-500'>{errors.firstName.message}</div>
@@ -98,7 +112,6 @@ export default function RegisterPage() {
             })}
             id='email'
             className='w-full'
-            autoFocus
           />
           {errors.email && (
             <div className='text-red-500'>{errors.email.message}</div>
@@ -118,7 +131,6 @@ export default function RegisterPage() {
             })}
             id='password'
             className='w-full'
-            autoFocus
           />
           {errors.password && (
             <div className='text-red-500'>{errors.password.message}</div>
@@ -139,7 +151,6 @@ export default function RegisterPage() {
             })}
             id='confirmPassword'
             className='w-full'
-            autoFocus
           />
           {errors.confirmPassword && (
             <div className='text-red-500'>{errors.confirmPassword.message}</div>

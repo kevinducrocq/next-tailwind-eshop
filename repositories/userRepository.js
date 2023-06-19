@@ -70,8 +70,15 @@ export const update = async (id, userFields) => {
     const fields = [];
     const values = [];
     for (const field in userFields) {
-      fields.push(`${field} = ?`);
-      values.push(userFields[field]);
+      if (field === "password" && userFields[field]) {
+        const hashedPassword = bcryptjs.hashSync(userFields[field]);
+        fields.push(`${field} = ?`);
+        values.push(hashedPassword);
+      }
+      if (field !== "password") {
+        fields.push(`${field} = ?`);
+        values.push(userFields[field]);
+      }
     }
 
     const queryStr = `
@@ -79,12 +86,12 @@ export const update = async (id, userFields) => {
       SET ${fields.join(", ")}
       WHERE id = ?
     `;
-    const result = await query({
+    await query({
       query: queryStr,
       values: [...values, id],
     });
 
-    return result.insertId;
+    return findUserById(id);
   } catch (error) {
     console.error(
       "Une erreur s'est produite lors de la mise à jour de l'utilisateur :",

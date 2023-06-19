@@ -3,6 +3,7 @@ import * as orderItemRepository from "@/repositories/orderItemRepository";
 import * as productRepository from "@/repositories/productRepository";
 import * as shippingAddressRepository from "@/repositories/shippingAddressRepository";
 import * as billingAddressRepository from "@/repositories/billingAddressRepository";
+import paypal from "@paypal/checkout-server-sdk";
 
 export const findOneById = async (id, user, groups = []) => {
   let order = await orderRepository.findOneById(id);
@@ -75,7 +76,7 @@ export const createOrder = async (order, user) => {
   return newOrder;
 };
 
-export const payOrder = async (orderId, user) => {
+export const payOrder = async (orderId, user, paymentData) => {
   const order = await orderRepository.findOneById(orderId, user);
 
   if (!order) {
@@ -84,6 +85,25 @@ export const payOrder = async (orderId, user) => {
 
   if (order.isPaid) {
     throw new Error("La commande a déjà été payée");
+  }
+
+  // Initialiser le SDK PayPal avec les informations d'authentification du mode sandbox
+  const clientId = process.env.PAYPAL_CLIENT_ID;
+  const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
+  const environment = new paypal.core.SandboxEnvironment(
+    clientId,
+    clientSecret
+  );
+  const client = new paypal.core.PayPalHttpClient(environment);
+
+  // Récupérer le paiement à partir de l'API PayPal
+  const captureId = paymentData.orderID;
+  const request = new paypal.orders.OrdersGetRequest(captureId);
+  const response = await client.execute(request);
+
+  // Vérifier si le paiement a été capturé avec succès
+  if (response.result.status !== "COMPLETED") {
+      throw new Error("Le paiement n'a pas été effectué avec succès");
   }
 
   const updatedOrder = await orderRepository.update(orderId, {

@@ -72,7 +72,6 @@ export default function LoginPage() {
             type='password'
             name='password'
             {...register("password", {
-              required: "Entrez votre mot de passe",
               minLength: {
                 value: 6,
                 message: "Le mot de passe doit contenir au moins 6 caractères",

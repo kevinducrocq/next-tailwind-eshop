@@ -1,7 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 import * as orderService from "@/services/orderService";
-import paypal from "@paypal/checkout-server-sdk";
 
 const payOrderApi = async (req, res) => {
   try {
@@ -19,29 +18,12 @@ const payOrderApi = async (req, res) => {
       return res.status(400).json({ error: "ID de commande manquant" });
     }
 
-    // Initialiser le SDK PayPal avec les informations d'authentification du mode sandbox
-    const clientId = process.env.PAYPAL_CLIENT_ID;
-    const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
-    const environment = new paypal.core.SandboxEnvironment(
-      clientId,
-      clientSecret
-    );
-    const client = new paypal.core.PayPalHttpClient(environment);
-
-    // Récupérer le paiement à partir de l'API PayPal
-    const captureId = paymentData.orderID;
-    const request = new paypal.orders.OrdersGetRequest(captureId);
-    const response = await client.execute(request);
-
-    // Vérifier si le paiement a été capturé avec succès
-    if (response.result.status !== "COMPLETED") {
-      return res
-        .status(400)
-        .json({ error: "Le paiement n'a pas été effectué avec succès" });
-    }
-
     // Mettre à jour l'ordre dans la base de données
-    const updatedOrder = await orderService.payOrder(orderId, user);
+    const updatedOrder = await orderService.payOrder(
+      orderId,
+      user,
+      paymentData
+    );
 
     if (updatedOrder) {
       return res.status(200).json(updatedOrder);
