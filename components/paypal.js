@@ -8,6 +8,7 @@ const Paypal = ({ children }) => {
       options={{
         "client-id": clientId,
         currency: "EUR",
+        "disable-funding": "credit,card",
       }}
     >
       {children}

@@ -121,3 +121,18 @@ export const remove = async (id) => {
     );
   }
 };
+
+export const countProducts = async () => {
+  try {
+    const result = await query({
+      query: "SELECT COUNT(*) AS count FROM products",
+      singleResult: true,
+    });
+    return result.count;
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors du comptage des produits :",
+      error
+    );
+  }
+};

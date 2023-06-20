@@ -131,3 +131,34 @@ export const remove = async (id) => {
     );
   }
 };
+
+export const countOrders = async () => {
+  try {
+    const result = await query({
+      query: "SELECT COUNT(*) AS count FROM orders",
+      singleResult: true,
+    });
+    console.log(result);
+    return result.count;
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors du comptage des commandes :",
+      error
+    );
+  }
+};
+
+export const calculateTotalSales = async () => {
+  try {
+    const result = await query({
+      query: "SELECT SUM(totalPrice) AS totalSales FROM orders",
+      singleResult: true,
+    });
+    return result.totalSales;
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors du calcul du total des ventes :",
+      error
+    );
+  }
+};

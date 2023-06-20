@@ -114,3 +114,17 @@ export const remove = async (id) => {
     );
   }
 };
+export const countUsers = async () => {
+  try {
+    const result = await query({
+      query: "SELECT COUNT(*) AS count FROM users",
+      singleResult: true,
+    });
+    return result.count;
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors du comptage des produits :",
+      error
+    );
+  }
+};

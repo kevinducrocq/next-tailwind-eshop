@@ -6,7 +6,6 @@ import fetchUserById from "@/domain/user/fetchUserById";
 import updateUser from "@/domain/user/updateUser";
 import { getError } from "@/utils/error";
 import { Disclosure } from "@headlessui/react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -56,12 +55,6 @@ export default function ProfilePage() {
       );
 
       if (updatedUser) {
-        // const result = await signIn("credentials", {
-        //   redirect: false,
-        //   email,
-        //   password,
-        // });
-
         if (updatedUser.error) {
           toast.error(updatedUser.error);
         } else {

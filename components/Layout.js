@@ -86,6 +86,17 @@ export default function Layout({ title, children }) {
                         Historique de commandes
                       </DropdownLink>
                     </Menu.Item>
+                    {session.user.isAdmin && (
+                      <Menu.Item>
+                        <DropdownLink
+                          className='dropdown-link'
+                          href='/admin/dashboard'
+                          legacyBehavior
+                        >
+                          Administration
+                        </DropdownLink>
+                      </Menu.Item>
+                    )}
                     <Menu.Item>
                       <DropdownLink
                         className='dropdown-link'

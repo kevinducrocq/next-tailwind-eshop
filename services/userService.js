@@ -50,3 +50,15 @@ export const updateUser = async (
 
   return updatedUser;
 };
+
+export const getTotalUsers = async () => {
+  try {
+    const totalProducts = await userRepository.countUsers();
+    return totalProducts;
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors du calcul du montant des ventes :",
+      error
+    );
+  }
+};

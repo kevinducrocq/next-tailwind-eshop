@@ -103,7 +103,7 @@ export const payOrder = async (orderId, user, paymentData) => {
 
   // Vérifier si le paiement a été capturé avec succès
   if (response.result.status !== "COMPLETED") {
-      throw new Error("Le paiement n'a pas été effectué avec succès");
+    throw new Error("Le paiement n'a pas été effectué avec succès");
   }
 
   const updatedOrder = await orderRepository.update(orderId, {
@@ -146,3 +146,27 @@ export const payOrder = async (orderId, user, paymentData) => {
 
   return updatedOrder;
 };
+
+export const getTotalOrders = async () => {
+  try {
+    const totalOrders = await orderRepository.countOrders();
+    return totalOrders;
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors du calcul du nombre total de commandes :",
+      error
+    );
+  }
+};
+export const getTotalAmount = async () => {
+  try {
+    const totalOrders = await orderRepository.calculateTotalSales();
+    return totalOrders;
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors du calcul du montant des ventes :",
+      error
+    );
+  }
+};
+
