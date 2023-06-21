@@ -3,9 +3,40 @@ import fetchNumberOfOrders from "@/domain/admin/fetchNumberOfOrders";
 import fetchTotalAmount from "@/domain/admin/fetchTotalAmount";
 import fetchTotalProducts from "@/domain/admin/fetchTotalProducts";
 import fetchTotalUsers from "@/domain/admin/fetchTotalUsers";
+import fetchSalesData from "@/domain/admin/fetchSalesData";
 import { getError } from "@/utils/error";
 import Link from "next/link";
 import React, { useEffect, useReducer, useState } from "react";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+// Chart
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+export const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top",
+    },
+  },
+};
 
 export default function AdminDashboardPage() {
   function reducer(state, action) {
@@ -29,6 +60,7 @@ export default function AdminDashboardPage() {
   const [totalAmount, setTotalAmount] = useState();
   const [totalProducts, setTotalProducts] = useState();
   const [totalUsers, setTotalUsers] = useState();
+  const [salesData, setSalesData] = useState([]);
 
   const [{ loading, error }, dispatch] = useReducer(reducer, {
     loading: true,
@@ -43,6 +75,7 @@ export default function AdminDashboardPage() {
         await fetchTotalAmount(setTotalAmount);
         await fetchTotalProducts(setTotalProducts);
         await fetchTotalUsers(setTotalUsers);
+        await fetchSalesData(setSalesData);
         dispatch({
           type: "FETCH_SUCCESS",
           payload: numOrders,
@@ -56,6 +89,19 @@ export default function AdminDashboardPage() {
     };
     fetchData();
   }, [numOrders, totalAmount, totalProducts, totalUsers]);
+
+  const chartData = {
+    labels: salesData.map((x) => x.month),
+    datasets: [
+      {
+        label: "Ventes",
+        backgroundColor: "rgba(162, 222, 208, 1)",
+        data: salesData.map((x) => x.totalSales),
+      },
+    ],
+  };
+
+  console.log(chartData);
 
   return (
     <Layout title='Admin - Tableau de bord'>
@@ -114,6 +160,11 @@ export default function AdminDashboardPage() {
                   <Link href='/admin/users'>Voir les utilisateurs</Link>
                 </div>
               </div>
+              <h2 className='text-xl'>Résumé des ventes</h2>
+              <Bar
+                options={{ legend: { display: true, position: "right" } }}
+                data={chartData}
+              />
             </div>
           )}
         </div>

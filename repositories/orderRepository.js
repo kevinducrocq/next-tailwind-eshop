@@ -138,7 +138,6 @@ export const countOrders = async () => {
       query: "SELECT COUNT(*) AS count FROM orders",
       singleResult: true,
     });
-    console.log(result);
     return result.count;
   } catch (error) {
     console.error(
@@ -158,6 +157,21 @@ export const calculateTotalSales = async () => {
   } catch (error) {
     console.error(
       "Une erreur s'est produite lors du calcul du total des ventes :",
+      error
+    );
+  }
+};
+
+export const getSalesData = async () => {
+  try {
+    const result = await query({
+      query: `
+    SELECT DATE_FORMAT(createdAt, '%Y-%m') AS month, SUM(totalPrice) AS totalSales FROM orders GROUP BY month`,
+    });
+    return result;
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors de la récupération des données de vente :",
       error
     );
   }

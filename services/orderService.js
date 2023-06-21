@@ -169,4 +169,14 @@ export const getTotalAmount = async () => {
     );
   }
 };
-
+export const getSalesData = async () => {
+  try {
+    const totalOrders = await orderRepository.getSalesData();
+    return totalOrders;
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors du calcul du montant des ventes :",
+      error
+    );
+  }
+};
