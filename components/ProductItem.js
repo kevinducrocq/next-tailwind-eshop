@@ -24,6 +24,7 @@ export default function ProductItem({ product, addToCartHandler }) {
           className='primary-button mt-4'
           type='button'
           onClick={() => addToCartHandler(product)}
+          disabled={product.countInStock <= 0}
         >
           <FontAwesomeIcon icon={faCartPlus} className='mr-2' />
           Ajouter au panier

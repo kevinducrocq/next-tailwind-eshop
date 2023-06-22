@@ -61,8 +61,8 @@ function OrderPage() {
   };
 
   return (
-    <Layout title={`Commande N° ${id}`}>
-      <h1 className='mb-4 text-xl'>{`Commande N° ${id}`}</h1>
+    <Layout title={`Commande N° ${order.invoice_number}`}>
+      <h1 className='mb-4 text-xl'>{`Commande N° ${order.invoice_number}`}</h1>
 
       <div className='grid md:grid-cols-4 md:gap-5'>
         <div className='overflow-x-auto md:col-span-3'>

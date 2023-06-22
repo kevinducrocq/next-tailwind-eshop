@@ -17,6 +17,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import AdminMenu from "@/components/adminMenu";
 
 // Chart
 
@@ -101,72 +102,49 @@ export default function AdminDashboardPage() {
     ],
   };
 
-  console.log(chartData);
-
   return (
     <Layout title='Admin - Tableau de bord'>
-      <div className='grid md:grid-cols-4 md:gap5'>
-        <div>
-          <ul>
-            <li>
-              <Link href='/admin/dashboard' legacyBehavior>
-                <a className='font-bold'>Tableau de bord</a>
-              </Link>
-            </li>
-            <li>
-              <Link href='/admin/orders' legacyBehavior>
-                <a className='font-bold'>Commandes</a>
-              </Link>
-            </li>
-            <li>
-              <Link href='/admin/products' legacyBehavior>
-                <a className='font-bold'>Produits</a>
-              </Link>
-            </li>
-            <li>
-              <Link href='/admin/utilisateurs' legacyBehavior>
-                <a className='font-bold'>Utilisateurs</a>
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div className='md:col-span-3'>
-          <h1 className='mb-4 text-xl'>Tableau de bord</h1>
-          {loading ? (
-            <div>Chargement...</div>
-          ) : error ? (
-            <div className='alert-error'>{error}</div>
-          ) : (
-            <div>
-              <div className='grid grid-cols-1 md:grid-cols-4'>
-                <div className='card m-5 p-5'>
-                  <p className='text-3xl'>{totalAmount} &euro;</p>
-                  <p>Ventes</p>
-                  <Link href='/admin/orders'>Voir les ventes</Link>
+      <div className='container mx-auto px-4 py-8'>
+        <div className='grid md:grid-cols-4 md:gap5'>
+          <AdminMenu />
+          <div className='md:col-span-3'>
+            <h1 className='mb-4 text-xl'>Tableau de bord</h1>
+            {loading ? (
+              <div>Chargement...</div>
+            ) : error ? (
+              <div className='alert-error'>{error}</div>
+            ) : (
+              <div>
+                <div className='grid grid-cols-1 md:grid-cols-4'>
+                  <div className='card m-5 p-5'>
+                    <p className='text-3xl'>{totalAmount} &euro;</p>
+                    <p>Ventes</p>
+                    <Link href='/admin/orders'>Voir les ventes</Link>
+                  </div>
+                  <div className='card m-5 p-5'>
+                    <p className='text-3xl'>{numOrders} </p>
+                    <p>Commandes</p>
+                    <Link href='/admin/orders'>Voir les commandes</Link>
+                  </div>
+                  <div className='card m-5 p-5'>
+                    <p className='text-3xl'>{totalProducts} </p>
+                    <p>Produits</p>
+                    <Link href='/admin/orders'>Voir les produits</Link>
+                  </div>
+                  <div className='card m-5 p-5'>
+                    <p className='text-3xl'>{totalUsers} </p>
+                    <p>Utilisateurs</p>
+                    <Link href='/admin/users'>Voir les utilisateurs</Link>
+                  </div>
                 </div>
-                <div className='card m-5 p-5'>
-                  <p className='text-3xl'>{numOrders} </p>
-                  <p>Commandes</p>
-                  <Link href='/admin/orders'>Voir les commandes</Link>
-                </div>
-                <div className='card m-5 p-5'>
-                  <p className='text-3xl'>{totalProducts} </p>
-                  <p>Produits</p>
-                  <Link href='/admin/orders'>Voir les produits</Link>
-                </div>
-                <div className='card m-5 p-5'>
-                  <p className='text-3xl'>{totalUsers} </p>
-                  <p>Utilisateurs</p>
-                  <Link href='/admin/users'>Voir les utilisateurs</Link>
-                </div>
+                <h2 className='text-xl'>Résumé des ventes</h2>
+                <Bar
+                  options={{ legend: { display: true, position: "right" } }}
+                  data={chartData}
+                />
               </div>
-              <h2 className='text-xl'>Résumé des ventes</h2>
-              <Bar
-                options={{ legend: { display: true, position: "right" } }}
-                data={chartData}
-              />
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </Layout>

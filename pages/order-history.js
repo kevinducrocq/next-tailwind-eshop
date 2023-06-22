@@ -3,15 +3,43 @@ import Layout from "@/components/Layout";
 import fetchUserOrders from "@/domain/order/fetchUserOrders";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { saveAs } from "file-saver";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { getError } from "@/utils/error";
 
 export default function OrderHistoryPage() {
+  function reducer(state, action) {
+    switch (action.type) {
+      case "FETCH_REQUEST":
+        return { ...state, loading: true, error: "" };
+      case "FETCH_SUCCESS":
+        return { ...state, loading: false, orders: action.payload, error: "" };
+      case "FETCH_FAIL":
+        return { ...state, loading: false, error: action.payload };
+      default:
+        return state;
+    }
+  }
+
+  const [{ loading, error }, dispatch] = useReducer(reducer, {
+    loading: true,
+    error: "",
+  });
+
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    fetchUserOrders(setOrders);
+    const fetchOrders = async () => {
+      try {
+        dispatch({ type: "FETCH_REQUEST" });
+        await fetchUserOrders(setOrders);
+        dispatch({ type: "FETCH_SUCCESS", payload: orders });
+      } catch (err) {
+        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+      }
+    };
+    fetchOrders();
   }, []);
 
   const generateInvoicePDF = async (order) => {
@@ -39,7 +67,7 @@ export default function OrderHistoryPage() {
 
       // Add invoice details
       y -= lineHeight;
-      page.drawText(`Commande n°: ${order.id}`, {
+      page.drawText(`Commande n°: ${order.invoice_number}`, {
         x: margin,
         y,
         size: fontSize,
@@ -77,7 +105,11 @@ export default function OrderHistoryPage() {
     <Layout title='Historique de commandes'>
       <div className='container mx-auto px-4 py-8'>
         <h1 className='text-3xl font-semibold mb-4'>Historique de commandes</h1>
-        {orders.length === 0 ? (
+        {loading ? (
+          <div>Chargement...</div>
+        ) : error ? (
+          <div className='alert-error'>{error}</div>
+        ) : orders.length <= 0 ? (
           <h2>Vous n&apos;avez pas encore de commandes </h2>
         ) : (
           orders.map((order) => (
@@ -88,7 +120,7 @@ export default function OrderHistoryPage() {
               <div className='flex flex-col sm:flex-row items-start justify-between mb-6'>
                 <div>
                   <h2 className='text-lg font-semibold'>
-                    Commande n°: {order.id}
+                    Commande n°: {order.invoice_number}
                   </h2>
                   <p className='text-sm'>
                     Créée le : {order.createdAt.substring(0, 10)}

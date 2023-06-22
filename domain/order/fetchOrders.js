@@ -1,6 +1,6 @@
 const fetchOrders = async (callback) => {
   try {
-    const response = await fetch("/api/product/findAllOrdersApi");
+    const response = await fetch("/api/admin/findAllOrdersApi");
     const jsonOrders = await response.json();
     callback(jsonOrders);
   } catch (err) {

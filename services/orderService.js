@@ -1,9 +1,26 @@
 import * as orderRepository from "@/repositories/orderRepository";
+import * as userRepository from "@/repositories/userRepository";
 import * as orderItemRepository from "@/repositories/orderItemRepository";
 import * as productRepository from "@/repositories/productRepository";
 import * as shippingAddressRepository from "@/repositories/shippingAddressRepository";
 import * as billingAddressRepository from "@/repositories/billingAddressRepository";
 import paypal from "@paypal/checkout-server-sdk";
+import { invoiceNumber } from "@/utils/invoiceNumber";
+
+export const findAll = async (groups = []) => {
+  let orders = await orderRepository.findAll();
+
+  for (const order of orders) {
+    if (!orders) {
+      throw new Error("No orders found");
+    }
+    if (groups.includes("users")) {
+      order.user = await userRepository.findUserById(order.userId);
+    }
+  }
+
+  return orders;
+};
 
 export const findOneById = async (id, user, groups = []) => {
   let order = await orderRepository.findOneById(id);
@@ -109,6 +126,7 @@ export const payOrder = async (orderId, user, paymentData) => {
   const updatedOrder = await orderRepository.update(orderId, {
     isPaid: true,
     paidAt: new Date(),
+    invoice_number: invoiceNumber(order.createdAt, orderId),
   });
 
   if (!updatedOrder) {
