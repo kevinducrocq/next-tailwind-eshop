@@ -14,7 +14,19 @@ export default function ProductItem({ product, addToCartHandler }) {
           className='rounded shadow'
         />
       </Link>
-      <div className='flex flex-col items-center justify-center p-5'>
+
+      <div className='flex flex-col items-center justify-center p-4'>
+        <div className='mb-1 self-start'>
+          {product.countInStock <= 0 ? (
+            <span class='bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300'>
+              Epuisé
+            </span>
+          ) : (
+            <span class='bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300'>
+              En stock
+            </span>
+          )}
+        </div>
         <Link href={`/product/${product.slug}`}>
           <h2 className='text-lg font-semibold'>{product.name}</h2>
         </Link>

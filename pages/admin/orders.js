@@ -49,8 +49,6 @@ export default function AdminOrdersPage() {
     fetchData();
   }, []);
 
-  console.log(orders);
-
   return (
     <Layout title='Admin - Commandes'>
       <div className='container mx-auto px-4 py-8'>

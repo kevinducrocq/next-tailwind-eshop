@@ -17,10 +17,9 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import AdminMenu from "@/components/adminMenu";
+import AdminMenu from "@/components/AdminMenu";
 
 // Chart
-
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -39,24 +38,24 @@ export const options = {
   },
 };
 
-export default function AdminDashboardPage() {
-  function reducer(state, action) {
-    switch (action.type) {
-      case "FETCH_REQUEST":
-        return { ...state, loading: true, error: "" };
-      case "FETCH_SUCCESS":
-        return { ...state, loading: false, summary: action.payload, error: "" };
-      case "FETCH_FAIL":
-        return {
-          ...state,
-          loading: false,
-          error: action.payload,
-        };
-      default:
-        state;
-    }
+function reducer(state, action) {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true, error: "" };
+    case "FETCH_SUCCESS":
+      return { ...state, loading: false, summary: action.payload, error: "" };
+    case "FETCH_FAIL":
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      state;
   }
+}
 
+export default function AdminDashboardPage() {
   const [numOrders, setNumOrders] = useState();
   const [totalAmount, setTotalAmount] = useState();
   const [totalProducts, setTotalProducts] = useState();

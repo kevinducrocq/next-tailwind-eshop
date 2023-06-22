@@ -93,6 +93,19 @@ export const createOrder = async (order, user) => {
   return newOrder;
 };
 
+export const deliverOrder = async (orderId) => {
+  let deliveredOrder = await orderRepository.update(orderId, {
+    isDelivered: true,
+    deliveredAt: new Date(),
+  });
+
+  if (!deliveredOrder) {
+    throw new Error("Erreur lors de la modification de la commande");
+  }
+
+  return deliveredOrder;
+};
+
 export const payOrder = async (orderId, user, paymentData) => {
   const order = await orderRepository.findOneById(orderId, user);
 
