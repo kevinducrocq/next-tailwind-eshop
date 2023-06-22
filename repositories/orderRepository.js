@@ -12,26 +12,6 @@ export const findAll = async () => {
   }
 };
 
-export const findWithUsersByOrderId = async (orderId) => {
-  try {
-    const result = await query({
-      query: `
-        SELECT o.*, u.*
-        FROM orders o
-        INNER JOIN users u ON o.userId = u.id
-        WHERE o.id = ?
-      `,
-      values: [orderId],
-    });
-    return result;
-  } catch (error) {
-    console.error(
-      "Une erreur s'est produite lors de la récupération des commandes :",
-      error
-    );
-  }
-};
-
 export const findBy = async (searchCriterias) => {
   try {
     const criterias = [];
