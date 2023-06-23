@@ -71,7 +71,7 @@ export default function Layout({ title, children }) {
                     <Menu.Item>
                       <DropdownLink
                         className='dropdown-link'
-                        href={`/user/${session.user.id}`}
+                        href={`/user/profile`}
                         legacyBehavior
                       >
                         Profil

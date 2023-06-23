@@ -6,16 +6,15 @@ import fetchUserById from "@/domain/user/fetchUserById";
 import updateUser from "@/domain/user/updateUser";
 import { getError } from "@/utils/error";
 import { Disclosure } from "@headlessui/react";
-import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 export default function ProfilePage() {
-  const { query } = useRouter();
-  const { id } = query;
   const [user, setUser] = useState([]);
   const [shippingAddresses, setShippingAddresses] = useState([]);
+  const { data: session } = useSession();
 
   const {
     handleSubmit,
@@ -32,10 +31,8 @@ export default function ProfilePage() {
   }, [user, setValue]);
 
   useEffect(() => {
-    if (id) {
-      fetchUserById(id, setUser);
-    }
-  }, [id]);
+    fetchUserById(session?.user.id, setUser);
+  }, [session?.user.id]);
 
   useEffect(() => {
     fetchAddresses(setShippingAddresses);
