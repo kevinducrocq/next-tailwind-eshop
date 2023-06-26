@@ -25,7 +25,7 @@ function reducer(state, action) {
       state;
   }
 }
-export default function AdminOrdersPage() {
+export default function AdminProductsPage() {
   const [{ loading, error }, dispatch] = useReducer(reducer, {
     loading: true,
     error: "",
@@ -33,7 +33,6 @@ export default function AdminOrdersPage() {
 
   const [products, setProducts] = useState([]);
 
-  console.log("FRONT", products);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,4 +110,4 @@ export default function AdminOrdersPage() {
     </Layout>
   );
 }
-AdminOrdersPage.auth = { adminOnly: true };
+AdminProductsPage.auth = { adminOnly: true };

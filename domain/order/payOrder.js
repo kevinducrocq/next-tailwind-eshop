@@ -2,7 +2,6 @@ const API_URL = "/api/order/payOrderApi";
 const CONTENT_TYPE = "application/json";
 
 const payOrder = async (orderId, paymentData) => {
-  console.log("DOMAIN", "orderId:", orderId, "paymentData:", paymentData);
   try {
     const orderResponse = await fetch(API_URL, {
       headers: {

@@ -16,7 +16,6 @@ export const findAll = async (groups = []) => {
         );
       }
     }
-    console.log("SERVICE", products);
     return products;
   } catch (error) {
     console.error(

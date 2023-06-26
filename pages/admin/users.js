@@ -34,7 +34,6 @@ export default function AdminOrdersPage() {
 
   const [users, setusers] = useState([]);
 
-  console.log("FRONT", users);
 
   useEffect(() => {
     const fetchData = async () => {

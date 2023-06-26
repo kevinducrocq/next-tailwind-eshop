@@ -18,7 +18,6 @@ export const findAll = async (groups = []) => {
       }
     }
 
-    console.log("SERVICE", users);
     return users;
   } catch (error) {
     console.error(
