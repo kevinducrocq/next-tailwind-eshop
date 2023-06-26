@@ -1,5 +1,6 @@
 import CheckoutWizard from "@/components/CheckoutWizard";
 import Layout from "@/components/Layout";
+import Spinner from "@/components/Spinner";
 import getLastBillingAddress from "@/domain/order/getLastBillingAddress";
 import placeOrder from "@/domain/order/placeOrder";
 import { Store } from "@/utils/Store";
@@ -99,10 +100,8 @@ export default function PlaceorderPage() {
     <Layout title='Récapitulatif de commande'>
       <CheckoutWizard activeStep={3} />
       <h1 className='mb-4 text-xl'>Récapitulatif de la commande</h1>
-      {cartItems.length === 0 ? (
-        <div>
-          Votre panier est vide, <Link href={"/"}>Go shopping</Link>
-        </div>
+      {loading ? (
+        <Spinner />
       ) : (
         <div className='grid md:grid-cols-4 md:gap-5'>
           <div className='overflow-x-auto md:col-span-3'>

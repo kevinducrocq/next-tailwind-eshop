@@ -62,6 +62,7 @@ export default function RegisterPage() {
             })}
             id='firstName'
             className='w-full'
+            autoFocus
           />
           {errors.firstName && (
             <div className='text-red-500'>{errors.firstName.message}</div>
@@ -77,7 +78,6 @@ export default function RegisterPage() {
             })}
             id='lastName'
             className='w-full'
-            autoFocus
           />
           {errors.lastName && (
             <div className='text-red-500'>{errors.lastName.message}</div>

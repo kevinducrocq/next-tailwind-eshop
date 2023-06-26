@@ -18,6 +18,7 @@ import {
   Legend,
 } from "chart.js";
 import AdminMenu from "@/components/AdminMenu";
+import Spinner from "@/components/Spinner";
 
 // Chart
 ChartJS.register(
@@ -109,7 +110,7 @@ export default function AdminDashboardPage() {
           <div className='md:col-span-3'>
             <h1 className='mb-4 text-xl'>Tableau de bord</h1>
             {loading ? (
-              <div>Chargement...</div>
+              <Spinner />
             ) : error ? (
               <div className='alert-error'>{error}</div>
             ) : (

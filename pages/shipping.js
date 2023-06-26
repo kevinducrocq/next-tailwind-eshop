@@ -3,20 +3,43 @@ import CheckoutWizard from "@/components/CheckoutWizard";
 import Layout from "@/components/Layout";
 import ShippingAddressList from "@/components/ShippingAddressList";
 import ShippingAddressModal from "@/components/ShippingAddressModal";
+import Spinner from "@/components/Spinner";
 import saveBillingAddress from "@/domain/order/saveBillingAddress";
 import fetchAddresses from "@/domain/user/fetchAddresses";
 import { Store } from "@/utils/Store";
+import { getError } from "@/utils/error";
 import { faForward } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import { toast } from "react-toastify";
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true, error: "" };
+    case "FETCH_SUCCESS":
+      return { ...state, loading: false, summary: action.payload, error: "" };
+    case "FETCH_FAIL":
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      state;
+  }
+}
 
 export default function ShippingPage() {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
   const router = useRouter();
+  const [{ loading, error }, dispatcher] = useReducer(reducer, {
+    loading: true,
+    error: "",
+  });
 
   const [shippingAddresses, setShippingAddresses] = useState([]);
   const [selectedShippingAddress, setSelectedShippingAddress] = useState(null);
@@ -24,10 +47,22 @@ export default function ShippingPage() {
   const [selectedBillingAddress, setSelectedBillingAddress] = useState(null);
 
   useEffect(() => {
-    fetchAddresses((foundShippingAddresses) => {
-      setShippingAddresses(foundShippingAddresses);
-      setSelectedShippingAddress(foundShippingAddresses[0]);
-    });
+    const fetchData = async () => {
+      try {
+        dispatcher({ type: "FETCH_REQUEST" });
+        fetchAddresses((foundShippingAddresses) => {
+          setShippingAddresses(foundShippingAddresses);
+          setSelectedShippingAddress(foundShippingAddresses[0]);
+        });
+        dispatcher({
+          type: "FETCH_SUCCESS",
+          payload: shippingAddresses,
+        });
+      } catch (err) {
+        dispatcher({ type: "FETCH_FAIL", payload: getError(err) });
+      }
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -97,12 +132,18 @@ export default function ShippingPage() {
       <div className='my-10'>
         <h2 className='text-3xl font-semibold'>Adresse de livraison</h2> <hr />
         <div className='mx-auto grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 mt-5'>
-          <ShippingAddressList
-            onChange={setSelectedShippingAddress}
-            shippingAddresses={shippingAddresses}
-            selectedShippingAddress={selectedShippingAddress}
-            isOrder={true}
-          />
+          {loading ? (
+            <Spinner align='center' />
+          ) : error ? (
+            <div className='alert-error'>{error}</div>
+          ) : (
+            <ShippingAddressList
+              onChange={setSelectedShippingAddress}
+              shippingAddresses={shippingAddresses}
+              selectedShippingAddress={selectedShippingAddress}
+              isOrder={true}
+            />
+          )}
           <ShippingAddressModal
             onCreate={() =>
               fetchAddresses((addresses) => {

@@ -1,10 +1,29 @@
 import Layout from "@/components/Layout";
 import ProductItem from "@/components/ProductItem";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import React from "react";
 import fetchProducts from "@/domain/product/fetchProducts";
 import { Store } from "@/utils/Store";
 import { toast } from "react-toastify";
+import { getError } from "@/utils/error";
+import Spinner from "@/components/Spinner";
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true, error: "" };
+    case "FETCH_SUCCESS":
+      return { ...state, loading: false, summary: action.payload, error: "" };
+    case "FETCH_FAIL":
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      state;
+  }
+}
 
 export default function Home() {
   const { state, dispatch } = useContext(Store);
@@ -12,8 +31,25 @@ export default function Home() {
 
   const [products, setProducts] = useState([]);
 
+  const [{ loading, error }, dispatcher] = useReducer(reducer, {
+    loading: true,
+    error: "",
+  });
+
   useEffect(() => {
-    fetchProducts(setProducts);
+    const fetchData = async () => {
+      try {
+        dispatcher({ type: "FETCH_REQUEST" });
+        fetchProducts(setProducts);
+        dispatcher({
+          type: "FETCH_SUCCESS",
+          payload: products,
+        });
+      } catch (err) {
+        dispatcher({ type: "FETCH_FAIL", payload: getError(err) });
+      }
+    };
+    fetchData();
   }, []);
 
   const addToCartHandler = async (product) => {
@@ -41,13 +77,21 @@ export default function Home() {
   return (
     <Layout title="Page d'accueil">
       <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
-        {products.map((product) => (
-          <ProductItem
-            product={product}
-            key={product.slug}
-            addToCartHandler={addToCartHandler}
-          />
-        ))}
+        {loading ? (
+          <div className='flex'>
+            <Spinner align='center' />
+          </div>
+        ) : error ? (
+          <div className='alert-error'>{error}</div>
+        ) : (
+          products.map((product) => (
+            <ProductItem
+              product={product}
+              key={product.slug}
+              addToCartHandler={addToCartHandler}
+            />
+          ))
+        )}
       </div>
     </Layout>
   );

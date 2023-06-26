@@ -5,9 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import dynamic from "next/dynamic";
 import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
+import Spinner from "@/components/Spinner";
 
 function CartPage() {
   const { state, dispatch } = useContext(Store);
@@ -15,6 +17,10 @@ function CartPage() {
     cart: { cartItems },
   } = state;
   const router = useRouter();
+
+  const { data: session, status } = useSession();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const removeItemHandler = (item) => {
     dispatch({ type: "CART_REMOVE_ITEM", payload: item });
@@ -42,6 +48,20 @@ function CartPage() {
       position: "bottom-right",
     });
   };
+
+  const handleCommanderClick = async () => {
+    if (!session) {
+      setIsLoading(true);
+      await router.push("login?redirect=/shipping");
+      setIsLoading(false);
+    } else {
+      router.push("/shipping");
+    }
+  };
+
+  if (status === "loading") {
+    return <Spinner />;
+  }
 
   return (
     <Layout title='Panier'>
@@ -117,13 +137,18 @@ function CartPage() {
                     &euro;
                   </div>
                 </li>
+
                 <li>
-                  <button
-                    onClick={() => router.push("login?redirect=/shipping")}
-                    className='primary-button w-full'
-                  >
-                    Commander
-                  </button>
+                  {isLoading ? (
+                    <Spinner hScreen={false} />
+                  ) : (
+                    <button
+                      onClick={handleCommanderClick}
+                      className='primary-button w-full'
+                    >
+                      Commander
+                    </button>
+                  )}
                 </li>
               </ul>
             </div>

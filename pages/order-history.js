@@ -7,6 +7,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import { saveAs } from "file-saver";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { getError } from "@/utils/error";
+import Spinner from "@/components/Spinner";
 
 export default function OrderHistoryPage() {
   function reducer(state, action) {
@@ -14,7 +15,7 @@ export default function OrderHistoryPage() {
       case "FETCH_REQUEST":
         return { ...state, loading: true, error: "" };
       case "FETCH_SUCCESS":
-        return { ...state, loading: false, orders: action.payload, error: "" };
+        return { ...state, loading: false, error: "" };
       case "FETCH_FAIL":
         return { ...state, loading: false, error: action.payload };
       default:
@@ -106,7 +107,7 @@ export default function OrderHistoryPage() {
       <div className='container mx-auto px-4 py-8'>
         <h1 className='text-3xl font-semibold mb-4'>Historique de commandes</h1>
         {loading ? (
-          <div>Chargement...</div>
+          <Spinner />
         ) : error ? (
           <div className='alert-error'>{error}</div>
         ) : orders.length <= 0 ? (

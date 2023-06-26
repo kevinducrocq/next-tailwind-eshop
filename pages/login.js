@@ -6,9 +6,10 @@ import Layout from "@/components/Layout";
 import { getError } from "@/utils/error";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import Spinner from "@/components/Spinner";
 
 export default function LoginPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const { redirect } = router.query;
 
@@ -38,6 +39,11 @@ export default function LoginPage() {
       toast.error(getError(err));
     }
   };
+
+  if (status === "loading") {
+    // Affichez le spinner pendant que la session est en cours de vérification
+    return <Spinner size='12' color='blue' background='gray' align='center' />;
+  }
 
   return (
     <Layout title='Connexion'>
@@ -79,7 +85,6 @@ export default function LoginPage() {
             })}
             id='password'
             className='w-full'
-            autoFocus
           />
           {errors.password && (
             <div className='text-red-500'>{errors.password.message}</div>
