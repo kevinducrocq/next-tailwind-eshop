@@ -1,13 +1,30 @@
 import * as productRepository from "@/repositories/productRepository";
+import * as categoryRepository from "@/repositories/categoryRepository";
 
-export const findAll = async () => {
-  let products = await productRepository.findAll();
+export const findAll = async (groups = []) => {
+  try {
+    let products = await productRepository.findAll();
 
-  if (!products) {
-    throw new Error("No products found");
+    for (const product of products) {
+      if (!products) {
+        throw new Error("No products found");
+      }
+      if (groups.includes("categories")) {
+        const productId = product.id;
+        product.categories = await categoryRepository.findCategoriesByProductId(
+          productId
+        );
+      }
+    }
+    console.log("SERVICE", products);
+    return products;
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors de la récupération des produits :",
+      error
+    );
+    throw error;
   }
-
-  return products;
 };
 
 export const findBySlug = async (slug) => {

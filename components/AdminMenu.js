@@ -21,7 +21,7 @@ export default function AdminMenu() {
           </Link>
         </li>
         <li>
-          <Link href='/admin/utilisateurs' legacyBehavior>
+          <Link href='/admin/users' legacyBehavior>
             <a className='font-bold'>Utilisateurs</a>
           </Link>
         </li>

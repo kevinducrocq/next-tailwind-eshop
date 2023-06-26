@@ -1,5 +1,33 @@
+import * as orderRepository from "@/repositories/orderRepository";
 import * as userRepository from "@/repositories/userRepository";
 
+export const findAll = async (groups = []) => {
+  try {
+    let users = await userRepository.findAll();
+
+    for (const user of users) {
+      if (!user) {
+        throw new Error("No users found");
+      }
+      if (groups.includes("orders")) {
+        const userId = user.id;
+        const searchCriteria = { userId };
+        const userOrders = await orderRepository.findBy(searchCriteria);
+        const userOrderCount = userOrders.length;
+        user.orderCount = userOrderCount;
+      }
+    }
+
+    console.log("SERVICE", users);
+    return users;
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors de la récupération des utilisateurs :",
+      error
+    );
+    throw error;
+  }
+};
 export const findOneById = async (id) => {
   let user = await userRepository.findUserById(id);
   if (!user.id) {
