@@ -8,6 +8,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import AdminMenu from "@/components/AdminMenu";
+import Spinner from "@/components/Spinner";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -57,7 +58,7 @@ export default function AdminOrdersPage() {
           <div className='md:col-span-3'>
             <h1 className='mb-4 text-xl'>Commandes</h1>
             {loading ? (
-              <div>Chargement...</div>
+              <Spinner />
             ) : error ? (
               <div className='alert-error'>{error}</div>
             ) : orders.length <= 0 ? (

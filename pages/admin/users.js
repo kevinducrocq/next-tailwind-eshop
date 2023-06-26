@@ -34,7 +34,6 @@ export default function AdminOrdersPage() {
 
   const [users, setusers] = useState([]);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,7 +58,7 @@ export default function AdminOrdersPage() {
           <div className='md:col-span-3'>
             <h1 className='mb-4 text-xl'>Utilisateurs</h1>
             {loading ? (
-              <Spinner hScreen={false} />
+              <Spinner />
             ) : error ? (
               <div className='alert-error'>{error}</div>
             ) : users.length <= 0 ? (

@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import AdminMenu from "@/components/AdminMenu";
 import fetchProducts from "@/domain/admin/fetchProducts";
+import Spinner from "@/components/Spinner";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -33,7 +34,6 @@ export default function AdminProductsPage() {
 
   const [products, setProducts] = useState([]);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,7 +58,7 @@ export default function AdminProductsPage() {
           <div className='md:col-span-3'>
             <h1 className='mb-4 text-xl'>Produits</h1>
             {loading ? (
-              <div>Chargement...</div>
+              <Spinner />
             ) : error ? (
               <div className='alert-error'>{error}</div>
             ) : products.length <= 0 ? (
