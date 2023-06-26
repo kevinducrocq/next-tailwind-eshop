@@ -6,9 +6,10 @@ const findOrderByIdApi = async (req, res) => {
   try {
     // VÉRIFICATION DE LA SESSION ET DE L'UTILISATEUR CONNECTÉ
     const session = await getServerSession(req, res, authOptions);
-    if (!session) {
-      return res.status(401).send({ message: "Connectez-vous" });
+    if (!session || (session && !session.user?.isAdmin)) {
+      return res.status(401).json({ error: "Connectez-vous" });
     }
+
     const { user } = session;
 
     // RÉCUPÉRATION DE LA COMMANDE PAR SON ID ET L'UTILISATEUR CONNECTÉ

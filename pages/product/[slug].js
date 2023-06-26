@@ -78,6 +78,18 @@ export default function ProductPage() {
         </div>
         <div>
           <div className='card p-5'>
+            <div className='mb-4 flex justify-start'>
+              {product.countInStock <= 0 ? (
+                <span class='bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300'>
+                  Epuisé
+                </span>
+              ) : (
+                <span class='bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300'>
+                  En stock
+                </span>
+              )}
+            </div>
+
             <div className='mb-2 flex justify-between'>
               <div>Prix</div>
               <div>{product.price} &euro;</div>
@@ -89,6 +101,7 @@ export default function ProductPage() {
             <button
               className='primary-button w-full'
               onClick={addToCartHandler}
+              disabled={product.countInStock <= 0}
             >
               <FontAwesomeIcon icon={faCartPlus} />
               &nbsp; Ajouter au panier

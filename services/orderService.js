@@ -25,7 +25,7 @@ export const findAll = async (groups = []) => {
 export const findOneById = async (id, user, groups = []) => {
   let order = await orderRepository.findOneById(id);
 
-  if (order.userId !== user.id) {
+  if (order.userId !== user.id && !user.isAdmin) {
     throw new Error("Mauvais identifiant d'utilisateur");
   }
 

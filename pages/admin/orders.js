@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import fetchOrders from "@/domain/order/fetchOrders";
+import fetchOrders from "@/domain/admin/fetchOrders";
 import { getError } from "@/utils/error";
 import React, { useEffect, useReducer, useState } from "react";
 import { format } from "date-fns";
