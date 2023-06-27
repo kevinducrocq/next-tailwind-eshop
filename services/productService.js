@@ -36,6 +36,26 @@ export const findBySlug = async (slug) => {
   return product;
 };
 
+export const findById = async (id) => {
+  let product = await productRepository.findProductById(id);
+
+  if (!product) {
+    throw new Error("Pas de produit trouvé");
+  }
+
+  // Récupérer la catégorie du produit en effectuant une jointure dans la requête SQL
+  const category = await categoryRepository.findCategoriesByProductId(id);
+
+  if (!category) {
+    throw new Error("No category found for the product");
+  }
+
+  // Ajouter la catégorie au produit
+  product.category = category;
+
+  return product;
+};
+
 export const getTotalProducts = async () => {
   try {
     const totalProducts = await productRepository.countProducts();

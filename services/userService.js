@@ -11,7 +11,7 @@ export const findAll = async (groups = []) => {
       }
       if (groups.includes("orders")) {
         const userId = user.id;
-        const searchCriteria = { userId };
+        const searchCriteria = { userId, isPaid: true };
         const userOrders = await orderRepository.findBy(searchCriteria);
         const userOrderCount = userOrders.length;
         user.orderCount = userOrderCount;

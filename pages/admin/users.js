@@ -51,7 +51,7 @@ export default function AdminOrdersPage() {
   }, []);
 
   return (
-    <Layout title='Admin - Produits'>
+    <Layout title='Admin - Utilisateurs'>
       <div className='container mx-auto px-4 py-8'>
         <div className='grid md:grid-cols-4 md:gap5'>
           <AdminMenu />
@@ -71,7 +71,7 @@ export default function AdminOrdersPage() {
                       <th className='px-5 text-left'>NOM</th>
                       <th className='p-5 text-left'>PRÉNOM</th>
                       <th className='p-5 text-left'>EMAIL</th>
-                      <th className='p-5 text-left'>NOMBRE DE COMMANDES</th>
+                      <th className='p-5 text-left'>COMMANDES</th>
                       <th className='p-5 text-left'>ADMIN</th>
                       <th className='p-5 text-left'>CREÉ LE</th>
                       <th className='p-5 text-left'>ACTION</th>
