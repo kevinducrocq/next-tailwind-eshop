@@ -67,3 +67,34 @@ export const getTotalProducts = async () => {
     );
   }
 };
+
+export const updateProduct = async (
+  productId,
+  name,
+  slug,
+  image,
+  price,
+  brand,
+  countInStock,
+  description,
+  categoryId // Nouveau paramètre categoryId
+) => {
+  let updatedProduct = await productRepository.update(productId, {
+    name,
+    slug,
+    image,
+    price,
+    brand,
+    countInStock,
+    description,
+  });
+
+  if (!updatedProduct) {
+    throw new Error("Erreur lors de la modification du produit");
+  }
+
+  // Mettre à jour la catégorie du produit dans la table de liaison product_categories
+  await productRepository.updateProductCategory(productId, categoryId);
+
+  return updatedProduct;
+};

@@ -48,13 +48,14 @@ const handler = async (req, res) => {
     data.users.forEach(async (user) => {
       const result = await query({
         query:
-          "INSERT INTO users(firstName, lastName, email, password, isAdmin) VALUES(?, ?, ?, ?, ?);",
+          "INSERT INTO users(firstName, lastName, email, password, isAdmin, createdAt) VALUES(?, ?, ?, ?, ?, ?);",
         values: [
           user.firstName,
           user.lastName,
           user.email,
           user.password,
           user.isAdmin,
+          new Date(),
         ],
       });
       console.log("ttt", result);

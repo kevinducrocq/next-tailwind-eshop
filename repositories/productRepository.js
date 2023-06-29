@@ -136,3 +136,19 @@ export const countProducts = async () => {
     );
   }
 };
+
+export const updateProductCategory = async (productId, categoryId) => {
+  try {
+    await query({
+      query:
+        "UPDATE product_categories SET category_id = ? WHERE product_id = ?",
+      values: [categoryId, productId],
+    });
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors de la mise à jour de la catégorie du produit :",
+      error
+    );
+    throw error;
+  }
+};

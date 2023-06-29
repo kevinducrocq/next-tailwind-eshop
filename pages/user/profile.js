@@ -233,7 +233,13 @@ export default function ProfilePage() {
                       )}
                   </div>
                   <div className='mb-4'>
-                    <button className='primary-button'>Mettre à jour</button>
+                    <button className='primary-button' disabled={loadingUpdate}>
+                      {loadingUpdate ? (
+                        <Spinner hScreen={false} size='10' />
+                      ) : (
+                        "Mettre à jour"
+                      )}
+                    </button>
                   </div>
                 </form>
               </Disclosure.Panel>

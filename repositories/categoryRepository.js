@@ -2,7 +2,9 @@ import query from "@/utils/dbMysql";
 
 export const findAll = async () => {
   try {
-    const result = await query({ query: "SELECT * FROM categories" });
+    const result = await query({
+      query: "SELECT * FROM categories",
+    });
     return result;
   } catch (error) {
     console.error(
@@ -115,22 +117,6 @@ export const remove = async (id) => {
   } catch (error) {
     console.error(
       "Une erreur s'est produite lors de la suppression de la catégorie :",
-      error
-    );
-    throw error;
-  }
-};
-
-export const countCategories = async () => {
-  try {
-    const result = await query({
-      query: "SELECT COUNT(*) AS count FROM categories",
-      singleResult: true,
-    });
-    return result.count;
-  } catch (error) {
-    console.error(
-      "Une erreur s'est produite lors du comptage des catégories :",
       error
     );
     throw error;

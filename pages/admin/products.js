@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import AdminMenu from "@/components/AdminMenu";
 import fetchProducts from "@/domain/admin/fetchProducts";
 import Spinner from "@/components/Spinner";
@@ -96,6 +96,9 @@ export default function AdminProductsPage() {
                         <td className='p-5'>
                           <Link href={`/product/${product.slug}`}>
                             <FontAwesomeIcon icon={faEye} /> Détails
+                          </Link>{" "}
+                          <Link href={`/admin/product/${product.id}`}>
+                            <FontAwesomeIcon icon={faEdit} /> Editer
                           </Link>
                         </td>
                       </tr>
