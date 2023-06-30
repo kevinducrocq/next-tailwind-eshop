@@ -75,9 +75,9 @@ export const updateProduct = async (
   image,
   price,
   brand,
+  categoryId, // Nouveau paramètre categoryId
   countInStock,
-  description,
-  categoryId // Nouveau paramètre categoryId
+  description
 ) => {
   let updatedProduct = await productRepository.update(productId, {
     name,
@@ -89,12 +89,12 @@ export const updateProduct = async (
     description,
   });
 
+  // Mettre à jour la catégorie du produit dans la table de liaison product_categories
+  await productRepository.updateProductCategory(productId, categoryId);
+
   if (!updatedProduct) {
     throw new Error("Erreur lors de la modification du produit");
   }
-
-  // Mettre à jour la catégorie du produit dans la table de liaison product_categories
-  await productRepository.updateProductCategory(productId, categoryId);
 
   return updatedProduct;
 };

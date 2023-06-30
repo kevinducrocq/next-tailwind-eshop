@@ -105,9 +105,11 @@ export default function AdminDashboardPage() {
   return (
     <Layout title='Admin - Tableau de bord'>
       <div className='container mx-auto px-4 py-8'>
-        <div className='grid md:grid-cols-4 md:gap5'>
-          <AdminMenu />
-          <div className='md:col-span-3'>
+        <div className='grid md:grid-cols-6 md:gap-2'>
+          <div className='md:col-span-1'>
+            <AdminMenu />
+          </div>
+          <div className='md:col-span-5'>
             <h1 className='mb-4 text-xl'>Tableau de bord</h1>
             {loading ? (
               <Spinner />

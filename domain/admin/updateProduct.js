@@ -4,12 +4,12 @@ const updateProduct = async (
   productId,
   name,
   slug,
-  price,
   image,
+  price,
   brand,
-  selectedCategoryId,
   countInStock,
-  description
+  description,
+  selectedCategoryId
 ) => {
   try {
     const productResponse = await fetch("/api/admin/updateProductApi", {
@@ -17,17 +17,17 @@ const updateProduct = async (
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify({
         productId,
         name,
         slug,
-        price,
         image,
+        price,
         brand,
-        selectedCategoryId,
         countInStock,
         description,
+        selectedCategoryId,
       }),
     });
 
@@ -35,8 +35,8 @@ const updateProduct = async (
       getError(productResponse);
       return;
     }
-
-    return await productResponse.json();
+    const responseData = await productResponse.json();
+    return responseData;
   } catch (err) {
     console.error(err);
   }

@@ -53,9 +53,11 @@ export default function AdminProductsPage() {
   return (
     <Layout title='Admin - Produits'>
       <div className='container mx-auto px-4 py-8'>
-        <div className='grid md:grid-cols-4 md:gap5'>
-          <AdminMenu />
-          <div className='md:col-span-3'>
+        <div className='grid md:grid-cols-6 md:gap-2'>
+          <div className='md:col-span-1'>
+            <AdminMenu />
+          </div>
+          <div className='md:col-span-5'>
             <h1 className='mb-4 text-xl'>Produits</h1>
             {loading ? (
               <Spinner />
@@ -71,6 +73,7 @@ export default function AdminProductsPage() {
                       <th className='px-5 text-left'>NOM</th>
                       <th className='p-5 text-left'>PRIX</th>
                       <th className='p-5 text-left'>CATEGORIE</th>
+                      <th className='p-5 text-left'>STOCK</th>
                       <th className='p-5 text-left'>MARQUE</th>
                       <th className='p-5 text-left'>NOTE</th>
                       <th className='p-5 text-left'>CREÉ LE</th>
@@ -86,6 +89,7 @@ export default function AdminProductsPage() {
                         <td className='p-5'>{product.name}</td>
                         <td className='p-5'>{product.price} &euro;</td>
                         <td className='p-5'>{product.categories.name}</td>
+                        <td className='p-5'>{product.countInStock}</td>
                         <td className='p-5'>{product.brand}</td>
                         <td className='p-5'>{product.rating} / 5</td>
                         <td className='p-5'>

@@ -25,6 +25,16 @@ function reducer(state, action) {
         loading: false,
         error: action.payload,
       };
+    case "UPDATE_REQUEST":
+      return { ...state, loadingUpdate: true, error: "" };
+    case "UPDATE_SUCCESS":
+      return { ...state, loadingUpdate: false, error: "" };
+    case "UPDATE_FAIL":
+      return {
+        ...state,
+        loadingUpdate: false,
+        error: action.payload,
+      };
     default:
       state;
   }
@@ -32,6 +42,7 @@ function reducer(state, action) {
 
 export default function AdminProductEditPage() {
   const { query } = useRouter();
+  const router = useRouter();
   const productId = query.id;
   const [{ loading, error, loadingUpdate }, dispatch] = useReducer(reducer, {
     loading: true,
@@ -47,13 +58,15 @@ export default function AdminProductEditPage() {
   const [product, setProduct] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const [initialCategoryId, setInitialCategoryId] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        fetchProductById(productId, setProduct);
-
+        fetchProductById(productId, (fetchedProduct) => {
+          setProduct(fetchedProduct);
+        });
         fetchCategories(setCategories);
         dispatch({
           type: "FETCH_SUCCESS",
@@ -64,7 +77,7 @@ export default function AdminProductEditPage() {
       }
     };
     fetchData();
-  }, [productId, setValue]);
+  }, [productId]);
 
   useEffect(() => {
     try {
@@ -76,6 +89,7 @@ export default function AdminProductEditPage() {
       setValue("category", product.category?.id);
       setValue("countInStock", product.countInStock);
       setValue("description", product.description);
+      setInitialCategoryId(product.category?.id);
     } catch (err) {
       getError(err);
     }
@@ -89,6 +103,7 @@ export default function AdminProductEditPage() {
     product.description,
     setValue,
     product.name,
+    product.category?.id,
   ]);
 
   const submitHandler = async ({
@@ -101,6 +116,7 @@ export default function AdminProductEditPage() {
     description,
   }) => {
     try {
+      dispatch({ type: "UPDATE_REQUEST" });
       const updatedProduct = await updateProduct(
         productId,
         name,
@@ -108,29 +124,27 @@ export default function AdminProductEditPage() {
         image,
         price,
         brand,
-        selectedCategoryId,
         countInStock,
-        description
+        description,
+        selectedCategoryId ? selectedCategoryId : initialCategoryId
       );
-
       if (updatedProduct) {
         if (updatedProduct.error) {
           toast.error(updatedProduct.error);
         } else {
+          dispatch({ type: "UPDATE_SUCCESS" });
           setProduct(updatedProduct);
-          toast.success("Informations du produit mises à jour avec succès !");
+          router.push("/admin/products");
         }
       }
     } catch (err) {
-      toast.error(getError(err));
+      dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
     }
   };
 
   const handleCategoryChange = (event) => {
     setSelectedCategoryId(event.target.value);
   };
-
-  console.log("FRONT", selectedCategoryId);
 
   return (
     <Layout title={`Admin - Edition produit : ${product.name}`}>
@@ -234,16 +248,15 @@ export default function AdminProductEditPage() {
                     name='category'
                     id='category'
                     className='w-full'
+                    value={
+                      selectedCategoryId !== ""
+                        ? selectedCategoryId
+                        : initialCategoryId
+                    }
                     onChange={handleCategoryChange}
                   >
                     {categories.map((mappedCategory) => (
-                      <option
-                        key={mappedCategory.id}
-                        value={mappedCategory.id}
-                        defaultValue={
-                          mappedCategory.name === product.category?.name
-                        }
-                      >
+                      <option key={mappedCategory.id} value={mappedCategory.id}>
                         {mappedCategory.name}
                       </option>
                     ))}
@@ -289,7 +302,7 @@ export default function AdminProductEditPage() {
                 <div className='mb-4'>
                   <button className='primary-button' disabled={loadingUpdate}>
                     {loadingUpdate ? (
-                      <Spinner hScreen={false} size='10' />
+                      <Spinner hScreen={false} size='30' />
                     ) : (
                       "Mettre à jour"
                     )}
