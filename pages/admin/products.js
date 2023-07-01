@@ -88,7 +88,7 @@ export default function AdminProductsPage() {
                       >
                         <td className='p-5'>{product.name}</td>
                         <td className='p-5'>{product.price} &euro;</td>
-                        <td className='p-5'>{product.categories.name}</td>
+                        <td className='p-5'>{product.categories?.name}</td>
                         <td className='p-5'>{product.countInStock}</td>
                         <td className='p-5'>{product.brand}</td>
                         <td className='p-5'>{product.rating} / 5</td>

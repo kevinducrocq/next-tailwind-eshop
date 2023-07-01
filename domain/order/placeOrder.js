@@ -27,6 +27,7 @@ const placeOrder = async (
       }),
     });
     const createdOrder = await orderRepsonse.json();
+    console.log("DOMAIN", createdOrder);
     return createdOrder;
   } catch (err) {
     console.error(err);

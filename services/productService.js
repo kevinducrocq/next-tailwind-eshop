@@ -98,3 +98,36 @@ export const updateProduct = async (
 
   return updatedProduct;
 };
+
+export const addProduct = async (
+  name,
+  slug,
+  image,
+  price,
+  brand,
+  countInStock,
+  description,
+  selectedCategoryId
+) => {
+  let newProductId = await productRepository.create({
+    name,
+    slug,
+    image,
+    price,
+    brand,
+    countInStock,
+    description,
+  });
+
+  console.log("SERVICE", newProductId);
+  console.log("SERVICE*cat", selectedCategoryId);
+
+  // Mettre à jour la catégorie du produit dans la table de liaison product_categories
+  await productRepository.setProductCategory(newProductId, selectedCategoryId);
+
+  if (!newProductId) {
+    throw new Error("Erreur lors de l'ajout du produit");
+  }
+
+  return newProductId;
+};

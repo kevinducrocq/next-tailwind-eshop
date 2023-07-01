@@ -74,7 +74,6 @@ export const updateUser = async (
   if (!updatedUser) {
     throw new Error("Erreur lors de la modification de l'utilisateur");
   }
-
   return updatedUser;
 };
 

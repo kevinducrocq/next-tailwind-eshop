@@ -63,52 +63,97 @@ export default function Layout({ title, children }) {
               {status === "loading" ? (
                 "Chargement..."
               ) : session?.user ? (
-                <Menu as='div' className='relative inline-block'>
-                  <Menu.Button className='text-blue-600'>
-                    {session.user.name}
-                  </Menu.Button>
-                  <Menu.Items className='absolute right-0 w-56 origin-top-right shadow-lg bg-white'>
-                    <Menu.Item>
-                      <DropdownLink
-                        className='dropdown-link'
-                        href={`/user/profile`}
-                        legacyBehavior
-                      >
-                        Profil
-                      </DropdownLink>
-                    </Menu.Item>
-                    <Menu.Item>
-                      <DropdownLink
-                        className='dropdown-link'
-                        href='/order-history'
-                        legacyBehavior
-                      >
-                        Historique de commandes
-                      </DropdownLink>
-                    </Menu.Item>
-                    {session.user.isAdmin && (
+                <>
+                  <Menu as='div' className='relative inline-block'>
+                    <Menu.Button className='text-blue-600'>
+                      {session.user.name}
+                    </Menu.Button>
+                    <Menu.Items className='absolute right-0 w-56 origin-top-right shadow-lg bg-white'>
                       <Menu.Item>
                         <DropdownLink
                           className='dropdown-link'
-                          href='/admin/dashboard'
+                          href={`/user/profile`}
                           legacyBehavior
                         >
-                          Administration
+                          Profil
                         </DropdownLink>
                       </Menu.Item>
-                    )}
-                    <Menu.Item>
-                      <DropdownLink
-                        className='dropdown-link'
-                        onClick={logoutHandler}
-                        href=''
-                        legacyBehavior
-                      >
-                        Déconnexion
-                      </DropdownLink>
-                    </Menu.Item>
-                  </Menu.Items>
-                </Menu>
+                      <Menu.Item>
+                        <DropdownLink
+                          className='dropdown-link'
+                          href='/order-history'
+                          legacyBehavior
+                        >
+                          Historique de commandes
+                        </DropdownLink>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <DropdownLink
+                          className='dropdown-link'
+                          onClick={logoutHandler}
+                          href=''
+                          legacyBehavior
+                        >
+                          Déconnexion
+                        </DropdownLink>
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Menu>
+                  {session.user.isAdmin && (
+                    <Menu as='div' className='relative inline-block p-2'>
+                      <Menu.Button className='text-blue-600'>
+                        Administration
+                      </Menu.Button>
+                      <Menu.Items className='absolute right-0 w-56 origin-top-right shadow-lg bg-white'>
+                        <Menu.Item>
+                          <DropdownLink
+                            className='dropdown-link'
+                            href={`/admin/dashboard`}
+                            legacyBehavior
+                          >
+                            Tableau de bord
+                          </DropdownLink>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <DropdownLink
+                            className='dropdown-link'
+                            href='/admin/orders'
+                            legacyBehavior
+                          >
+                            Commandes
+                          </DropdownLink>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <DropdownLink
+                            className='dropdown-link'
+                            href='/admin/products'
+                            legacyBehavior
+                          >
+                            Produits
+                          </DropdownLink>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <DropdownLink
+                            className='dropdown-link'
+                            href='/admin/users'
+                            legacyBehavior
+                          >
+                            Utilisateurs
+                          </DropdownLink>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <DropdownLink
+                            className='dropdown-link'
+                            href='/admin/product/add-product'
+                            legacyBehavior
+                          >
+                            Ajouter un produit
+                          </DropdownLink>
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Menu>
+                  )}
+                </>
               ) : (
                 <Link href='/login'>Connexion</Link>
               )}

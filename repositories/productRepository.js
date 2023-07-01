@@ -46,10 +46,11 @@ export const findProductBySlug = async (slug) => {
 
 export const create = async (product) => {
   try {
+    console.log(product);
     const result = await query({
       query: `
-        INSERT INTO products (name, slug, image, price, brand, rating, numReviews, countInStock, description, createdAt)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
+        INSERT INTO products (name, slug, image, price, brand, countInStock, description, createdAt)
+        VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
       `,
       values: [
         product.name,
@@ -57,8 +58,6 @@ export const create = async (product) => {
         product.image,
         product.price,
         product.brand,
-        product.rating,
-        product.numReviews,
         product.countInStock,
         product.description,
       ],
@@ -134,6 +133,22 @@ export const countProducts = async () => {
       "Une erreur s'est produite lors du comptage des produits :",
       error
     );
+  }
+};
+
+export const setProductCategory = async (productId, categoryId) => {
+  try {
+    await query({
+      query:
+        "INSERT INTO product_categories (product_id, category_id) VALUES (?, ?)",
+      values: [productId, categoryId],
+    });
+  } catch (error) {
+    console.error(
+      "Une erreur s'est produite lors de la mise à jour de la catégorie du produit :",
+      error
+    );
+    throw error;
   }
 };
 

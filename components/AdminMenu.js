@@ -21,6 +21,11 @@ export default function AdminMenu() {
           </Link>
         </li>
         <li>
+          <Link href='/admin/product/add-product' legacyBehavior>
+            <a className='font-bold'>Ajouter un produit</a>
+          </Link>
+        </li>
+        <li>
           <Link href='/admin/users' legacyBehavior>
             <a className='font-bold'>Utilisateurs</a>
           </Link>
