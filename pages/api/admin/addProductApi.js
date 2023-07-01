@@ -36,7 +36,6 @@ const addProductApi = async (req, res) => {
       selectedCategoryId
     );
 
-    console.log("API", result);
     
     res.status(200).json(result);
   } catch (error) {

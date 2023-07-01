@@ -46,7 +46,6 @@ export const findProductBySlug = async (slug) => {
 
 export const create = async (product) => {
   try {
-    console.log(product);
     const result = await query({
       query: `
         INSERT INTO products (name, slug, image, price, brand, countInStock, description, createdAt)
@@ -145,7 +144,7 @@ export const setProductCategory = async (productId, categoryId) => {
     });
   } catch (error) {
     console.error(
-      "Une erreur s'est produite lors de la mise à jour de la catégorie du produit :",
+      "Une erreur s'est produite lors de l'ajout de la catégorie du produit :",
       error
     );
     throw error;
@@ -157,7 +156,7 @@ export const updateProductCategory = async (productId, categoryId) => {
     await query({
       query:
         "UPDATE product_categories SET category_id = ? WHERE product_id = ?",
-      values: [categoryId, productId],
+      values: [productId, categoryId],
     });
   } catch (error) {
     console.error(

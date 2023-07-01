@@ -119,8 +119,6 @@ export const addProduct = async (
     description,
   });
 
-  console.log("SERVICE", newProductId);
-  console.log("SERVICE*cat", selectedCategoryId);
 
   // Mettre à jour la catégorie du produit dans la table de liaison product_categories
   await productRepository.setProductCategory(newProductId, selectedCategoryId);

@@ -77,7 +77,6 @@ export default function AdminProductAddPage() {
         if (newProduct.error) {
           toast.error(newProduct.error);
         } else {
-          console.log("FRONT", newProduct);
           dispatch({ type: "ADD_SUCCESS" });
           router.push("/admin/products");
         }
