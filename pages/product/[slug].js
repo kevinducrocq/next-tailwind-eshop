@@ -1,8 +1,9 @@
 import Layout from "@/components/Layout";
 import fetchProductBySlug from "@/domain/product/fetchProductBySlug";
 import { Store } from "@/utils/Store";
-import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { faCartPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -14,6 +15,8 @@ export default function ProductPage() {
   const router = useRouter();
   const { query } = useRouter();
   const { slug } = query;
+
+  const { data: session } = useSession();
 
   const [product, setProduct] = useState([]);
 
@@ -48,10 +51,15 @@ export default function ProductPage() {
 
   return (
     <Layout title={product.name}>
-      <div className='py-2'>
+      <div className='py-2 flex justify-between'>
         <Link legacyBehavior href='/'>
           Accueil
         </Link>
+        {session?.user?.isAdmin && (
+          <Link href={`/admin/product/${product.id}`}>
+            <FontAwesomeIcon icon={faEdit} /> Editer
+          </Link>
+        )}
       </div>
       <div className='grid md:grid-cols-4 md:gap-3'>
         <div className='md:col-span-2'>
@@ -68,7 +76,6 @@ export default function ProductPage() {
             <li>
               <h1 className='text-lg'>{product.name}</h1>
             </li>
-            <li>Catégorie</li>
             <li>Marque : {product.brand}</li>
             <li>
               {product.rating} sur {product.numReviews} avis
@@ -80,11 +87,11 @@ export default function ProductPage() {
           <div className='card p-5'>
             <div className='mb-4 flex justify-start'>
               {product.countInStock <= 0 ? (
-                <span class='bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300'>
+                <span className='bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300'>
                   Epuisé
                 </span>
               ) : (
-                <span class='bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300'>
+                <span className='bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300'>
                   En stock
                 </span>
               )}

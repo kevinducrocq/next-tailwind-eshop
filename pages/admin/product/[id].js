@@ -5,6 +5,7 @@ import fetchProductById from "@/domain/admin/fetchProductById";
 import updateProduct from "@/domain/admin/updateProduct";
 import fetchCategories from "@/domain/categories/fetchCategories";
 import { getError } from "@/utils/error";
+import { slugify } from "@/utils/slugify";
 import { faBackward } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -108,7 +109,6 @@ export default function AdminProductEditPage() {
 
   const submitHandler = async ({
     name,
-    slug,
     price,
     image,
     brand,
@@ -117,6 +117,7 @@ export default function AdminProductEditPage() {
   }) => {
     try {
       dispatch({ type: "UPDATE_REQUEST" });
+      const slug = slugify(name);
       const updatedProduct = await updateProduct(
         productId,
         name,
@@ -177,21 +178,6 @@ export default function AdminProductEditPage() {
                   />
                   {errors.name && (
                     <div className='text-red-500'>{errors.name.message}</div>
-                  )}
-                </div>
-                <div className='mb-4 '>
-                  <label htmlFor='slug'>Slug</label>
-                  <input
-                    name='slug'
-                    type='text'
-                    className='w-full'
-                    id='slug'
-                    {...register("slug", {
-                      required: "Entrez le slug du produit",
-                    })}
-                  />
-                  {errors.slug && (
-                    <div className='text-red-500'>{errors.slug.message}</div>
                   )}
                 </div>
                 <div className='mb-4 '>

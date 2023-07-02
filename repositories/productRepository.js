@@ -156,7 +156,7 @@ export const updateProductCategory = async (productId, categoryId) => {
     await query({
       query:
         "UPDATE product_categories SET category_id = ? WHERE product_id = ?",
-      values: [productId, categoryId],
+      values: [categoryId, productId],
     });
   } catch (error) {
     console.error(

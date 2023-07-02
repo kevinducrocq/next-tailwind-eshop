@@ -78,7 +78,7 @@ export default function AdminProductsPage() {
                       <th className='p-5 text-left'>NOTE</th>
                       <th className='p-5 text-left'>CREÉ LE</th>
                       <th className='p-5 text-left'>ACTION</th>
-                    </tr>{" "}
+                    </tr>
                   </thead>
                   <tbody>
                     {products?.map((product) => (

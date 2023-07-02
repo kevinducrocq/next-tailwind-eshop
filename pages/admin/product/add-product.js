@@ -4,11 +4,12 @@ import Spinner from "@/components/Spinner";
 import addProduct from "@/domain/admin/addProduct";
 import fetchCategories from "@/domain/categories/fetchCategories";
 import { getError } from "@/utils/error";
+import { slugify } from "@/utils/slugify";
 import { faBackward } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -42,6 +43,7 @@ export default function AdminProductAddPage() {
   } = useForm();
 
   const [categories, setCategories] = useState([]);
+  const categoryRef = useRef(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
 
   useEffect(() => {
@@ -54,7 +56,6 @@ export default function AdminProductAddPage() {
 
   const submitHandler = async ({
     name,
-    slug,
     price,
     image,
     brand,
@@ -63,6 +64,8 @@ export default function AdminProductAddPage() {
   }) => {
     try {
       dispatch({ type: "ADD_REQUEST" });
+      const initialCategoryId = categoryRef.current.value;
+      const slug = slugify(name);
       const newProduct = await addProduct(
         name,
         slug,
@@ -71,7 +74,7 @@ export default function AdminProductAddPage() {
         brand,
         countInStock,
         description,
-        selectedCategoryId
+        selectedCategoryId || initialCategoryId
       );
       if (newProduct) {
         if (newProduct.error) {
@@ -121,21 +124,6 @@ export default function AdminProductAddPage() {
                   />
                   {errors.name && (
                     <div className='text-red-500'>{errors.name.message}</div>
-                  )}
-                </div>
-                <div className='mb-4 '>
-                  <label htmlFor='slug'>Slug</label>
-                  <input
-                    name='slug'
-                    type='text'
-                    className='w-full'
-                    id='slug'
-                    {...register("slug", {
-                      required: "Entrez le slug du produit",
-                    })}
-                  />
-                  {errors.slug && (
-                    <div className='text-red-500'>{errors.slug.message}</div>
                   )}
                 </div>
                 <div className='mb-4 '>
@@ -192,11 +180,7 @@ export default function AdminProductAddPage() {
                     name='category'
                     id='category'
                     className='w-full'
-                    // value={
-                    //   selectedCategoryId !== ""
-                    //     ? selectedCategoryId
-                    //     : initialCategoryId
-                    // }
+                    ref={categoryRef}
                     onChange={handleCategoryChange}
                   >
                     {categories.map((mappedCategory) => (
