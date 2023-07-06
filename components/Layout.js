@@ -135,6 +135,15 @@ export default function Layout({ title, children }) {
                         <Menu.Item>
                           <DropdownLink
                             className='dropdown-link'
+                            href='/admin/product/add-product'
+                            legacyBehavior
+                          >
+                            Ajouter un produit
+                          </DropdownLink>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <DropdownLink
+                            className='dropdown-link'
                             href='/admin/users'
                             legacyBehavior
                           >

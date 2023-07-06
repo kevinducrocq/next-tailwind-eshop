@@ -232,7 +232,7 @@ export default function PlaceorderPage() {
                 onClick={placeOrderHandler}
                 className='primary-button w-full'
               >
-                {loading ? "Chargement..." : "Commander"}
+                {loading ? "Chargement..." : "Valider ma commande"}
               </button>
             </div>
           </div>

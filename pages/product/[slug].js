@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Rating from "@/components/Rating";
 import fetchProductBySlug from "@/domain/product/fetchProductBySlug";
 import { Store } from "@/utils/Store";
 import { faCartPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -78,7 +79,11 @@ export default function ProductPage() {
             </li>
             <li>Marque : {product.brand}</li>
             <li>
-              {product.rating} sur {product.numReviews} avis
+              <Rating
+                rating={product.rating}
+                numReviews={product.numReviews}
+
+              ></Rating>
             </li>
             <li>Description : {product.description}</li>
           </ul>

@@ -3,12 +3,12 @@ import { getError } from "@/utils/error";
 import React, { useEffect, useReducer, useState } from "react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEye } from "@fortawesome/free-solid-svg-icons";
 import AdminMenu from "@/components/AdminMenu";
 import fetchProducts from "@/domain/admin/fetchProducts";
 import Spinner from "@/components/Spinner";
+import { useRouter } from "next/router";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -31,6 +31,7 @@ export default function AdminProductsPage() {
     loading: true,
     error: "",
   });
+  const router = useRouter();
 
   const [products, setProducts] = useState([]);
 
@@ -97,13 +98,23 @@ export default function AdminProductsPage() {
                             locale: fr,
                           })}
                         </td>
-                        <td className='p-5'>
-                          <Link href={`/product/${product.slug}`}>
-                            <FontAwesomeIcon icon={faEye} /> Détails
-                          </Link>{" "}
-                          <Link href={`/admin/product/${product.id}`}>
+                        <td className='p-5 flex flex-col'>
+                          <button
+                            className='default-button mb-1'
+                            onClick={() => {
+                              router.push(`/product/${product.slug}`);
+                            }}
+                          >
+                            <FontAwesomeIcon icon={faEye} /> Voir
+                          </button>
+                          <button
+                            className='default-button'
+                            onClick={() => {
+                              router.push(`/admin/product/${product.id}`);
+                            }}
+                          >
                             <FontAwesomeIcon icon={faEdit} /> Editer
-                          </Link>
+                          </button>
                         </td>
                       </tr>
                     ))}

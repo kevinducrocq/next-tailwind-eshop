@@ -3,6 +3,7 @@ import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import React from "react";
+import Rating from "./Rating";
 
 export default function ProductItem({ product, addToCartHandler }) {
   return (
@@ -30,7 +31,12 @@ export default function ProductItem({ product, addToCartHandler }) {
         <Link href={`/product/${product.slug}`}>
           <h2 className='text-lg font-semibold'>{product.name}</h2>
         </Link>
-        <p className='mb-2 text-gray-500'>{product.brand}</p>
+        <Rating
+          rating={product.rating}
+          numReviews={product.numReviews}
+          size={"xs"}
+        ></Rating>
+        <p className='mb-2 text-gray-500'>{product.brand}</p>{" "}
         <p className='text-xl font-bold'>€ {product.price}</p>
         <button
           className='primary-button mt-4'
@@ -39,7 +45,7 @@ export default function ProductItem({ product, addToCartHandler }) {
           disabled={product.countInStock <= 0}
         >
           <FontAwesomeIcon icon={faCartPlus} className='mr-2' />
-          Ajouter au panier
+          Ajouter
         </button>
       </div>
     </div>

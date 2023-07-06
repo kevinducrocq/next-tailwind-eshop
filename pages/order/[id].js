@@ -196,7 +196,12 @@ function OrderPage() {
 
   return (
     <Layout title={`Commande N° ${order.invoice_number}`}>
-      <h1 className='mb-4 text-xl'>{`Commande N° ${order.invoice_number}`}</h1>
+      {order.isPaid ? (
+        <h1 className='mb-4 text-xl'>{`Commande N° ${order.invoice_number}`}</h1>
+      ) : (
+        <h1 className='mb-4 text-xl'>Votre commande</h1>
+      )}
+
       {loading ? (
         <div>Chargement...</div>
       ) : error ? (
