@@ -2,6 +2,7 @@ import AdminMenu from "@/components/AdminMenu";
 import Layout from "@/components/Layout";
 import Spinner from "@/components/Spinner";
 import addProduct from "@/domain/admin/addProduct";
+import uploadImage from "@/domain/admin/uploadImage";
 import fetchCategories from "@/domain/categories/fetchCategories";
 import { getError } from "@/utils/error";
 import { slugify } from "@/utils/slugify";
@@ -25,6 +26,16 @@ function reducer(state, action) {
         loadingAdd: false,
         error: action.payload,
       };
+    case "UPLOAD_REQUEST":
+      return { ...state, loadingUpload: true, error: "" };
+    case "UPLOAD_SUCCESS":
+      return { ...state, loadingUpload: false, error: "" };
+    case "UPLOAD_FAIL":
+      return {
+        ...state,
+        loadingUpload: false,
+        error: action.payload,
+      };
     default:
       state;
   }
@@ -45,6 +56,7 @@ export default function AdminProductAddPage() {
   const [categories, setCategories] = useState([]);
   const categoryRef = useRef(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const [imagePreview, setImagePreview] = useState(null); // State pour l'aperçu de l'image
 
   useEffect(() => {
     try {
@@ -53,6 +65,24 @@ export default function AdminProductAddPage() {
       getError(err);
     }
   }, []);
+
+  const handleImageChange = async (event) => {
+    const file = event.target.files[0];
+    const imageUrl = URL.createObjectURL(file);
+
+    const resizedImage = await new Promise((resolve) => {
+      const img = new Image();
+      img.src = imageUrl;
+      img.onload = () => {
+        const maxWidth = 800; // Définissez la largeur maximale souhaitée pour l'image redimensionnée
+        const maxHeight = 800; // Définissez la hauteur maximale souhaitée pour l'image redimensionnée
+        const resizedDataUrl = ImageResizer.resize(img, maxWidth, maxHeight);
+        resolve(resizedDataUrl);
+      };
+    });
+
+    setImagePreview(resizedImage);
+  };
 
   const submitHandler = async ({
     name,
@@ -64,33 +94,53 @@ export default function AdminProductAddPage() {
   }) => {
     try {
       dispatch({ type: "ADD_REQUEST" });
-      const initialCategoryId = categoryRef.current.value;
-      const slug = slugify(name);
-      const newProduct = await addProduct(
-        name,
-        slug,
-        image,
-        price,
-        brand,
-        countInStock,
-        description,
-        selectedCategoryId || initialCategoryId
-      );
-      if (newProduct) {
-        if (newProduct.error) {
-          toast.error(newProduct.error);
-        } else {
-          dispatch({ type: "ADD_SUCCESS" });
-          router.push("/admin/products");
+
+      const file = image[0]; // Récupérer le fichier d'image
+      const uniqueName = generateUniqueName(file.name); // Générer un nom unique pour l'image
+
+      // Envoyer l'image redimensionnée avec le nom unique au serveur
+      const response = await uploadImage(file, uniqueName);
+
+      if (response.error) {
+        toast.error(response.error);
+      } else {
+        const imagePath = response.path; // Chemin de l'image dans le dossier "uploads"
+
+        // Enregistrer le chemin de l'image en base de données
+        const newProduct = await addProduct(
+          name,
+          slugify(name),
+          imagePath,
+          price,
+          brand,
+          countInStock,
+          description,
+          selectedCategoryId
+        );
+        if (newProduct) {
+          if (newProduct.error) {
+            toast.error(newProduct.error);
+          } else {
+            dispatch({ type: "ADD_SUCCESS" });
+            router.push("/admin/products");
+          }
         }
       }
     } catch (err) {
-      dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
+      dispatch({ type: "ADD_FAIL", payload: getError(err) });
     }
   };
 
   const handleCategoryChange = (event) => {
     setSelectedCategoryId(event.target.value);
+  };
+  const generateUniqueName = (originalName) => {
+    const timestamp = Date.now();
+    const randomString = Math.random().toString(36).substring(2, 8);
+    const extension = originalName.split(".").pop();
+    const uniqueName = `${timestamp}-${randomString}.${extension}`;
+
+    return uniqueName;
   };
 
   return (
@@ -165,12 +215,19 @@ export default function AdminProductAddPage() {
                     type='file'
                     className='w-full'
                     id='image'
+                    onChange={handleImageChange}
                     {...register("image", {
-                      required: "Entrez l'image' du produit",
+                      required: "Entrez l'image du produit",
                     })}
                   />
                   {errors.image && (
                     <div className='text-red-500'>{errors.image.message}</div>
+                  )}
+                </div>
+                <div className='mb-4'>
+                  {imagePreview && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={imagePreview} alt='Image Preview' />
                   )}
                 </div>
                 <div className='mb-4 '>
