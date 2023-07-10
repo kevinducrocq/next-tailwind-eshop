@@ -17,8 +17,8 @@ const addProductApi = async (req, res) => {
     const {
       name,
       slug,
-      image,
       price,
+      image,
       brand,
       countInStock,
       description,
@@ -36,7 +36,6 @@ const addProductApi = async (req, res) => {
       selectedCategoryId
     );
 
-    
     res.status(200).json(result);
   } catch (error) {
     console.error(

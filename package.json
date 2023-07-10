@@ -42,6 +42,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
     "react-image-crop": "^10.1.5",
+    "react-image-file-resizer": "^0.4.8",
     "react-responsive-carousel": "^3.2.23",
     "react-toastify": "^9.1.2",
     "serverless-mysql": "^1.5.5",
