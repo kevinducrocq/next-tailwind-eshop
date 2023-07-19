@@ -1,7 +1,10 @@
 import AdminMenu from "@/components/AdminMenu";
+import CustomFileSelector from "@/components/CustomFileSelector";
+import ImagePreview from "@/components/ImagePreview";
 import Layout from "@/components/Layout";
 import Spinner from "@/components/Spinner";
 import addProduct from "@/domain/admin/addProduct";
+import uploadImage from "@/domain/admin/uploadImage";
 import fetchCategories from "@/domain/categories/fetchCategories";
 import { getError } from "@/utils/error";
 import { slugify } from "@/utils/slugify";
@@ -45,6 +48,15 @@ export default function AdminProductAddPage() {
   const [categories, setCategories] = useState([]);
   const categoryRef = useRef(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const [images, setImages] = useState([]);
+
+  const handleFileSelected = (e) => {
+    if (e.target.files) {
+      //convert `FileList` to `File[]`
+      const _files = Array.from(e.target.files);
+      setImages(_files);
+    }
+  };
 
   useEffect(() => {
     try {
@@ -66,6 +78,14 @@ export default function AdminProductAddPage() {
       dispatch({ type: "ADD_REQUEST" });
       const initialCategoryId = categoryRef.current.value;
       const slug = slugify(name);
+
+      // IMAGES
+      const formData = new FormData();
+      images.forEach((image) => {
+        formData.append(image.name, image);
+      });
+      await uploadImage(formData);
+
       const newProduct = await addProduct(
         name,
         slug,
@@ -160,18 +180,11 @@ export default function AdminProductAddPage() {
                 </div>
                 <div className='mb-4 '>
                   <label htmlFor='image'>Image</label>
-                  <input
-                    name='image'
-                    type='text'
-                    className='w-full'
-                    id='image'
-                    {...register("image", {
-                      required: "Entrez l'image' du produit",
-                    })}
+                  <CustomFileSelector
+                    accept='image/png, image/jpeg'
+                    onChange={handleFileSelected}
                   />
-                  {errors.image && (
-                    <div className='text-red-500'>{errors.image.message}</div>
-                  )}
+                  <ImagePreview images={images} />
                 </div>
                 <div className='mb-4 '>
                   <label htmlFor='category'>Catégorie</label>
