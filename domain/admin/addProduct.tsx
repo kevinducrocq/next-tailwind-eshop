@@ -3,7 +3,7 @@ import { getError } from "@/utils/error";
 const addProduct = async (
   name,
   slug,
-  image,
+  imagePath,
   price,
   brand,
   countInStock,
@@ -11,6 +11,7 @@ const addProduct = async (
   selectedCategoryId
 ) => {
   try {
+    console.log("DOMAIN", imagePath);
     const productResponse = await fetch("/api/admin/addProductApi", {
       headers: {
         Accept: "application/json",
@@ -20,7 +21,7 @@ const addProduct = async (
       body: JSON.stringify({
         name,
         slug,
-        image,
+        imagePath,
         price,
         brand,
         countInStock,

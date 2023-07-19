@@ -162,7 +162,7 @@ export default function AdminProductAddPage() {
                   <label htmlFor='image'>Image</label>
                   <input
                     name='image'
-                    type='text'
+                    type='file'
                     className='w-full'
                     id='image'
                     {...register("image", {
