@@ -82,7 +82,6 @@ export default function ProductPage() {
               <Rating
                 rating={product.rating}
                 numReviews={product.numReviews}
-
               ></Rating>
             </li>
             <li>Description : {product.description}</li>

@@ -3,7 +3,6 @@ import { getError } from "@/utils/error";
 const addProduct = async (
   name,
   slug,
-  image,
   price,
   brand,
   countInStock,
@@ -20,7 +19,6 @@ const addProduct = async (
       body: JSON.stringify({
         name,
         slug,
-        image,
         price,
         brand,
         countInStock,

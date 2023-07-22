@@ -1,32 +1,79 @@
+import multer from "multer";
+import { v4 as uuid } from "uuid";
+import sharp from "sharp";
+import path from "path";
 import fs from "fs";
 
-const uploadImageApi = async (req, res) => {
-  if (req.method !== "POST") {
-    return;
-  }
+const __dirname = path.resolve();
+const FILE_DIR = path.join(__dirname, "/uploads");
 
-  try {
-    const formData = await req.formData();
-    const formDataEntryValues = Array.from(formData.values());
-    for (const formDataEntryValue of formDataEntryValues) {
-      if (
-        typeof formDataEntryValue === "object" &&
-        "arrayBuffer" in formDataEntryValue
-      ) {
-        const file = formDataEntryValue;
-        const buffer = Buffer.from(await file.arrayBuffer());
-        fs.writeFileSync(`public/uploads/${file.name}`, buffer);
-      }
-    }
+// Check if the upload directory exists, if not, create it
+if (!fs.existsSync(FILE_DIR)) {
+  fs.mkdirSync(FILE_DIR);
+}
 
-    res.status(200).json(formData);
-  } catch (error) {
-    console.error("Une erreur s'est produite lors de l'upload :", error);
-    res.status(500).json({
-      error: "Erreur lors de l'upload",
-      details: error.message,
-    });
+const storage = multer.diskStorage({
+  destination: (req, file, done) => {
+    done(null, FILE_DIR);
+  },
+  filename: (req, file, done) => {
+    done(
+      null,
+      uuid() + "_" + file.originalname.toLocaleLowerCase().split(" ").join("-")
+    );
+  },
+});
+
+const fileFilter = (req, file, done) => {
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype == "image/jpg"
+  ) {
+    done(null, true);
+  } else {
+    done(new Error("file type not supported"), false);
   }
 };
 
-export default uploadImageApi;
+const imgUpload = multer({ storage, fileFilter }).single("file");
+
+const imageUploadApi = async (req, res) => {
+  console.log("Received request:", req);
+  imgUpload(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ success: false, message: err.message });
+    }
+    try {
+      const { file } = req;
+      if (!file) {
+        return res
+          .status(400)
+          .json({ success: false, message: "file not supplied" });
+      }
+      const newFileName =
+        uuid() +
+        "_" +
+        file.originalname.toLocaleLowerCase().split(" ").join("-");
+      const newFilePath = path.join(FILE_DIR, newFileName);
+
+      // save newFilePath in your db as image path
+      await sharp(file.path)
+        .resize({ height: 1000 })
+        .withMetadata()
+        .jpeg({ quality: 70 })
+        .toFile(newFilePath);
+      fs.unlinkSync(file.path);
+
+      return res.status(200).json({
+        success: true,
+        message: "image uploaded",
+        path: "/" + newFileName,
+      });
+    } catch (error) {
+      return res.status(500).json({ success: false, message: error.message });
+    }
+  });
+};
+
+export default imageUploadApi;

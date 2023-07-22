@@ -3,10 +3,6 @@ import { getError } from "@/utils/error";
 const uploadImage = async (images) => {
   try {
     const imageReponse = await fetch("/api/admin/uploadImageApi", {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "multipart/form-data",
-      },
       method: "POST",
       body: images,
     });

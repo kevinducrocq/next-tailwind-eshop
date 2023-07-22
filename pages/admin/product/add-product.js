@@ -82,7 +82,7 @@ export default function AdminProductAddPage() {
       // IMAGES
       const formData = new FormData();
       images.forEach((image) => {
-        formData.append(image.name, image);
+        formData.append("images", image);
       });
       await uploadImage(formData);
 
