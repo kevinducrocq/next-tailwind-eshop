@@ -17,7 +17,7 @@ const addProductApi = async (req, res) => {
     const {
       name,
       slug,
-      image,
+      images,
       price,
       brand,
       countInStock,
@@ -28,7 +28,7 @@ const addProductApi = async (req, res) => {
     const result = await productService.addProduct(
       name,
       slug,
-      image,
+      images,
       price,
       brand,
       countInStock,

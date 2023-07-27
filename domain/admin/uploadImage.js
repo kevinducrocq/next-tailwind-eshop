@@ -1,10 +1,10 @@
 import { getError } from "@/utils/error";
 
-const uploadImage = async (images) => {
+const uploadImage = async (image) => {
   try {
     const imageReponse = await fetch("/api/admin/uploadImageApi", {
       method: "POST",
-      body: images,
+      body: image,
     });
 
     if (imageReponse.status > 400) {

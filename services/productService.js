@@ -102,7 +102,7 @@ export const updateProduct = async (
 export const addProduct = async (
   name,
   slug,
-  image,
+  images,
   price,
   brand,
   countInStock,
@@ -112,12 +112,14 @@ export const addProduct = async (
   let newProductId = await productRepository.create({
     name,
     slug,
-    image,
+    images,
     price,
     brand,
     countInStock,
     description,
   });
+
+  console.log(newProductId);
 
   // Mettre à jour la catégorie du produit dans la table de liaison product_categories
   await productRepository.setProductCategory(newProductId, selectedCategoryId);
