@@ -54,7 +54,7 @@ export const create = async (product) => {
       values: [
         product.name,
         product.slug,
-        product.image,
+        product.images,
         product.price,
         product.brand,
         product.countInStock,

@@ -5,7 +5,7 @@ import path from "path";
 import fs from "fs";
 
 const __dirname = path.resolve();
-const FILE_DIR = path.join(__dirname, "/uploads");
+const FILE_DIR = path.join(__dirname, "/public/uploads");
 
 // Check if the upload directory exists, if not, create it
 if (!fs.existsSync(FILE_DIR)) {
@@ -36,10 +36,9 @@ const fileFilter = (req, file, done) => {
   }
 };
 
-const imgUpload = multer({ storage, fileFilter }).single("file");
+const imgUpload = multer({ storage, fileFilter }).single("image");
 
 const imageUploadApi = async (req, res) => {
-  console.log("Received request:", req);
   imgUpload(req, res, async (err) => {
     if (err) {
       return res.status(400).json({ success: false, message: err.message });
@@ -51,6 +50,7 @@ const imageUploadApi = async (req, res) => {
           .status(400)
           .json({ success: false, message: "file not supplied" });
       }
+
       const newFileName =
         uuid() +
         "_" +
@@ -68,12 +68,18 @@ const imageUploadApi = async (req, res) => {
       return res.status(200).json({
         success: true,
         message: "image uploaded",
-        path: "/" + newFileName,
+        path: "/uploads/" + newFileName,
       });
     } catch (error) {
       return res.status(500).json({ success: false, message: error.message });
     }
   });
 };
+
+export const config = {
+  api: {
+    bodyParser: false
+  }
+}
 
 export default imageUploadApi;

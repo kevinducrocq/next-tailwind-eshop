@@ -80,22 +80,24 @@ export default function AdminProductAddPage() {
       const slug = slugify(name);
 
       // IMAGES
-      const formData = new FormData();
-      images.forEach((image) => {
-        formData.append("images", image);
-      });
-      await uploadImage(formData);
+
+      const imagesUploaded = await Promise.all(images.map((image) => {
+        const formData = new FormData();
+        formData.append("image", image);
+        return uploadImage(formData);
+      }));
 
       const newProduct = await addProduct(
         name,
         slug,
-        image,
+        imagesUploaded.map(image => image.path),
         price,
         brand,
         countInStock,
         description,
         selectedCategoryId || initialCategoryId
       );
+
       if (newProduct) {
         if (newProduct.error) {
           toast.error(newProduct.error);
